@@ -1,40 +1,37 @@
 "use client"
-
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+
 import { Button } from "@/components/ui/button"
 
-export default function ThemeToggle() {
-    const [theme, setTheme] = useState<"light" | "dark">("light")
+const ThemeToggle = () => {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-    useEffect(() => {
-        if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-            document.documentElement.classList.add("dark")
-            setTheme("dark")
-        } else {
-            document.documentElement.classList.remove("dark")
-            setTheme("light")
-        }
-    }, [])
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-    const toggleTheme = () => {
-        const isDark = document.documentElement.classList.contains("dark")
-        if (isDark) {
-            document.documentElement.classList.remove("dark")
-            localStorage.setItem("theme", "light")
-            setTheme("light")
-        } else {
-            document.documentElement.classList.add("dark")
-            localStorage.setItem("theme", "dark")
-            setTheme("dark")
-        }
-    }
-
+  if (!mounted) {
     return (
-        <Button
-            onClick={toggleTheme}
-            className="rounded px-4 py-2 border text-sm transition-colors border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
-        >
-            {theme === "dark" ? "🌞 Light" : "🌙 Dark"}
-        </Button>
+      <Button variant="ghost" size="icon" className="h-9 w-9">
+        <div className="h-4 w-4" />
+      </Button>
     )
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      className="h-9 w-9 transition-colors hover:bg-accent"
+    >
+      {theme === "light" ? <Moon className="h-4 w-4 transition-all" /> : <Sun className="h-4 w-4 transition-all" />}
+      <span className="sr-only">Перемикач теми</span>
+    </Button>
+  )
 }
+
+export default ThemeToggle

@@ -3,7 +3,7 @@ import React from 'react'
 
 const CTA = () => {
     return (
-        <section className="bg-blue-600 py-16 text-white md:py-24">
+        <section className="bg-blue-600 dark:bg-blue-900 py-16 text-white md:py-24">
             <div className="container mx-auto">
                 <div className="flex flex-col items-center space-y-6 text-center">
                     <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">

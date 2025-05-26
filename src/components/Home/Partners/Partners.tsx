@@ -3,7 +3,7 @@ import React from 'react'
 
 const Partners = () => {
     return (
-        <section className="bg-white py-12">
+        <section className="bg-white dark:bg-background py-12">
             <div className="container mx-auto">
                 <div className="flex flex-col items-center space-y-8">
                     <h3 className="text-xl font-semibold">Accredited By & Industry Partners</h3>

@@ -5,7 +5,7 @@ import React from 'react'
 
 const Benefits = () => {
     return (
-        <section className="bg-gray-50 py-16 md:py-24">
+        <section className="bg-gray-50 dark:bg-blue-900 py-16 md:py-24">
             <div className="container mx-auto">
                 <div className="grid gap-12 lg:grid-cols-2">
                     <div className="flex flex-col justify-center space-y-4">

@@ -29,7 +29,7 @@ const socials = [
 
 const Footer = () => {
     return (
-        <footer className="border-t bg-gray-50">
+        <footer className="border-t bg-gray-50 dark:bg-background">
             <div className="container py-12 mx-auto">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div>

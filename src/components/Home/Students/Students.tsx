@@ -6,7 +6,7 @@ import React from 'react'
 
 const Students = () => {
     return (
-        <section className="bg-white py-16 md:py-24">
+        <section className="bg-background py-16 md:py-24">
             <div className="container space-y-12 mx-auto">
                 <div className="flex flex-col items-center space-y-4 text-center">
                     <div className="inline-block rounded-full bg-blue-100 p-2">

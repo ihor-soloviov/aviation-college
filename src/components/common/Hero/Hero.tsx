@@ -1,9 +1,10 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import useParallax from "@/hooks/useParallax"
 
 interface HeroProps {
   imgPath: string
@@ -11,22 +12,11 @@ interface HeroProps {
 
 const Hero = ({ imgPath }: HeroProps) => {
   const bgRef = useRef<HTMLDivElement>(null)
-  const [offsetY, setOffsetY] = useState(0)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!bgRef.current) return
-      const scrollY = window.scrollY
-      const speed = 0.4 // Паралакс-швидкість: менше — сильніше відставання
-      setOffsetY(scrollY * speed)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  const { offsetY } = useParallax(bgRef)
 
   return (
     <section className="relative overflow-hidden">
+      {/* Background Image with Overlay */}
       <div
         ref={bgRef}
         className="absolute inset-0 z-0 will-change-transform"
@@ -35,32 +25,39 @@ const Hero = ({ imgPath }: HeroProps) => {
         }}
       >
         <Image
-          src={imgPath}
+          src={imgPath || "/placeholder.svg"}
           alt="Aviation students with aircraft"
           fill
-          className="object-cover brightness-[0.7] transition-transform duration-100"
+          className="object-cover transition-transform duration-100"
           priority
           quality={100}
         />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50 dark:bg-black/60" />
       </div>
 
-      <div className="container relative z-10 flex flex-col items-center justify-center space-y-4 py-32 text-center text-white md:py-48 lg:py-56 mx-auto">
-        <Badge className="bg-blue-600 hover:bg-blue-600">Enrollment Open for Fall 2025</Badge>
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+      <div className="container relative z-10 flex flex-col items-center justify-center space-y-4 py-32 text-center mx-auto md:py-48 lg:py-56">
+        <Badge className="bg-blue-600 dark:bg-primary hover:bg-primary/90 text-primary-foreground border-0">
+          Enrollment Open for Fall 2025
+        </Badge>
+
+        <h1 className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl">
           Авіаційний коледж
         </h1>
+
         <p className="max-w-[700px] text-lg text-white/90 md:text-xl">
           Світові класи навчальні програми, стан-оф-а-т-арні навчальні прилади, і промислові зв'язки для запуску вашої
           aviation career.
         </p>
+
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
+          <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer shadow-lg">
             Explore Programs
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="border-white text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 cursor-pointer"
+            className="border-white/80 text-white hover:bg-white hover:text-foreground hover:border-white cursor-pointer backdrop-blur-sm bg-white/10"
           >
             Schedule a Tour
           </Button>

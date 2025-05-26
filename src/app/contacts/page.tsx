@@ -20,83 +20,7 @@ export default function AboutPage() {
         <>
             <Hero imgPath="/hero-contact-us.webp" />
 
-            {/* Mission & Values */}
-            {/* <section className="bg-white py-16 md:py-24">
-                <div className="container space-y-12 mx-auto">
-                    <div className="grid gap-12 lg:grid-cols-2">
-                        <div className="space-y-6">
-                            <div className="inline-block rounded-full bg-blue-100 p-2">
-                                <Target className="h-6 w-6 text-blue-600" />
-                            </div>
-                            <h2 className="text-3xl font-bold tracking-tighter">Наша місія</h2>
-                            <p className="text-lg text-muted-foreground">
-                                Підготовка потрібних суспільству фахівців, які поєднують високі професійні та соціально-особистісні компетентності; забезпечення розвитку потенціалу та можилвостей самореалізації студентів та співробитників у процесі їх спільної освітньої, інноваційної та організаційної діяльності.
-                            </p>
-                            <ul className="space-y-2">
-                                <li className="flex items-start gap-2">
-                                    <Star className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
-                                    <span>Висока якість освіти та підготовки</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <Shield className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
-                                    <span>Інноваційна діяльність</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <Heart className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
-                                    <span>Співпраця з навчальними закладами та підприємствами</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div className="space-y-6">
-                            <div className="inline-block rounded-full bg-blue-100 p-2">
-                                <Heart className="h-6 w-6 text-blue-600" />
-                            </div>
-                            <h2 className="text-3xl font-bold tracking-tighter">Наші цінності</h2>
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <Card>
-                                    <CardHeader className="pb-2">
-                                        <CardTitle className="text-lg">Відкритість</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">
-                                            Ми вільні у тому, що будуємо своє майбутнє, яке забезпечить нам бути вільними.
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="pb-2">
-                                        <CardTitle className="text-lg">Повага до особистості</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">Ми цінуємо та поважаємо кожну особистість, сприяємо її гармонійному розвитку.</p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="pb-2">
-                                        <CardTitle className="text-lg">Креативність</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">Ми даємо курсантам  не лише знання, а й формуємо компетентності, які дозволять їм бути конкурентоспроможними на ринку праці.</p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="pb-2">
-                                        <CardTitle className="text-lg">Доброчесність</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">
-                                            Ми вільні в обміні інформацією, розвитку власних ідей та визначенні власних дій при усвідомленні високої особистої відповідальності за результати.
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
-
-            <section className="bg-gray-50 py-16 md:py-24">
+            <section className="bg-gray-50 dark:bg-background py-16 md:py-24">
                 <div className="container space-y-12 mx-auto">
                     <div className="flex flex-col items-center space-y-4 text-center">
                         <div className="inline-block rounded-full bg-blue-100 p-2">
@@ -263,7 +187,7 @@ export default function AboutPage() {
                     </div>
 
                     {/* Full Address */}
-                    <div className="rounded-lg bg-white p-8 text-center">
+                    <div className="rounded-lg bg-white dark:bg-blue-900 p-8 text-center">
                         <h3 className="text-xl font-bold mb-4">Поштова адреса</h3>
                         <p className="text-lg text-muted-foreground">
                             Криворізький фаховий коледж Державного некомерційного підприємства
