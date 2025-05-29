@@ -180,7 +180,7 @@ export default function CoursesPage() {
     return (
         <main className="flex-1">
             <Hero imgPath="/hero-courses.webp" />
-            <section className="bg-white py-16 md:py-24" id="all">
+            <section className="bg-white dark:bg-background py-16 md:py-24" id="all">
                 <div className="container space-y-12 mx-auto">
                     {/* Filter Tabs */}
                     <div className="flex flex-wrap justify-center gap-2">
@@ -189,7 +189,7 @@ export default function CoursesPage() {
                                 key={category}
                                 variant={category === "All" ? "default" : "outline"}
                                 size="sm"
-                                className={category === "All" ? "bg-blue-600 hover:bg-blue-700" : ""}
+                                className={category === "All" ? "bg-blue-600 hover:bg-blue-700 dark:white/10 dark:hover:bg-blue-900/20" : ""}
                             >
                                 {category}
                             </Button>
@@ -266,7 +266,7 @@ export default function CoursesPage() {
                     </div>
 
                     {/* Bottom CTA */}
-                    <div className="flex flex-col items-center space-y-6 rounded-lg bg-gray-50 p-8 text-center">
+                    <div className="flex flex-col items-center space-y-6 rounded-lg bg-gray-50 dark:bg-blue-900 p-8 text-center">
                         <h3 className="text-2xl font-bold">Can't Find What You're Looking For?</h3>
                         <p className="max-w-[600px] text-muted-foreground">
                             Our admissions counselors are here to help you find the perfect program for your aviation career goals.
@@ -284,7 +284,7 @@ export default function CoursesPage() {
             </section>
 
             {/* Quick Stats */}
-            <section className="bg-blue-600 py-12 text-white">
+            <section className="bg-blue-600 dark:bg-blue-900 py-12 text-white">
                 <div className="container mx-auto">
                     <div className="grid gap-8 md:grid-cols-4">
                         <div className="text-center">

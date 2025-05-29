@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef } from "react"
-import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import useParallax from "@/hooks/useParallax"
@@ -37,29 +36,25 @@ const Hero = ({ imgPath }: HeroProps) => {
       </div>
 
       <div className="container relative z-10 flex flex-col items-center justify-center space-y-4 py-32 text-center mx-auto md:py-48 lg:py-56">
-        <Badge className="bg-blue-600 dark:bg-primary hover:bg-primary/90 text-primary-foreground border-0">
-          Enrollment Open for Fall 2025
-        </Badge>
 
         <h1 className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl">
           Авіаційний коледж
         </h1>
 
         <p className="max-w-[700px] text-lg text-white/90 md:text-xl">
-          Світові класи навчальні програми, стан-оф-а-т-арні навчальні прилади, і промислові зв'язки для запуску вашої
-          aviation career.
+          Більше 70 років традицій авіаційної освіти та незламності в сучасних викликах.
         </p>
 
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer shadow-lg">
-            Explore Programs
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-lg">
+            Дізнатися більше
           </Button>
           <Button
             size="lg"
             variant="outline"
             className="border-white/80 text-white hover:bg-white hover:text-foreground hover:border-white cursor-pointer backdrop-blur-sm bg-white/10"
           >
-            Schedule a Tour
+            Записатися на навчання
           </Button>
         </div>
       </div>

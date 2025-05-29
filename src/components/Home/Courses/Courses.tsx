@@ -15,9 +15,9 @@ const Courses = () => {
                     <div className="inline-block rounded-full bg-blue-100 p-2">
                         <GraduationCap className="h-6 w-6 text-blue-600" />
                     </div>
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Aviation Programs</h2>
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Навчальні програми</h2>
                     <p className="max-w-[700px] text-muted-foreground">
-                        Comprehensive training programs designed to prepare you for a successful career in aviation.
+                        Комплексні навчальні програми, розроблені для підготовки до успішної кар'єри в авіації.
                     </p>
                 </div>
 
