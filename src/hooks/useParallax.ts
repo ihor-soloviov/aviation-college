@@ -14,7 +14,7 @@ const useParallax = (bgRef: React.RefObject<HTMLDivElement | null>) => {
     
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
-      }, [])
+      }, [bgRef])
       
   return { offsetY }
 }

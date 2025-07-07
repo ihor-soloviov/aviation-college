@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Facebook, Plane } from 'lucide-react'
+import { Plane } from 'lucide-react'
 import React from 'react'
 import Image from 'next/image'
 

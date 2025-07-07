@@ -3,10 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
     Users,
     Award,
-    Target,
-    Heart,
     Shield,
-    Star,
     MapPin,
     Phone,
     Mail,
