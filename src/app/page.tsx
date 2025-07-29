@@ -1,7 +1,8 @@
 import dynamic from "next/dynamic";
-import Hero from "@/components/common/Hero/Hero"; 
+import Hero from "@/components/common/Hero/Hero";
 import { NewsGrid } from "@/components/common/NewsGrid";
 import { newsData } from "@/lib/news-data-template";
+import { Suspense } from "react";
 
 const Courses = dynamic(() => import("@/components/Home/Courses/Courses"), { ssr: true });
 const Benefits = dynamic(() => import("@/components/Home/Benefits/Benefits"), { ssr: true });
@@ -13,7 +14,9 @@ export default function HomePage() {
   return (
     <>
       <Hero imgPath="/hero-home.webp" />
-      <Courses />
+      <Suspense>
+        <Courses />
+      </Suspense>
       <NewsGrid news={newsData} variant="compact" maxItems={3} />
       <Benefits />
       <Students />

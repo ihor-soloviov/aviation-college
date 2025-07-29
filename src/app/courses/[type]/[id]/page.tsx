@@ -8,22 +8,17 @@ import {
 import { notFound } from "next/navigation"
 import { courses } from "@/lib/courses"
 import Course from "@/components/Courses/Course/Course"
+import { use } from "react"
 
-interface CoursePageProps {
-  params: {
-    id: string,
-    type: "fulltime" | "parttime"
-  }
-}
-
-export default function CoursePage({ params }: CoursePageProps) {
-  const course = courses[params.type].find((c) => c.id === params.id)
+export default function CoursePage({ params }: { params: Promise<{ id: string, type: "fulltime" | "parttime" }> }) {
+  const { id, type } = use(params)
+  const course = courses[type].find((c) => c.id === id)
 
   if (!course) {
     notFound()
   }
 
-  const otherCourses = courses[params.type].filter((c) => c.id !== params.id).slice(0, 3);
+  const otherCourses = courses[type].filter((c) => c.id !== id).slice(0, 3);
   const IconComponent = course.icon
 
   return (
