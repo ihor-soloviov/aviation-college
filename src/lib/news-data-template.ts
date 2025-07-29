@@ -26,7 +26,7 @@ export interface NewsItem {
         
         <p>Нові літаки вже пройшли всі необхідні сертифікації та готові до використання в навчальному процесі з наступного семестру.</p>
       `,
-      image: "https://placehold.co/800x600/blue/white?text=New+Aircraft+Fleet",
+      image: "https://placehold.co/800x600/grey/white?text=New+Aircraft+Fleet",
       date: "15 січня 2025",
       category: "Навчання",
       author: "Прес-служба коледжу",
@@ -54,7 +54,7 @@ export interface NewsItem {
         
         <p>Перші студенти зможуть скористатися програмами обміну вже з вересня 2025 року.</p>
       `,
-      image: "https://placehold.co/800x600/blue/white?text=International+Partnership",
+      image: "https://placehold.co/800x600/grey/white?text=International+Partnership",
       date: "10 січня 2025",
       category: "Міжнародна співпраця",
       author: "Відділ міжнародних зв'язків",
@@ -82,7 +82,7 @@ export interface NewsItem {
         
         <p>Симулятор буде використовуватися як для базової підготовки студентів, так і для підвищення кваліфікації діючих пілотів.</p>
       `,
-      image: "https://placehold.co/800x600/blue/white?text=Boeing+737+Simulator",
+      image: "https://placehold.co/800x600/grey/white?text=Boeing+737+Simulator",
       date: "5 січня 2025",
       category: "Обладнання",
       author: "Технічний відділ",
@@ -112,7 +112,7 @@ export interface NewsItem {
         
         <p>Рівень працевлаштування випускників коледжу традиційно залишається високим - понад 95% знаходять роботу за фахом протягом перших шести місяців після закінчення навчання.</p>
       `,
-      image: "https://placehold.co/800x600/blue/white?text=Graduation+2024",
+      image: "https://placehold.co/800x600/grey/white?text=Graduation+2024",
       date: "20 грудня 2024",
       category: "Випуск",
       author: "Прес-служба коледжу",
@@ -142,7 +142,7 @@ export interface NewsItem {
         
         <p>Набір на першу групу розпочнеться в лютому 2025 року. Планується прийняти 25 студентів.</p>
       `,
-      image: "https://placehold.co/800x600/blue/white?text=Safety+Training",
+      image: "https://placehold.co/800x600/grey/white?text=Safety+Training",
       date: "28 грудня 2024",
       category: "Нові програми",
       author: "Відділ якості",
@@ -173,7 +173,7 @@ export interface NewsItem {
         
         <p>Перша група з 20 студентів розпочне навчання в березні 2025 року.</p>
       `,
-      image: "https://placehold.co/800x600/blue/white?text=Drone+Technology",
+      image: "https://placehold.co/800x600/grey/white?text=Drone+Technology",
       date: "2 січня 2025",
       category: "Нові програми",
       author: "Кафедра нових технологій",

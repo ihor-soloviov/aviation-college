@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Plane } from 'lucide-react'
 import React from 'react'
 import Image from 'next/image'
+import { links } from '@/lib/navigation'
 
 const socials = [
     {
@@ -29,7 +30,7 @@ const socials = [
 
 const Footer = () => {
     return (
-        <footer className="border-t bg-gray-50 dark:bg-background">
+        <footer className="border-t bg-gray-50 dark:bg-blue-900/10">
             <div className="container py-12 mx-auto">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div>
@@ -44,25 +45,19 @@ const Footer = () => {
                             {socials.map((social) => (
                                 <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-blue-600">
                                     <span className="sr-only">{social.name}</span>
-                                    <Image src={social.iconPath} alt={social.name} width={24} height={24} />
+                                    <Image src={social.iconPath} alt={social.name}  width={24} height={24} />
                                 </Link>
                             ))}
                         </div>
                     </div>
 
                     <div>
-                        <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">Програми</h4>
+                        <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">Навігація</h4>
                         <ul className="space-y-2 text-sm">
-                            {[
-                                "Pilot Training",
-                                "Aircraft Maintenance",
-                                "Aviation Management",
-                                "Air Traffic Control",
-                                "Flight Dispatcher",
-                            ].map((item) => (
-                                <li key={item}>
-                                    <Link href="#" className="text-sm text-muted-foreground transition-colors duration-300 hover:text-black">
-                                        {item}
+                            {links.map((item) => (
+                                <li key={item.label}>
+                                    <Link href={item.href} className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600">
+                                        {item.label}
                                     </Link>
                                 </li>
                             ))}
@@ -74,7 +69,7 @@ const Footer = () => {
                         <ul className="space-y-2 text-sm">
                             {["Admissions", "Financial Aid", "Career Services", "Student Life", "Alumni Network"].map((item) => (
                                 <li key={item}>
-                                    <Link href="#" className="text-sm text-muted-foreground transition-colors duration-300 hover:text-black">
+                                    <Link href="#" className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600">
                                         {item}
                                     </Link>
                                 </li>
@@ -89,7 +84,7 @@ const Footer = () => {
                                 href="https://maps.app.goo.gl/UzDMeywUZNE1dkKv5"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-muted-foreground transition-colors duration-300 hover:text-black"
+                                className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
                             >
                                 вулиця Олега Антонова, 1
                             </a>
@@ -98,21 +93,21 @@ const Footer = () => {
                                 href="https://maps.app.goo.gl/UzDMeywUZNE1dkKv5"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-muted-foreground transition-colors duration-300 hover:text-black"
+                                className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
                             >
                                 Кривий Ріг, 50024
                             </a>
                             <br />
                             <a
                                 href="mailto:pochta@krfk.kai.edu.ua"
-                                className="mt-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-black"
+                                className="mt-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
                             >
                                 pochta@krfk.kai.edu.ua
                             </a>
                             <br />
                             <a
                                 href="tel:+380678241414"
-                                className="text-sm text-muted-foreground transition-colors duration-300 hover:text-black"
+                                className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
                             >
                                 067-824-14-14
                             </a>

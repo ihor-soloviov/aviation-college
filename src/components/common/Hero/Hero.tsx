@@ -32,7 +32,7 @@ const Hero = ({ imgPath }: HeroProps) => {
           quality={100}
         />
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/50 dark:bg-black/60" />
+        <div className="absolute inset-0 bg-black/50 dark:bg-blue-900/10/60" />
       </div>
 
       <div className="container relative z-10 flex flex-col items-center justify-center space-y-4 py-32 text-center mx-auto md:py-48 lg:py-56">

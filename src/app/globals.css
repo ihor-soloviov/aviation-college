@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+section {
+  padding: 20px 1rem;
+}
+
+footer {
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  section {
+    padding: 50px 1rem;
+  }
+}

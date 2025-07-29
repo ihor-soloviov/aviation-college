@@ -41,7 +41,7 @@ const Benefits = () => {
                         <div className="space-y-4">
                             <div className="relative aspect-square overflow-hidden rounded-lg">
                                 <Image
-                                    src="https://placehold.co/400x400/blue/white?text=Google Classroom"
+                                    src="https://placehold.co/400x400/grey/white?text=Google Classroom"
                                     alt="Google Classroom"
                                     fill
                                     className="object-cover"
@@ -49,7 +49,7 @@ const Benefits = () => {
                             </div>
                             <div className="relative aspect-video overflow-hidden rounded-lg">
                                 <Image
-                                    src="https://placehold.co/400x300/blue/white?text=Технічна база"
+                                    src="https://placehold.co/400x300/grey/white?text=Технічна база"
                                     alt="Технічна база"
                                     fill
                                     className="object-cover"
@@ -59,7 +59,7 @@ const Benefits = () => {
                         <div className="space-y-4 pt-8">
                             <div className="relative aspect-video overflow-hidden rounded-lg">
                                 <Image
-                                    src="https://placehold.co/400x300/blue/white?text=Part-147"
+                                    src="https://placehold.co/400x300/grey/white?text=Part-147"
                                     alt="Part-147"
                                     fill
                                     className="object-cover"
@@ -67,7 +67,7 @@ const Benefits = () => {
                             </div>
                             <div className="relative aspect-square overflow-hidden rounded-lg">
                                 <Image
-                                    src="https://placehold.co/400x400/blue/white?text=Онлайн лабараторія"
+                                    src="https://placehold.co/400x400/grey/white?text=Онлайн лабараторія"
                                     alt="Онлайн лабараторія"
                                     fill
                                     className="object-cover"
