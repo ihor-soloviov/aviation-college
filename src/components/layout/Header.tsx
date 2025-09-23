@@ -1,11 +1,10 @@
 "use client"
 import Link from 'next/link'
-import { MenuIcon, Plane } from 'lucide-react'
-import React, { useEffect, useRef, useState } from 'react'
+import { Plane } from 'lucide-react'
+import React, { useRef, useState } from 'react'
 
 import ThemeToggle from '../common/ThemeToggle/ThemeToggle'
 import NavItem from '../common/Header/NavItem'
-import { useMediaQuery } from 'usehooks-ts'
 import { useClickOutside } from '@/hooks/useClickOutside'   
 import { links } from '@/lib/navigation'
 

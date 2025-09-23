@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import useParallax from "@/hooks/useParallax"
+import { useRef } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import useParallax from "@/hooks/useParallax";
 
 interface HeroProps {
-  imgPath: string
+  imgPath: string;
 }
 
 const Hero = ({ imgPath }: HeroProps) => {
-  const bgRef = useRef<HTMLDivElement>(null)
-  const { offsetY } = useParallax(bgRef)
+  const bgRef = useRef<HTMLDivElement>(null);
+  const { offsetY } = useParallax(bgRef);
 
   return (
     <section className="relative overflow-hidden">
@@ -36,17 +36,20 @@ const Hero = ({ imgPath }: HeroProps) => {
       </div>
 
       <div className="container relative z-10 flex flex-col items-center justify-center space-y-4 py-32 text-center mx-auto md:py-48 lg:py-56">
-
         <h1 className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl">
           Авіаційний коледж
         </h1>
 
         <p className="max-w-[700px] text-lg text-white/90 md:text-xl">
-          Більше 70 років традицій авіаційної освіти та незламності в сучасних викликах.
+          КРИВОРІЗЬКИЙ ФАХОВИЙ КОЛЕДЖ ДЕРЖАВНОГО НЕКОМЕРЦІЙНОГО ПІДПРИЄМСТВА
+          «ДЕРЖАВНИЙ УНІВЕРСИТЕТ «КИЇВСЬКИЙ АВІАЦІЙНИЙ ІНСТИТУТ»
         </p>
 
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-lg">
+          <Button
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-lg"
+          >
             Дізнатися більше
           </Button>
           <Button
@@ -59,7 +62,7 @@ const Hero = ({ imgPath }: HeroProps) => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;
