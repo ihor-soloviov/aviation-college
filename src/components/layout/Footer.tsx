@@ -45,7 +45,7 @@ const Footer = () => {
                             {socials.map((social) => (
                                 <Link key={social.name} href={social.href} className="text-muted-foreground hover:text-blue-600">
                                     <span className="sr-only">{social.name}</span>
-                                    <Image src={social.iconPath} alt={social.name}  width={24} height={24} />
+                                    <Image src={social.iconPath} alt={social.name} width={24} height={24} className="fill-white" />
                                 </Link>
                             ))}
                         </div>
