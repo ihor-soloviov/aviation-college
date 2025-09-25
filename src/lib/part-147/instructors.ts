@@ -1,6 +1,6 @@
 import { IInstructorsData } from "@/types/part-147";
 
-export const tableHeaders = [
+export const instructorsHeaders = [
   {
     id: 1,
     name: "№",

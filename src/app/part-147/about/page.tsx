@@ -1,8 +1,10 @@
+import { BackLink } from "@/components/common/BackLink/BackLink";
 import { Award } from "lucide-react";
 
 export default function AboutPart147Page() {
   return (
     <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
+      <BackLink href="/part-147" />
       <div className="container space-y-12 mx-auto max-w-[1000px]">
         <div className="space-y-8">
           {/* Section Header */}
@@ -31,9 +33,9 @@ export default function AboutPart147Page() {
             {/* Ratings Table */}
             <div className="my-8">
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-gray-300">
+                <table className="w-full bg-gray-100 dark:bg-gray-800 border-collapse border border-gray-300">
                   <thead>
-                    <tr className="bg-gray-50 dark:bg-blue-900/10">
+                    <tr>
                       <th className="border border-gray-300 px-4 py-3 text-left font-semibold">
                         Вид
                       </th>
