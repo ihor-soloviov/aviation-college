@@ -42,6 +42,7 @@ const socials = [
 
 export const Socials = () => {
   const { theme } = useTheme();
+
   return (
     <div>
       <div className="flex items-center gap-2">
