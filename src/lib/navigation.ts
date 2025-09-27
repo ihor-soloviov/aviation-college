@@ -8,19 +8,19 @@ export const links = [
     href: "/courses",
   },
   {
-    label: "Новини",
-    href: "/news",
+    label: "Part-147",
+    href: "/part-147",
   },
   {
     label: "Про нас",
     href: "/about-us",
   },
   {
-    label: "Контакти",
-    href: "/contacts",
+    label: "Новини",
+    href: "/news",
   },
   {
-    label: "Part-147",
-    href: "/part-147",
+    label: "Контакти",
+    href: "/contacts",
   },
 ];
