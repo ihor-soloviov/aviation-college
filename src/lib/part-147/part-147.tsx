@@ -9,8 +9,9 @@ import {
   Users,
   Shield,
 } from "lucide-react";
+import { Part147PageContent } from "@/types/part-147";  
 
-export const linkCategories = [
+export const pageContent: Part147PageContent[] = [
   {
     title: "Основні сторінки",
     description: "Головні розділи сайту коледжу",
@@ -48,6 +49,7 @@ export const linkCategories = [
         description:
           "Організація та проведення підготовки в Організації PART-147",
         icon: <Settings className="h-4 w-4" />,
+        isInDevelopment: true,
       },
       {
         title: "Розклади занять та екзаменів",
@@ -55,6 +57,7 @@ export const linkCategories = [
         description:
           "Розклади проведення занять та екзаменів в Організації PART-147",
         icon: <BookOpen className="h-5 w-5" />,
+        isInDevelopment: true,
       },
       {
         title: "Вартість підготовки",
@@ -62,6 +65,7 @@ export const linkCategories = [
         description:
           "Інформація щодо оплати за проведення підготовки, консультування та екзаменування в Організації PART-147",
         icon: <DollarSign className="h-4 w-4" />,
+        isInDevelopment: true,
       },
       {
         title: "Проживання у гуртожитку",
