@@ -5,7 +5,7 @@ import { SectionTitleProps } from "@/types/part-147";
 
 export default function Part147Page() {
   return (
-    <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
+    <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
       <div className="container space-y-12 mx-auto">
         {pageContent.map(({ title, description, icon, links }) => (
           <div key={title} className="space-y-6">
@@ -24,9 +24,9 @@ const PageTitle = () => (
     <div className="inline-block rounded-full bg-blue-100 p-2">
       <GraduationCap className="h-6 w-6 text-blue-600" />
     </div>
-    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+    <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-balance dark:text-white">
       Організація PART-147
-    </h2>
+    </h1>
     <p className="max-w-[700px] text-muted-foreground">
       Організація з підготовки до технічного обслуговування та екзаменування
     </p>
