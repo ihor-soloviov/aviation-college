@@ -49,6 +49,9 @@ const Hero = ({ imgPath }: HeroProps) => {
           <Button
             size="lg"
             className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-lg"
+            onClick={() => {
+              window.location.href = "#courses";
+            }}
           >
             Дізнатися більше
           </Button>
@@ -56,6 +59,9 @@ const Hero = ({ imgPath }: HeroProps) => {
             size="lg"
             variant="outline"
             className="border-white/80 text-white hover:bg-white hover:text-foreground hover:border-white cursor-pointer backdrop-blur-sm bg-white/10"
+            onClick={() => {
+              window.location.href = "/contacts#contacts-page";
+            }}
           >
             Записатися на навчання
           </Button>

@@ -1,4 +1,5 @@
 import React from "react";
+import { address_href } from "@/lib/utils";
 
 export const Contacts = () => {
   return (
@@ -8,7 +9,7 @@ export const Contacts = () => {
       </h4>
       <address className="not-italic">
         <a
-          href="https://maps.app.goo.gl/UzDMeywUZNE1dkKv5"
+          href={address_href}
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
@@ -17,7 +18,7 @@ export const Contacts = () => {
         </a>
         <br />
         <a
-          href="https://maps.app.goo.gl/UzDMeywUZNE1dkKv5"
+          href={address_href}
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"

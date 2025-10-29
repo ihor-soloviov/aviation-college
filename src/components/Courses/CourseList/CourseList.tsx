@@ -48,7 +48,7 @@ export default function ClientCourseList({ courses }: { courses: { fulltime: ICo
                 {
                     fulltime.length > 0 && (
                         <div id="fulltime">
-                            <h2 className="text-2xl font-bold py-4">Денна форма навчання</h2>
+                            <h2 className="text-2xl font-bold py-4 text-center">Денна форма навчання</h2>
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                 {fulltime.map((course) => {
                                     const Icon = course.icon
@@ -60,8 +60,8 @@ export default function ClientCourseList({ courses }: { courses: { fulltime: ICo
                 }
                 {
                     parttime.length > 0 && (
-                        <div id="parttime">
-                            <h2 className="text-2xl font-bold py-4">Заочна форма навчання</h2>
+                        <div id="parttime mt-6">
+                            <h2 className="text-2xl font-bold py-4 text-center">Заочна форма навчання</h2>
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                 {parttime.map((course) => {
                                     const Icon = course.icon

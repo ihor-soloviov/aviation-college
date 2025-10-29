@@ -26,7 +26,7 @@ export function NewsCard({ news, variant = "default" }: NewsCardProps) {
 
   return (
     <Link href={`/news/${news.id}`}>
-      <Card className="group overflow-hidden border-0 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+      <Card className="group relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 justify-between">
         <div
           className={`relative ${isCompact ? "h-48" : "h-64"} overflow-hidden`}
         >
