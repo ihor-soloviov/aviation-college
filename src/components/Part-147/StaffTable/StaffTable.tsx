@@ -36,11 +36,11 @@ export const StaffTable = () => {
   return (
     <div className="my-8">
       <div className="overflow-x-auto">
-        <table className="w-full bg-gray-100 dark:bg-gray-800 border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden shadow-md">
           <tbody>
             {staffData.map((item, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 px-4 py-3 font-medium align-top">
+              <tr key={index} className="hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors bg-white dark:bg-gray-800">
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-3">
                   <Image
                     src={item.src}
                     alt={item.name}
@@ -49,7 +49,7 @@ export const StaffTable = () => {
                     height={96}
                   />
                 </td>
-                <td className="border border-gray-300 px-4 py-3">
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 dark:text-gray-300">
                   <p className="font-bold">{item.name}</p>
                   <p className="text-sm">{item.description}</p>
                 </td>
