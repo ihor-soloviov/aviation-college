@@ -1,5 +1,4 @@
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
-import { SectionTitle } from "@/components/common/SectionTitle/SectionTitle";
 import { LinksNavigation } from "@/components/Part-147/Navigation/LinksNavigation";
 import { Part147PageContent } from "@/types/part-147";
 import {
@@ -63,14 +62,9 @@ export default function EntrantsPage() {
   return (
     <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
       <div className="container space-y-12 mx-auto">
-        {pageContent.map(({ title, description, icon, links }) => (
-          <div key={title} className="space-y-6">
+        {pageContent.map(({ title, description, links }) => (
+          <div key={title} className="space-y-10">
             <PageTitle title={title} description={description} />
-            <SectionTitle
-              icon={icon}
-              title="Вступникам"
-              description="Інформація для вступників коледжу"
-            />
             <LinksNavigation links={links} />
           </div>
         ))}
