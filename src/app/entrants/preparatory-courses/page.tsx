@@ -8,33 +8,22 @@ import {
   DollarSign,
   Calendar,
   Phone,
-  ArrowLeft,
   CheckCircle2,
   AlertCircle,
-  FileText,
   GraduationCap,
   Users,
   TrendingUp,
-  LinkIcon,
 } from "lucide-react";
 import useCardScrollAnimation from "@/hooks/cardScrollAnimation";
-import { useRouter } from "next/navigation";
-
+import { BackLink } from "@/components/common/BackLink/BackLink";
+import Link from "next/link";
 export default function PreparatoryCoursesPage() {
-  const router = useRouter();
   useCardScrollAnimation();
 
   return (
     <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
       <div className="container mx-auto px-4 space-y-12">
-        {/* Back button */}
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-4"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span className="font-medium">Назад</span>
-        </button>
+        <BackLink href="/entrants" />
 
         {/* Page Title */}
         <div className="flex flex-col items-center space-y-4 text-center max-w-4xl mx-auto">
@@ -224,7 +213,7 @@ export default function PreparatoryCoursesPage() {
           </Card>
 
           {/* Registration */}
-          <Card
+          {/* <Card
             className="animation-card group hover:shadow-xl transition-all duration-300 border-t-4 border-t-blue-600 md:col-span-2 lg:col-span-3"
             data-id="7"
           >
@@ -275,33 +264,28 @@ export default function PreparatoryCoursesPage() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
-          {/* Contact Info */}
-          <Card
-            className="animation-card group hover:shadow-xl transition-all duration-300 border-t-4 border-t-gray-600 dark:border-t-gray-400 md:col-span-2 lg:col-span-3"
-            data-id="8"
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg group-hover:scale-110 transition-transform">
-                  <Phone className="h-6 w-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                    Контактна інформація
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    За детальною інформацією звертайтесь за номером телефону:{" "}
-                    <a
-                      href="tel:+380672967175"
-                      className="font-semibold text-blue-600 hover:underline"
-                    >
-                      067-296-71-75
-                    </a>
-                  </p>
-                </div>
-              </div>
+          <Card className="md:col-span-2 lg:col-span-3 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 text-white dark:border-blue-700">
+            <CardContent className="flex flex-col items-center gap-4 py-8 text-center">
+              <h3 className="text-2xl font-bold">Запис на курси</h3>
+              <p className="max-w-[600px] text-white/90">
+                Надішліть: телефон, П.І.Б. слухача та П.І.Б. батьків на номер{" "}
+                <a
+                  href="tel:+380672967175"
+                  className="font-semibold text-black-600 hover:underline"
+                >
+                  067-296-71-75
+                </a>
+              </p>
+              <Link
+                href="https://docs.google.com/forms/d/e/1FAIpQLSf70UNr0UeYDBLI2z4HvXHh090fv3yQjQgr-Nz76bC9T3os6w/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-sm font-medium text-blue-600 transition-colors hover:bg-white/90 dark:bg-white dark:text-blue-700 dark:hover:bg-gray-100"
+              >
+                Онлайн реєстрація
+              </Link>
             </CardContent>
           </Card>
         </div>
