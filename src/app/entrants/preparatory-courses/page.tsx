@@ -7,7 +7,6 @@ import {
   Clock,
   DollarSign,
   Calendar,
-  Phone,
   CheckCircle2,
   AlertCircle,
   GraduationCap,

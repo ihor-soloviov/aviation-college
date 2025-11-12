@@ -37,7 +37,7 @@ export const pageContent: Part147PageContent[] = [
       },
       {
         title: "Спеціальності підготовки",
-        href: "/entrants/specialties",
+        href: "/courses",
         description:
           "Інформація про спеціальності підготовки до вступу до коледжу",
         icon: <Settings className="h-4 w-4" />,
