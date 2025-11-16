@@ -507,20 +507,270 @@ const documents: DocumentItem[] = [
     children: [
       {
         id: "11.1",
-        title: "Вимоги до написання мотиваційного листа вступниками",
-        children: [],
+        title:
+          "Списки осіб рекомендованих до зарахування на базі базової середньої освіти (на базі 9-ти класів)",
+        children: [
+          {
+            id: "11.1.1",
+            title: "рекомендовані до зарахування на бюджет",
+            children: [
+              {
+                id: "11.1.1.1",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю F2 Інженерія програмного забезпечення",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2massdfgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.2",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю F7 Комп`ютерна інженерія",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2massdfgdfgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.3",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю G3 Електрична інженерія",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2dfghdfassdfgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.4",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю G5 Електроніка, електронні комунікації, приладобудування та радіотехніка",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2mahdhdssdfgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.5",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю G7 Автоматизація, комп`ютерно-інтегровані технології та робототехніка",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2massdfdsfdgsdghdhgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.6",
+                title: `Списки осіб, рекомендованих до зарахування за спеціальністю G12 Авіаційна та ракетно-космічна техніка`,
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2massdfhdhdgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.7",
+                title: `Списки осіб, рекомендованих до зарахування за спеціальністю J6 Авіаційний транспорт (освітня програма "Авіаційний транспорт")`,
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2massdfdhdhgssasa4y.pdf",
+              },
+              {
+                id: "11.1.1.8",
+                title: `Списки осіб, рекомендованих до зарахування за спеціальністю J6 Авіаційний транспорт (освітня програма "Транспортні технології (на повітряному транспорті)")`,
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssdwrr2massdfgssasa4y.pdf",
+              },
+            ],
+          },
+          {
+            id: "11.1.2",
+            title: "рекомендовані до зарахування на контракт",
+            children: [
+              {
+                id: "11.1.2.1",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю F2 Інженерія програмного забезпечення",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdsdgsdgssd2massdfgssasa4y.pdf",
+              },
+              {
+                id: "11.1.2.2",
+                title: `Списки осіб, рекомендованих до зарахування за спеціальністю J6 Авіаційний транспорт (освітня програма "Авіаційний транспорт")`,
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2sgvsmassdfgdfgssasa4y.pdf",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "11.2",
+        title:
+          "Списки осіб рекомендованих до зарахування на базі ФМБ (МС) для здобуття ОС бакалавра",
+        children: [
+          {
+            id: "11.2.1",
+            title: "Денна форма здобуття освіти",
+            children: [
+              {
+                id: "11.2.1.1",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю D3 Менеджмент",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2masd'isfgdssdfgssasa4y.pdf",
+              },
+              {
+                id: "11.2.1.2",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю F7 Комп`ютерна інженерія",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2madkkssdfgdfgssasa4y.pdf",
+              },
+              {
+                id: "11.2.1.3",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю G3 Електрична інженерія",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2dfghdferyassdfgssasa4y.pdf",
+              },
+              {
+                id: "11.2.1.4",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю G5 Електроніка, електронні комунікації, приладобудування та радіотехніка",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2mahdhdssdfgggssasa4y.pdf",
+              },
+              {
+                id: "11.2.1.5",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю J6 Авіаційний транспорт",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2massdfdhdhssgssasa4y.pdf",
+              },
+            ],
+          },
+          {
+            id: "11.2.2",
+            title: "Заочна форма здобуття освіти",
+            children: [
+              {
+                id: "11.2.2.1",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю F7 Комп`ютерна інженерія",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdsdgsdgssd2m.kjlassdfgssasa4y.pdf",
+              },
+              {
+                id: "11.2.2.2",
+                title: `Списки осіб, рекомендованих до зарахування за спеціальністю G3 Електрична інженерія`,
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2sgvsmassdfgdfgsffsakjljsa4y.pdf",
+              },
+              {
+                id: "11.2.2.3",
+                title:
+                  "Списки осіб, рекомендованих до зарахування за спеціальністю G5 Електроніка, електронні комунікації, приладобудування та радіотехніка",
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdsdgsdgssd2massdfjklgsfsasa4y.pdf",
+              },
+              {
+                id: "11.2.2.4",
+                title: `Списки осіб, рекомендованих до зарахування за спеціальністю J6 Авіаційний транспорт`,
+                pdfUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdssd2sgvsmassdfgdfgfssakjlsa4y.pdf",
+              },
+            ],
+          },
+        ],
       },
     ],
   },
   {
     id: "12",
     title: "Накази про зарахування",
-    children: [],
-  },
-  {
-    id: "13",
-    title: "Протоколи засідання приймальної комісії",
-    children: [],
+    children: [
+      {
+        id: "12.1",
+        title: `Зарахування на базі БСО для здобуття ОПС "Фаховий молодший бакалавр"`,
+        children: [
+          {
+            id: "12.1.1",
+            title: "Основний набір",
+            children: [
+              {
+                id: "12.1.1.1",
+                title: "Денна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.1.1.1.1",
+                    title:
+                      "Наказ про зарахування №178-ст від 29.07.2025 (бюджет, БСО, спеціальності F2, F7, G3, G7)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.1.1.1.2",
+                    title:
+                      "Наказ про зарахування №179-ст від 29.07.2025 (бюджет, БСО, спеціальності G12, J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.1.1.1.3",
+                    title:
+                      "Наказ про зарахування №180-ст від 29.07.2025 (бюджет, БСО, спеціальність J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdsssgbhd2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.1.1.1.4",
+                    title:
+                      "Наказ про зарахування №181-ст від 29.07.2025 (контракт, БСО, спеціальність F2)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgsgsdgdssgdsmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.1.1.1.5",
+                    title:
+                      "Наказ про зарахування №182-ст від 29.07.2025 (контракт, БСО, спеціальність J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgssgsdgdgmassasa4y.pdf",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: "12.1.2",
+            title: "Додатковий набір",
+            children: [
+              {
+                id: "12.1.2.1",
+                title: "Денна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.1.2.1.1",
+                    title:
+                      "Наказ про зарахування №207-ст від 28.08.2025 (контракт, БСО, спеціальності F2, F7, G3, G7)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.1.2.1.2",
+                    title:
+                      "Наказ про зарахування №208-ст від 28.08.2025 (контракт, БСО, спеціальності G12, J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdgmassasa4y.pdf",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "12.2",
+        title: `Зарахування на базі ПЗСО та КР для здобуття ОПС "Фаховий молодший бакалавр"`,
+        children: [],
+      },
+      {
+        id: "12.3",
+        title: `Зарахування на базі ОПС ФМБ для здобуття освітнього ступеня "Бакалавр"`,
+        children: [],
+      },
+      {
+        id: "12.4",
+        title: `Зарахування на базі ФМБ, НРК 5, НРК 6 для здобуття ОПС "Фаховий молодший бакалавр"`,
+        children: [],
+      },
+    ],
   },
 ];
 
@@ -578,7 +828,7 @@ export default function DocumentsPage() {
                   : "text-gray-600"
               }`}
             />
-            <span>{item.title}</span>
+            <span className="mr-[10px]">{item.title}</span>
           </button>
         );
       }
