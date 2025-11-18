@@ -758,17 +758,220 @@ const documents: DocumentItem[] = [
       {
         id: "12.2",
         title: `Зарахування на базі ПЗСО та КР для здобуття ОПС "Фаховий молодший бакалавр"`,
-        children: [],
+        children: [
+          {
+            id: "12.2.1",
+            title: "Основний набір",
+            children: [
+              {
+                id: "12.2.1.1",
+                title: "Денна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.2.1.1.1",
+                    title:
+                      "Наказ про зарахування №192-ст від 14.08.2025 (бюджет, денна, ФМБ, спеціальніть J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2dsgsd2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.2.1.1.2",
+                    title:
+                      "Наказ про зарахування №193-ст від 14.08.2025 (контракт, денна, ФМБ, спеціальніть F2)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2safadgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.2.1.1.3",
+                    title:
+                      "Наказ про зарахування №194-ст від 14.08.2025 (контракт, денна, ФМБ, спеціальніть J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2assdsssgbhd2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.2.1.1.4",
+                    title:
+                      "Наказ про зарахування №196-ст від 14.08.2025 (контракт, денна, ФМБ, спеціальніть J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2dddf2sdgsdgsgsdgdssgdsmassasa4y.pdf",
+                  },
+                ],
+              },
+              {
+                id: "12.2.1.2",
+                title: "Заочна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.2.1.2.1",
+                    title:
+                      "Наказ про зарахування №191-ст від 14.08.2025 (контракт, заочна, ФМБ, спеціальності F2, F7)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2ddddsgsd2sdgsdgmassasa4y.pdf",
+                  },
+                  {
+                    id: "12.2.1.2.2",
+                    title:
+                      "Наказ про зарахування №195-ст від 14.08.2025 (контракт, заочна, ФМБ, спеціальніть J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2safadgsdgmassasafraa4y.pdf",
+                  },
+                  {
+                    id: "12.2.1.2.3",
+                    title:
+                      "Наказ про зарахування №197-ст від 14.08.2025 (контракт, заочна, ФМБ, спеціальності G12, J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2assdsssgbhd2sdgsdgmassghssasa4y.pdf",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: "12.2.2",
+            title: "Додатковий набір",
+            children: [
+              {
+                id: "12.2.2.1",
+                title: "Денна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.2.2.1.1",
+                    title:
+                      "Наказ про зарахування №209-ст від 28.08.2025 (контракт, ПЗСО, спеціальність F2)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4kyuhy.pdf",
+                  },
+                  {
+                    id: "12.2.2.1.2",
+                    title:
+                      "Наказ про зарахування №210-ст від 28.08.2025 (контракт, ПЗСО, спеціальність J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdgmassasdja4y.pdf",
+                  },
+                  {
+                    id: "12.2.2.1.3",
+                    title:
+                      "Наказ про зарахування №211-ст від 28.08.2025 (контракт, КР, спеціальність F7)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdsfsdgmassasdja4y.pdf",
+                  },
+                  {
+                    id: "12.2.2.1.4",
+                    title:
+                      "Наказ про зарахування №212-ст від 28.08.2025 (контракт, КР, спеціальність J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdlkkl;gmassasdja4y.pdf",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
         id: "12.3",
         title: `Зарахування на базі ОПС ФМБ для здобуття освітнього ступеня "Бакалавр"`,
-        children: [],
+        children: [
+          {
+            id: "12.3.1",
+            title: "Основний набір",
+            children: [
+              {
+                id: "12.3.1.1",
+                title: "Денна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.3.1.1.1",
+                    title:
+                      "Наказ про зарахування №184-ст від 11.08.2025 (контракт, денна, бакалаврат, спеціальності D3, F7, G3)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4flkjy.pdf",
+                  },
+                  {
+                    id: "12.3.1.1.2",
+                    title:
+                      "Наказ про зарахування №185-ст від 11.08.2025 (контракт, денна, бакалаврат, спеціальності J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdgmassaliusa4y.pdf",
+                  },
+                  {
+                    id: "12.3.1.1.3",
+                    title:
+                      "Наказ про зарахування №190-ст від 12.08.2025 (контракт, денна, бакалаврат, спеціальність G3)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2sdsssgbhd2sdgsdgmassasa4jlhy.pdf",
+                  },
+                ],
+              },
+              {
+                id: "12.3.1.2",
+                title: "Заочна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.3.1.2.1",
+                    title:
+                      "Наказ про зарахування №185-ст від 11.08.2025 (контракт, заочна, бакалаврат, спеціальності F7, G3, G5, J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4flkлeryjy.pdf",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: "12.3.2",
+            title: "Додатковий набір",
+            children: [
+              {
+                id: "12.3.2.1",
+                title: "Заочна форма здобуття освіти",
+                children: [
+                  {
+                    id: "12.3.2.1.1",
+                    title:
+                      "Наказ про зарахування №255-ст від 16.09.2025 (контракт, ФМБ, спеціальності F7, G3, J6)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4yeryte.pdf",
+                  },
+                  {
+                    id: "12.3.2.1.2",
+                    title:
+                      "Наказ про зарахування №256-ст від 16.09.2025 (контракт, ФМБ, спеціальність G3)",
+                    pdfUrl:
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dsgв2d2sdgsdgmrgrereyassasa4y.pdf",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
         id: "12.4",
         title: `Зарахування на базі ФМБ, НРК 5, НРК 6 для здобуття ОПС "Фаховий молодший бакалавр"`,
-        children: [],
+        children: [
+          {
+            title:
+              "Наказ про зарахування №252-ст від 16.09.2025 (контракт, бакалавр, спеціальності G12, J6)",
+            id: "12.4.1",
+            pdfUrl:
+              "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4yery2131te.pdf",
+          },
+          {
+            title:
+              "Наказ про зарахування №253-ст від 16.09.2025 (контракт, ФМБ, спеціальність J6)",
+            id: "12.4.2",
+            pdfUrl:
+              "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d2sdgsdgmassasa4yery2131te123.pdf",
+          },
+          {
+            title:
+              "Наказ про зарахування №254-ст від 16.09.2025 (контракт, ФМБ, спеціальність J6)",
+            id: "12.4.3",
+            pdfUrl:
+              "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dв2d22132sdgsdgmassasa4yery2131te.pdf",
+          },
+        ],
       },
     ],
   },
