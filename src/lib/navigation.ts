@@ -5,7 +5,7 @@ export const links = [
   },
   {
     label: "Вступникам",
-    href: "/entrants",
+    href: "/enterants",
   },
   {
     label: "Курси",

@@ -19,19 +19,19 @@ export const pageContent: Part147PageContent[] = [
     links: [
       {
         title: "Приймальна комісія",
-        href: "/entrants/admission-commission",
+        href: "/enterants/admission-commission",
         description: "Інформація про прийом до коледжу",
         icon: <Users className="h-4 w-4" />,
       },
       {
         title: "Підготовчі курси до вступу",
-        href: "/entrants/preparatory-courses",
+        href: "/enterants/preparatory-courses",
         description: "Інформація про підготовчі курси до вступу до коледжу",
         icon: <BookOpen className="h-4 w-4" />,
       },
       {
         title: "Інформаційний буклет",
-        href: "/entrants/information-booklet",
+        href: "/enterants/information-booklet",
         description: "Інформаційний буклет для вступників до коледжу",
         icon: <Newspaper className="h-4 w-4" />,
       },
@@ -44,13 +44,13 @@ export const pageContent: Part147PageContent[] = [
       },
       {
         title: "Вступ 2025",
-        href: "/entrants/entrance-2025",
+        href: "/enterants/enterance-2025",
         description: "Інформація про вступ 2025 до коледжу",
         icon: <Calendar className="h-4 w-4" />,
       },
       {
         title: "Архів приймальної інформації",
-        href: "/entrants/admission-information-archive",
+        href: "/enterants/admission-information-archive",
         description: "Архів приймальної інформації до коледжу",
         icon: <Mail className="h-4 w-4" />,
       },
@@ -58,7 +58,7 @@ export const pageContent: Part147PageContent[] = [
   },
 ];
 
-export default function EntrantsPage() {
+export default function EnterantsPage() {
   return (
     <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
       <div className="container space-y-12 mx-auto">
