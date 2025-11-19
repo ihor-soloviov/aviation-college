@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import MobileMenuDrawer from "@/components/layout/MobileMenuDrawer";
+import { MobileMenuProvider } from "@/hooks/useMobileMenu";
 import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
@@ -31,13 +33,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">
-              {children}
-              <Footer />
-            </main>
-          </div>
+          <MobileMenuProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <MobileMenuDrawer />
+              <main className="flex-1">
+                {children}
+                <Footer />
+              </main>
+            </div>
+          </MobileMenuProvider>
         </ThemeProvider>
       </body>
     </html >
