@@ -4,7 +4,7 @@ export interface IInstructorsData {
   competencies: string[];
 }
 
-export type Part147PageLink = {
+export type DefaultPageLink = {
   title: string;
   href: string;
   description: string;
@@ -18,6 +18,6 @@ export type SectionTitleProps = {
   description: string;
 };
 
-export type Part147PageContent = SectionTitleProps & {
-  links: Part147PageLink[];
+export type DefaultPageContent = SectionTitleProps & {
+  links: DefaultPageLink[];
 };

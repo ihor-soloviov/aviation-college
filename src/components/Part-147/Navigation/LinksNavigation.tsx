@@ -5,11 +5,11 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { Part147PageLink } from "@/types/part-147";
+import { DefaultPageLink } from "@/types/part-147";
 import Link from "next/link";
 
 type Props = {
-  links: Part147PageLink[];
+  links: DefaultPageLink[];
 };
 
 export const LinksNavigation: React.FC<Props> = ({ links }) => {

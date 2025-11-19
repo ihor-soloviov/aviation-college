@@ -7,29 +7,20 @@ import {
   Mail,
   MapPin,
   User,
-  ArrowLeft,
   Clock,
   FileText,
   Calendar,
 } from "lucide-react";
 import useCardScrollAnimation from "@/hooks/cardScrollAnimation";
-import { useRouter } from "next/navigation";
+import { BackLink } from "@/components/common/BackLink/BackLink";
 
 export default function AdmissionCommissionPage() {
-  const router = useRouter();
   useCardScrollAnimation();
 
   return (
     <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
       <div className="container mx-auto max-w-[900px] space-y-12">
-        {/* Back button */}
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-4"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span className="font-medium">Назад</span>
-        </button>
+        <BackLink href="/enterants" />
 
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="inline-block rounded-full bg-blue-100 p-2">
