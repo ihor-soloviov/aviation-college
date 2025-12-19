@@ -1,29 +1,29 @@
-"use client"
-import { X } from "lucide-react"
-import React, { useEffect, useRef } from "react"
+"use client";
+import { X } from "lucide-react";
+import React, { useEffect, useRef } from "react";
 
-import ThemeToggle from "../common/ThemeToggle/ThemeToggle"
-import NavItem from "../common/Header/NavItem"
-import { useClickOutside } from "@/hooks/useClickOutside"
-import { useMobileMenu } from "@/hooks/useMobileMenu"
-import { links } from "@/lib/navigation"
+import ThemeToggle from "../common/ThemeToggle/ThemeToggle";
+import NavItem from "../common/Header/NavItem";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { useMobileMenu } from "@/hooks/useMobileMenu";
+import { links } from "@/lib/navigation";
 
 const MobileMenuDrawer = () => {
-  const { isMenuOpen, closeMenu } = useMobileMenu()
-  const menuRef = useRef<HTMLDivElement>(null)
+  const { isMenuOpen, closeMenu } = useMobileMenu();
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(menuRef, closeMenu, isMenuOpen)
+  useClickOutside(menuRef, closeMenu, isMenuOpen);
 
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isMenuOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
 
   return (
     <div
@@ -58,7 +58,12 @@ const MobileMenuDrawer = () => {
 
         <nav className="flex flex-1 flex-col gap-2 py-6">
           {links.map((link) => (
-            <NavItem key={link.label} label={link.label} href={link.href} onClick={closeMenu} />
+            <NavItem
+              key={link.label}
+              label={link.label}
+              href={link.href}
+              onClick={closeMenu}
+            />
           ))}
         </nav>
 
@@ -67,8 +72,7 @@ const MobileMenuDrawer = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MobileMenuDrawer
-
+export default MobileMenuDrawer;

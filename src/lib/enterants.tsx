@@ -32,11 +32,10 @@ export const pageContent: DefaultPageContent[] = [
         href: "/enterants/information-booklet",
         description: "Інформаційний буклет для вступників до коледжу",
         icon: <Newspaper className="h-4 w-4" />,
-        isInDevelopment: true,
       },
       {
         title: "Спеціальності підготовки",
-        href: "/courses",
+        href: "/courses#courses-filters",
         description:
           "Інформація про спеціальності підготовки до вступу до коледжу",
         icon: <Settings className="h-4 w-4" />,
