@@ -1,11 +1,19 @@
 "use client";
 
-import { Calendar, ChevronDown } from "lucide-react";
+import { Calendar, ChevronDown, BookOpen, GraduationCap } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { SchedulePeriod } from "./types";
 import { SessionCard } from "./SessionCard";
+
+const getYearIcon = (year: string) => {
+  const startYear = parseInt(year.split("-")[0]);
+  if (startYear % 2 === 0) {
+    return <BookOpen className="h-5 w-5" />;
+  }
+  return <GraduationCap className="h-5 w-5" />;
+};
 
 type PeriodCardProps = {
   period: SchedulePeriod;
@@ -55,17 +63,12 @@ export const PeriodCard = ({
               <CardTitle className="text-lg md:text-xl">
                 {period.title}
               </CardTitle>
-              <div className="mt-1 flex items-center gap-2">
-                <Badge
+              <Badge
                   variant={period.studyForm === "Денна" ? "default" : "outline"}
-                  className="text-xs font-normal"
+                  className="mt-1 text-xs font-normal"
                 >
                   {period.studyForm} форма
                 </Badge>
-                <Badge variant="secondary" className="text-xs font-normal">
-                  {period.academicYears.length} навч. {period.academicYears.length === 1 ? "рік" : "роки"}
-                </Badge>
-              </div>
             </div>
           </div>
           <ChevronDown
@@ -109,8 +112,8 @@ export const PeriodCard = ({
                     className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-muted/50"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-sm font-bold text-white shadow-sm">
-                        {academicYear.year.split("-")[0].slice(-2)}
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
+                        {getYearIcon(academicYear.year)}
                       </div>
                       <div>
                         <span className="font-semibold text-foreground">
