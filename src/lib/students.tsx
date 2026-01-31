@@ -30,7 +30,6 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Розклад екзаменів",
         href: "/students/exams",
-        isInDevelopment: true,
       },
     ],
   },
