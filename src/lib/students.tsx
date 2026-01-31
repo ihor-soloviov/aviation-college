@@ -26,7 +26,6 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Графік консультацій",
         href: "/students/consultations",
-        isInDevelopment: true,
       },
       {
         title: "Розклад екзаменів",
