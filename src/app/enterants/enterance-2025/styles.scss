@@ -1,0 +1,35 @@
+/* Custom scrollbar styling for better UX */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 3px;
+    
+    &:hover {
+      background-color: rgb(148 163 184);
+    }
+  }
+}
+
+/* Dark mode scrollbar */
+:global(.dark) .overflow-y-auto {
+  scrollbar-color: rgb(71 85 105) transparent;
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(71 85 105);
+    
+    &:hover {
+      background-color: rgb(100 116 139);
+    }
+  }
+}

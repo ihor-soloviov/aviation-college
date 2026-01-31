@@ -4,10 +4,6 @@ export const links = [
     href: "/",
   },
   {
-    label: "Вступникам",
-    href: "/entrants",
-  },
-  {
     label: "Курси",
     href: "/courses",
   },

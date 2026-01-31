@@ -8,7 +8,7 @@ import { StaffTable } from "@/components/Part-147/StaffTable/StaffTable";
 export default function StaffPage() {
   // TODO: додати таблицю з кадровим складом
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
+    <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
       <BackLink href="/part-147" />
       <div className="container space-y-12 mx-auto max-w-[1000px]">
         <div className="space-y-8">

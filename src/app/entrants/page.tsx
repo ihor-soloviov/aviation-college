@@ -1,16 +1,8 @@
-import { PageTitle } from "@/components/common/PageTitle/PageTitle";
-import { SectionTitle } from "@/components/common/SectionTitle/SectionTitle";
-import { LinksNavigation } from "@/components/Part-147/Navigation/LinksNavigation";
-import { Part147PageContent } from "@/types/part-147";
-import {
-  Building,
-  Users,
-  Newspaper,
-  Settings,
-  BookOpen,
-  Mail,
-  Calendar,
-} from "lucide-react";
+import { PageTitle } from "@/components/common/PageTitle/PageTitle"
+import { SectionTitle } from "@/components/common/SectionTitle/SectionTitle"
+import { LinksNavigation } from "@/components/Part-147/Navigation/LinksNavigation"
+import type { Part147PageContent } from "@/types/part-147"
+import { Building, Users, Newspaper, Settings, BookOpen, Mail, Calendar } from "lucide-react"
 
 export const pageContent: Part147PageContent[] = [
   {
@@ -39,8 +31,7 @@ export const pageContent: Part147PageContent[] = [
       {
         title: "Спеціальності підготовки",
         href: "/entrants/specialties",
-        description:
-          "Інформація про спеціальності підготовки до вступу до коледжу",
+        description: "Інформація про спеціальності підготовки до вступу до коледжу",
         icon: <Settings className="h-4 w-4" />,
       },
       {
@@ -57,7 +48,7 @@ export const pageContent: Part147PageContent[] = [
       },
     ],
   },
-];
+]
 
 export default function EntrantsPage() {
   return (
@@ -66,15 +57,11 @@ export default function EntrantsPage() {
         {pageContent.map(({ title, description, icon, links }) => (
           <div key={title} className="space-y-6">
             <PageTitle title={title} description={description} />
-            <SectionTitle
-              icon={icon}
-              title="Вступникам"
-              description="Інформація для вступників коледжу"
-            />
+            <SectionTitle icon={icon} title="Вступникам" description="Інформація для вступників коледжу" />
             <LinksNavigation links={links} />
           </div>
         ))}
       </div>
     </section>
-  );
+  )
 }

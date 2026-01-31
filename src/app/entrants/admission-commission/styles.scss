@@ -1,0 +1,23 @@
+@function getAnimationDelay($id) {
+    @return $id * 0.2s;
+}
+
+.container {
+    perspective: 1000px;
+}
+
+.animation-card {
+    transform: translateZ(-100px);
+    
+    transition: transform 0.6s ease;
+    
+    @for $i from 1 through 15 {
+        &[data-id="#{$i}"] {
+            transition-delay: getAnimationDelay($i);
+        }
+    }
+}
+
+.visible {
+    transform: translateZ(0);
+}

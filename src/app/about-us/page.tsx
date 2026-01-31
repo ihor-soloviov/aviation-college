@@ -1,414 +1,232 @@
-import { AnimatedCounter } from "@/components/animated-counter"
-import { LazySection } from "@/components/lazy-section"
-import { Card, CardContent } from "@/components/ui/card"
-import {
-  GraduationCap,
-  Users,
-  Building2,
-  BookOpen,
-  Plane,
-  Trophy,
-  MapPin,
-  Calendar,
-  Wifi,
-  Utensils,
-  Home,
-  Music,
-} from "lucide-react"
-
 export default function AboutUsPage() {
+  const paragraphClasses = "text-muted-foreground mb-4";
+  const subTitleClasses = "text-xl font-semibold mt-8 mb-2";
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 dark:from-blue-900 dark:via-blue-950 dark:to-gray-900 py-20 md:py-32">
-        <div className="absolute inset-0 bg-[url('/aviation-pattern.jpg')] opacity-10"></div>
-        <div className="container mx-auto relative z-10 text-center text-white">
-          <LazySection animation="fadeIn">
-            <div className="inline-block rounded-full bg-white/20 dark:bg-white/10 p-3 mb-6">
-              <GraduationCap className="h-8 w-8" />
-            </div>
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl mb-6">
-              Криворізький Фаховий Коледж КАІ
-            </h1>
-            <p className="max-w-[800px] mx-auto text-lg text-white/90 md:text-xl">
-              Понад 70 років досконалості в авіаційній освіті. Готуємо професіоналів для неба.
-            </p>
-          </LazySection>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="bg-white dark:bg-gray-900 py-16 border-b dark:border-gray-800">
-        <div className="container mx-auto">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <LazySection animation="scaleIn" delay={0}>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  <AnimatedCounter end={35000} suffix="+" />
-                </div>
-                <div className="text-muted-foreground dark:text-gray-400 mt-2">Випускників</div>
-              </div>
-            </LazySection>
-            <LazySection animation="scaleIn" delay={100}>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  <AnimatedCounter end={45} suffix="+" />
-                </div>
-                <div className="text-muted-foreground dark:text-gray-400 mt-2">Країн світу</div>
-              </div>
-            </LazySection>
-            <LazySection animation="scaleIn" delay={200}>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  <AnimatedCounter end={106} />
-                </div>
-                <div className="text-muted-foreground dark:text-gray-400 mt-2">Викладачів</div>
-              </div>
-            </LazySection>
-            <LazySection animation="scaleIn" delay={300}>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  <AnimatedCounter end={13} />
-                </div>
-                <div className="text-muted-foreground dark:text-gray-400 mt-2">Повітряних суден</div>
-              </div>
-            </LazySection>
-          </div>
-        </div>
-      </section>
-
-      {/* History Section */}
-      <section className="bg-gray-50 dark:bg-gray-950 py-16 md:py-24">
-        <div className="container mx-auto max-w-[900px]">
-          <LazySection animation="slideUp">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="rounded-full bg-blue-100 dark:bg-blue-900/30 p-3">
-                <Calendar className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter dark:text-white">Історія та місія</h2>
-            </div>
-          </LazySection>
-
-          <LazySection animation="slideUp" delay={100}>
-            <Card className="mb-6 dark:bg-gray-900 dark:border-gray-800">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-full bg-blue-100 dark:bg-blue-900/30 p-2 mt-1">
-                    <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2 dark:text-white">Місце розташування</h3>
-                    <p className="text-muted-foreground dark:text-gray-400">
-                      50024, Дніпропетровська область, м. Кривий Ріг, вул. Олега Антонова, 1
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </LazySection>
-
-          <LazySection animation="slideUp" delay={200}>
-            <div className="prose dark:prose-invert max-w-none">
-              <p className="text-muted-foreground dark:text-gray-400 mb-4">
-                Історія коледжу бере початок з червня 1951 року. За роки свого існування коледж став сучасним закладом
-                освіти і підготував понад 35 тисяч фахівців, які працюють не лише в Україні, але і поза її межами, більш
-                як у 45 країнах світу.
-              </p>
-              <p className="text-muted-foreground dark:text-gray-400">
-                Основним завданням розвитку освіти у Криворізькому фаховому коледжі стає виведення її на рівень
-                державних і міжнародних стандартів, досягнення якісно нового рівня підготовки авіаційних фахівців.
-              </p>
-            </div>
-          </LazySection>
-        </div>
-      </section>
-
-      {/* Faculty Section */}
-      <section className="bg-white dark:bg-gray-900 py-16 md:py-24">
-        <div className="container mx-auto max-w-[900px]">
-          <LazySection animation="slideUp">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="rounded-full bg-green-100 dark:bg-green-900/30 p-3">
-                <Users className="h-6 w-6 text-green-600 dark:text-green-400" />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter dark:text-white">Викладацький склад</h2>
-            </div>
-          </LazySection>
-
-          <div className="grid gap-6 md:grid-cols-3 mb-8">
-            <LazySection animation="scaleIn" delay={0}>
-              <Card className="text-center dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                    <AnimatedCounter end={4} />
-                  </div>
-                  <div className="text-sm text-muted-foreground dark:text-gray-400">Доктори наук</div>
-                </CardContent>
-              </Card>
-            </LazySection>
-            <LazySection animation="scaleIn" delay={100}>
-              <Card className="text-center dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                    <AnimatedCounter end={20} />
-                  </div>
-                  <div className="text-sm text-muted-foreground dark:text-gray-400">Кандидати наук</div>
-                </CardContent>
-              </Card>
-            </LazySection>
-            <LazySection animation="scaleIn" delay={200}>
-              <Card className="text-center dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                    <AnimatedCounter end={63} />
-                  </div>
-                  <div className="text-sm text-muted-foreground dark:text-gray-400">Вища категорія</div>
-                </CardContent>
-              </Card>
-            </LazySection>
-          </div>
-
-          <LazySection animation="slideUp" delay={300}>
-            <p className="text-muted-foreground dark:text-gray-400">
-              Освітній процес у коледжі здійснюють 106 штатних та позаштатних викладачів. Для реалізації освітнього
-              процесу залучаються викладачі Національного авіаційного університету та інших закладів вищої освіти, які
-              працюють в коледжі за сумісництвом, та фахівці-практики.
-            </p>
-          </LazySection>
-        </div>
-      </section>
-
-      {/* Infrastructure Section */}
-      <section className="bg-gray-50 dark:bg-gray-950 py-16 md:py-24">
-        <div className="container mx-auto max-w-[900px]">
-          <LazySection animation="slideUp">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="rounded-full bg-purple-100 dark:bg-purple-900/30 p-3">
-                <Building2 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter dark:text-white">Інфраструктура</h2>
-            </div>
-          </LazySection>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <LazySection animation="slideInLeft" delay={0}>
-              <Card className="dark:bg-gray-900 dark:border-gray-800">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-purple-100 dark:bg-purple-900/30 p-2">
-                      <Building2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Навчальні корпуси</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        5 корпусів з 51 аудиторією, 14 кабінетами та 39 лабораторіями
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-
-            <LazySection animation="slideInRight" delay={100}>
-              <Card className="dark:bg-gray-900 dark:border-gray-800">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-purple-100 dark:bg-purple-900/30 p-2">
-                      <Plane className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Авіаційна техніка</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        13 повітряних суден на власній авіаційно-технічній базі
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-
-            <LazySection animation="slideInLeft" delay={200}>
-              <Card className="dark:bg-gray-900 dark:border-gray-800">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-purple-100 dark:bg-purple-900/30 p-2">
-                      <Trophy className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Спортивні об'єкти</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        2 спортзали, стадіон, баскетбольна та волейбольна площадки
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-
-            <LazySection animation="slideInRight" delay={300}>
-              <Card className="dark:bg-gray-900 dark:border-gray-800">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-purple-100 dark:bg-purple-900/30 p-2">
-                      <BookOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Бібліотека</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        Понад 147,480 томів літератури та електронні ресурси
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-          </div>
-
-          <LazySection animation="slideUp" delay={400}>
-            <Card className="mt-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 border-purple-200 dark:border-purple-900/30">
-              <CardContent className="pt-6">
-                <div className="grid gap-4 md:grid-cols-3 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                      <AnimatedCounter end={23} />
-                    </div>
-                    <div className="text-sm text-muted-foreground dark:text-gray-400">Комп'ютерні лабораторії</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                      <AnimatedCounter end={311} />
-                    </div>
-                    <div className="text-sm text-muted-foreground dark:text-gray-400">Комп'ютерів</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                      <AnimatedCounter end={23} />
-                    </div>
-                    <div className="text-sm text-muted-foreground dark:text-gray-400">Гектарів території</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </LazySection>
-        </div>
-      </section>
-
-      {/* Student Life Section */}
-      <section className="bg-white dark:bg-gray-900 py-16 md:py-24">
-        <div className="container mx-auto max-w-[900px]">
-          <LazySection animation="slideUp">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="rounded-full bg-orange-100 dark:bg-orange-900/30 p-3">
-                <Music className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter dark:text-white">Студентське життя</h2>
-            </div>
-          </LazySection>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <LazySection animation="scaleIn" delay={0}>
-              <Card className="dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-orange-100 dark:bg-orange-900/30 p-2">
-                      <Home className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Гуртожитки</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        4 гуртожитки з 100% забезпеченням житлом
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-
-            <LazySection animation="scaleIn" delay={100}>
-              <Card className="dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-orange-100 dark:bg-orange-900/30 p-2">
-                      <Utensils className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Харчування</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        Їдальня на 900 місць та 2 буфети
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-
-            <LazySection animation="scaleIn" delay={200}>
-              <Card className="dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-orange-100 dark:bg-orange-900/30 p-2">
-                      <Music className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Культура</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        Студентський палац, клуб "Авіатор", творчі колективи
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-
-            <LazySection animation="scaleIn" delay={300}>
-              <Card className="dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-orange-100 dark:bg-orange-900/30 p-2">
-                      <Wifi className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2 dark:text-white">Інтернет</h3>
-                      <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        Wi-Fi по всій території, Google Workspace
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </LazySection>
-          </div>
-
-          <LazySection animation="slideUp" delay={400}>
-            <Card className="mt-6 dark:bg-gray-800 dark:border-gray-700">
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground dark:text-gray-400">
-                  На території коледжу розташований Студентський палац та клуб «Авіатор», у яких працюють різноманітні
-                  художні гуртки, проводяться культурні заходи, конкурси та концерти. Працюють студентські творчі
-                  колективи, духовий оркестр, танцювальний колектив та 10 спортивних секцій.
-                </p>
-              </CardContent>
-            </Card>
-          </LazySection>
-        </div>
-      </section>
-
-      {/* Mission Section */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 dark:from-blue-900 dark:to-gray-900 py-16 md:py-24">
-        <div className="container mx-auto max-w-[800px] text-center">
-          <LazySection animation="fadeIn">
-            <div className="inline-block rounded-full bg-white/20 dark:bg-white/10 p-3 mb-6">
-              <GraduationCap className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold tracking-tighter text-white mb-6">Наше покликання</h2>
-            <p className="text-lg text-white/90 leading-relaxed">
-              Основним із завдань колективу коледжу є формування професійно-важливих компетентностей фахівців, які
-              сприяють успішному виконанню фахової діяльності в умовах інтеграції України до світового співтовариства і
-              конкурувати на світовому ринку праці.
-            </p>
-          </LazySection>
+      <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
+        <div className="container space-y-12 mx-auto max-w-[700px]">
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+            Загальна інформація
+          </h1>
+          <h2 className={subTitleClasses}>Історія та місія</h2>
+          <p className={paragraphClasses}>
+            Криворізький фаховий коледж Державного некомерційного підприємства
+            «Державний університет «Київський авіаційний інститут» (далі –
+            Коледж або КРФК КАІ) заснований на загальнодержавній власності,
+            підпорядкований Міністерству освіти і науки України. Місце
+            знаходження: 50024, Дніпропетровська область, м. Кривий Ріг, вул.
+            Олега Антонова, 1.
+          </p>
+          <p className={paragraphClasses}>
+            Історія коледжу бере початок з червня 1951 року. За роки свого
+            існування коледж став сучасним закладом освіти і підготував понад 35
+            тисяч фахівців, які працюють не лише в Україні, але і поза її
+            межами, більш як у 45 країнах світу.
+          </p>
+          <p className={paragraphClasses}>
+            Основним завданням розвитку освіти у Криворізькому фаховому коледжі
+            Державного некомерційного підприємства «Державний університет
+            «Київський авіаційний інститут» стає виведення її на рівень
+            державних і міжнародних стандартів, досягнення якісно нового рівня
+            підготовки авіаційних фахівців, забезпечення високого
+            науково-методичного і науково-технічного рівня освітнього процесу;
+            подальше формування змісту освіти на основі наскрізної
+            комп`ютеризації, фундаменталізації і прогресивних технологій
+            навчання; гуманізація освіти та всебічний розвиток особистості;
+            підвищення наукового потенціалу педагогічних (науково-педагогічних)
+            кадрів.
+          </p>
+          <h2 className={subTitleClasses}>Викладацький склад</h2>
+          <p className={paragraphClasses}>
+            Освітній процес у коледжі здійснюють 106 штатних та позаштатних
+            викладачів, з яких 4 доктори наук, професори, 20 кандидатів наук, 10
+            доцентів, 17 викладачів-методистів, 1 старший викладач та 63
+            викладачі вищої кваліфікаційної категорії. Для реалізації освітнього
+            процесу залучаються викладачі Національного авіаційного університету
+            (далі - НАУ) та інших закладів вищої освіти, які працюють в коледжі
+            за сумісництвом, та фахівці-практики.
+          </p>
+          <h2 className={subTitleClasses}>Структура коледжу</h2>
+          <p className={paragraphClasses}>
+            В структуру коледжу входять 4 відділення, 11 циклових комісій,
+            підготовче відділення, відділення моніторингу та забезпечення якості
+            освіти, які проводять навчально-виховну та методичну роботу щодо
+            впровадження новітніх технологій навчання, в тому числі з
+            використанням технічних засобів комп`ютеризації освітнього процесу.
+          </p>
+          <h2 className={subTitleClasses}>Матеріально-технічна база</h2>
+          <p className={paragraphClasses}>
+            До складу матеріально-технічної бази КРФК КАІ входять три навчальних
+            корпуси, аудиторний фонд яких складається з 51 аудиторії для
+            проведення лекційних, практичних, лабораторних занять; 14 навчальних
+            кабінетів; 39 лабораторії, з них 23 комп`ютерних.
+          </p>
+          <p className={paragraphClasses}>
+            До складу навчальної авіаційної технічної бази коледжу входять
+            тринадцять повітряних суден; два навчальних корпуси, аудиторний фонд
+            яких складається з 28 аудиторій для проведення лекційних,
+            практичних, лабораторних занять (з них - 17 лабораторій, 11
+            навчальних кабінетів); одна бібліотека та два читальні зали.
+          </p>
+          <p className={paragraphClasses}>
+            Загальна площа навчальних приміщень складає 33695,8 кв. м. Таким
+            чином, площа навчальних приміщень для здійснення освітнього процесу
+            в КРФК КАІ не суперечить технологічним вимогам щодо забезпечення
+            започаткування освітньої діяльності у сфері фахової передвищої
+            освіти – не менше ніж 2,4 кв. м на одного здобувача освіти.
+          </p>
+          <p className={paragraphClasses}>
+            Аудиторно-лабораторний фонд коледжу, за допомогою якого здійснюється
+            підготовка фахівців за всіма спеціальностями усіх рівнів освіти,
+            включає в себе обладнані кабінети та навчальні аудиторії, що
+            оснащені необхідними наочними посібниками, технічними засобами
+            навчання та паспортизовані належним чином. Обладнання лабораторій і
+            спеціалізованих кабінетів сприяє виконанню в повному обсязі
+            лабораторних та практичних робіт за навчальними планами.
+          </p>
+          <p className={paragraphClasses}>
+            Належний стан матеріально-технічної бази КРФК КАІ дає змогу
+            здійснювати відповідне комп`ютерне забезпечення освітнього процесу,
+            застосовувати на заняттях інноваційні методики й технології
+            навчання, широко використовувати мультимедійні засоби.
+            Забезпеченість мультимедійним обладнанням для одночасного
+            використання в навчальних аудиторіях становить більше 30 відсотків
+            від загальної кількості, що відповідає діючим ліцензійним вимогам.
+          </p>
+          <p className={paragraphClasses}>
+            В коледжі функціонують 23 комп`ютерні лабораторії, загальною площею
+            1866 кв. м. Кількість комп`ютерів, що задіяні в освітньому процесі
+            складає 311 одиниць. З урахуванням проектної місткості коледжу
+            кількість робочих комп`ютерних місць на сто здобувачів освіти
+            складає 12 одиниць (1 на 5). Комп`ютеризовані робочі місця об`єднані
+            в локальну мережу з можливістю доступу до мережі Internet. В коледжі
+            постійно відбувається оновлення наявного комп`ютерного обладнання.
+          </p>
+          <p className={paragraphClasses}>
+            Територія коледжу сягає більш ніж 23 га, з них 1,3 га –
+            авіаційно-технічна база, на якій знаходиться 12 одиниць сучасної
+            авіаційної техніки, в тому числі борт 85131, в кабіні якого велися
+            зйомки фільму «Екіпаж». Навчально-лабораторних корпусів – 5,
+            гуртожитків – 4, 2 спортзали, стадіон, їдальня, бібліотека. Коледж
+            має постійно діючу профорієнтаційну експозицію в музеї Національного
+            центру аерокосмічної освіти.
+          </p>
+          <p className={paragraphClasses}>
+            Коледж має дві спортивні зали (площа 2382 кв. м), стадіон,
+            баскетбольну площадку, волейбольну площадку та тенісний корт.
+            Стадіон у коледжі вважається одним із найкращих стадіонів у місті.
+            На базі коледжі постійно проводяться спортивні заходи, змагання
+            районного, міського, обласного, всеукраїнського і навіть
+            міжнародного рівнів. В коледжі працюють 10 спортивних секцій.
+          </p>
+          <p className={paragraphClasses}>
+            Площа приміщень для педагогічних (науково-педагогічних) працівників
+            - 1379,7 кв.м.
+          </p>
+          <p className={paragraphClasses}>
+            Відповідно до санітарно-гігієнічної оцінки освітньої діяльності
+            приміщень коледжу встановленим критеріям безпечності для здоров`я
+            людини, що проводилась Криворізьким міським управлінням
+            Держпродспоживслужби в Дніпропетровській області, стан
+            навчально-лабораторних приміщень відповідає вимогам Закону України
+            «Про забезпечення санітарного та епідемічного благополуччя
+            населення», ДСанПіН № 5.5.2.008-1 та ДСанПіН № 5.5.6.009-98.
+          </p>
+          <p className={paragraphClasses}>
+            Контроль за додержанням умов охорони праці та безпеки
+            життєдіяльності в коледжі проводиться згідно з діючим
+            законодавством, що фіксується в журналах відповідальних осіб.
+          </p>
+          <p className={paragraphClasses}>
+            Навчальна практика проводиться на навчальній авіаційно-технічній
+            базі та наземному радіополігоні.
+          </p>
+          <p className={paragraphClasses}>
+            Виробничу практику здобувачі освіти проходять в авіаційних
+            компаніях, на авіаційних заводах України, ДП «Антонов» та інших
+            підприємствах.
+          </p>
+          <h2 className={subTitleClasses}>Інформаційні ресурси</h2>
+          <p className={paragraphClasses}>
+            У КРФК КАІ функціонує власна бібліотека з 2-ма книгосховищами,
+            загальною площею 449,7 кв. м. Працюють бібліотечні читальні зали.
+            Запроваджений алфавітний систематизований каталог.
+          </p>
+          <p className={paragraphClasses}>
+            Загальний фонд бібліотеки складає понад 147480 томів наукової і
+            художньої літератури та 27 фахові видання періодичної літератури. За
+            рік більше як 19400 відвідувань. Функціонують електронні бібліотеки:
+            в бібліотеці, на відділеннях та на сайті коледжу. Електронні
+            бібліотеки вміщують підручники, навчальні посібники, конспекти
+            лекцій, методичні вказівки, основні нормативні документи, які
+            використовуються здобувачами освіти для самостійної роботи та
+            підготовки до екзаменів і заліків.
+          </p>
+          <p className={paragraphClasses}>
+            Коледж підключений до системи Google Workspace for Education.
+          </p>
+          <p className={paragraphClasses}>
+            Крім того, усі лабораторії коледжу підключені до мережі Інтернет.
+            Після занять, у разі не завантаженості лабораторії, здобувачі освіти
+            та викладачі мають можливість безкоштовно користуватись ресурсами
+            Інтернет. Інтернет проведений також і в гуртожитках. На території
+            коледжу розташовані точки Wi-Fi доступу до Інтернет.
+          </p>
+          <p className={paragraphClasses}>
+            Коледж має редакційно-видавничий відділ, який оснащений сучасною
+            друкарською і комп`ютерною технікою. Потужність друкарського
+            устаткування типографії забезпечує тиражування навчально-методичних
+            посібників, які розробляються педагогічними працівниками коледжу.
+          </p>
+          <p className={paragraphClasses}>
+            Коледж має власну їдальню загальною площею 2048,9 кв. м, що
+            розрахована на 900 посадкових місць. У ній здобувачі освіти, що
+            навчаються за державним замовленням, відповідно до постанови
+            Кабінету Міністрів України від 17 липня 2015 р. № 506 «Про
+            затвердження Порядку надання окремим категоріям осіб, які навчаються
+            у невійськових вищих навчальних закладах, статусу курсанта», мають
+            змогу безкоштовно харчуватися. Додатково функціонує два буфети.
+          </p>
+          <p className={paragraphClasses}>
+            На території коледжу побудовано чотири гуртожитки, житловою площею
+            6043,3 кв. м. Забезпеченість здобувачів освіти житловою площею
+            становить 100%.
+          </p>
+          <h2 className={subTitleClasses}>Студентське життя</h2>
+          <p className={paragraphClasses}>
+            На території коледжу розташований Студентський палац (клуб) та клуб
+            «Авіатор», у яких працюють різноманітні художні гуртки, проводяться
+            культурні заходи, конкурси та концерти, працюють студентські творчі
+            колективи, духовий оркестр, танцювальний колектив, дискоклуб та ін.
+          </p>
+          <p className={paragraphClasses}>
+            Важливим центром ведення літопису сучасного коледжу, популяризації
+            його досягнень, виховання студентства та профорієнтаційної роботи
+            виступає музей. Його було відкрито в 1974 році. Сучасна експозиція
+            нараховує 4975 експонатів.
+          </p>
+          <h2 className={subTitleClasses}>Практика та перспективи</h2>
+          <p className={paragraphClasses}>
+            Здобувачі освіти навчаються на кафедрі військової підготовки. По
+            закінченні навчання їм присвоюється військове звання «Молодший
+            лейтенант запасу».
+          </p>
+          <p className={paragraphClasses}>
+            Криворізький фаховий коледж Державного некомерційного підприємства
+            «Державний університет «Київський авіаційний інститут» - це єдиний
+            фаховий коледж технічного спрямування в Дніпропетровській області і
+            один з небагатьох в Україні, який готує фахових молодших бакалаврів
+            і бакалаврів.
+          </p>
+          <h2 className={subTitleClasses}>Наше покликання</h2>
+          <p className={paragraphClasses}>
+            Основним із завдань колективу коледжу є формування
+            професійно-важливих компетентностей фахівців, які сприяють успішному
+            виконанню фахової діяльності в умовах інтеграції України до
+            світового співтовариства і конкурувати на світовому ринку праці.
+          </p>
         </div>
       </section>
     </>
-  )
+  );
 }

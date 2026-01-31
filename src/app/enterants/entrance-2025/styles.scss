@@ -1,0 +1,22 @@
+/* Add custom scrollbar styles for the document tree */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(59 130 246 / 0.5) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(59 130 246 / 0.5);
+    border-radius: 3px;
+
+    &:hover {
+      background-color: rgb(59 130 246 / 0.7);
+    }
+  }
+}

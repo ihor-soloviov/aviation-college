@@ -1,4 +1,4 @@
-import { NewsCard } from "../NewsCard"
+import { NewsCard } from "../NewsCard/NewsCard" // Import directly from NewsCard.tsx instead of index
 
 interface NewsItem {
   id: string
@@ -29,8 +29,9 @@ export function NewsGrid({ news, variant = "default", maxItems }: NewsGridProps)
         </div>
 
         <div
-          className={`grid gap-8 ${isCompact ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            }`}
+          className={`grid gap-8 ${
+            isCompact ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          }`}
         >
           {displayNews.map((item) => (
             <NewsCard key={item.id} news={item} variant={variant} />

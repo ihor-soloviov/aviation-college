@@ -179,4 +179,3 @@ export interface NewsItem {
       author: "Кафедра нових технологій",
     },
   ]
-  

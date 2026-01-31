@@ -1,0 +1,51 @@
+.animation-card {
+    opacity: 0;
+    transform: translateY(30px) translateZ(0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+  
+    &.visible {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+    }
+  }
+  
+  @for $i from 1 through 10 {
+    .animation-card[data-id="#{$i}"].visible {
+      transition-delay: #{$i * 0.1}s;
+    }
+  }
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 3px;
+    
+    &:hover {
+      background-color: rgb(148 163 184);
+    }
+  }
+}
+
+:global(.dark) .custom-scrollbar {
+  scrollbar-color: rgb(71 85 105) transparent;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(71 85 105);
+    
+    &:hover {
+      background-color: rgb(100 116 139);
+    }
+  }
+}
