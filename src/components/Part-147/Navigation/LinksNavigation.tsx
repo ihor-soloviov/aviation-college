@@ -19,8 +19,10 @@ export const LinksNavigation: React.FC<Props> = ({ links }) => {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {links.map(
         ({ href, title, description, icon, isInDevelopment = false }) => {
+          const itemKey = href ?? title;
           const card = (
             <Card
+              key={itemKey}
               className={`group relative overflow-hidden ${
                 isInDevelopment
                   ? "opacity-50 cursor-not-allowed"
@@ -70,7 +72,7 @@ export const LinksNavigation: React.FC<Props> = ({ links }) => {
             <Link
               href={href}
               className={isInDevelopment ? "cursor-not-allowed" : ""}
-              key={href}
+              key={itemKey}
             >
               {card}
             </Link>
