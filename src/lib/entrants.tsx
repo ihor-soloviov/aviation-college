@@ -17,19 +17,19 @@ export const pageContent: DefaultPageContent[] = [
     links: [
       {
         title: "Приймальна комісія",
-        href: "/enterants/admission-commission",
+        href: "/entrants/admission-commission",
         description: "Інформація про прийом до коледжу",
         icon: <Users className="h-4 w-4" />,
       },
       {
         title: "Підготовчі курси до вступу",
-        href: "/enterants/preparatory-courses",
+        href: "/entrants/preparatory-courses",
         description: "Інформація про підготовчі курси до вступу до коледжу",
         icon: <BookOpen className="h-4 w-4" />,
       },
       {
         title: "Інформаційний буклет",
-        href: "/enterants/information-booklet",
+        href: "/entrants/information-booklet",
         description: "Інформаційний буклет для вступників до коледжу",
         icon: <Newspaper className="h-4 w-4" />,
       },
@@ -42,13 +42,13 @@ export const pageContent: DefaultPageContent[] = [
       },
       {
         title: "Вступ 2025",
-        href: "/enterants/enterance-2025",
+        href: "/entrants/entrance-2025",
         description: "Інформація про вступ 2025 до коледжу",
         icon: <Calendar className="h-4 w-4" />,
       },
       {
         title: "Архів приймальної інформації",
-        href: "/enterants/admission-information-archive",
+        href: "/entrants/admission-information-archive",
         description: "Архів приймальної інформації до коледжу",
         icon: <Mail className="h-4 w-4" />,
         isInDevelopment: true,

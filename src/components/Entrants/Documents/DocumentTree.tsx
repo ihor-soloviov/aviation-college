@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import type { DocumentItem } from "@/lib/enterants/entrance-2025-documents";
+import type { DocumentItem } from "@/lib/entrants/entrance-2025-documents";
 
 interface DocumentTreeProps {
   items: DocumentItem[];
@@ -31,7 +31,11 @@ export function DocumentTree({
 
         if (hasChildren) {
           return (
-            <AccordionItem key={item.id} value={item.id} className="border-none">
+            <AccordionItem
+              key={item.id}
+              value={item.id}
+              className="border-none"
+            >
               <AccordionTrigger
                 className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md px-3 py-2 text-left"
                 style={{ paddingLeft: `${paddingLeft}px` }}
@@ -90,4 +94,3 @@ export function DocumentTree({
     </>
   );
 }
-

@@ -2,7 +2,7 @@
 
 import { FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { EmptyState } from "@/components/Enterants/Documents";
+import { EmptyState } from "@/components/entrants/Documents";
 
 interface DocumentViewerProps {
   pdfUrl: string | null;
@@ -42,4 +42,3 @@ export function DocumentViewer({ pdfUrl, title }: DocumentViewerProps) {
     </Card>
   );
 }
-

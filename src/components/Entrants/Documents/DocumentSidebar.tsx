@@ -4,7 +4,7 @@ import { Folder } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion } from "@/components/ui/accordion";
 import { DocumentTree } from "./DocumentTree";
-import type { DocumentItem } from "@/lib/enterants/entrance-2025-documents";
+import type { DocumentItem } from "@/lib/entrants/entrance-2025-documents";
 
 interface DocumentSidebarProps {
   documents: DocumentItem[];
@@ -39,4 +39,3 @@ export function DocumentSidebar({
     </Card>
   );
 }
-

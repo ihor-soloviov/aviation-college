@@ -22,7 +22,7 @@ export default function PreparatoryCoursesPage() {
   return (
     <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
       <div className="container mx-auto px-4 space-y-12">
-        <BackLink href="/enterants" />
+        <BackLink href="/entrants" />
 
         {/* Page Title */}
         <div className="flex flex-col items-center space-y-4 text-center max-w-4xl mx-auto">

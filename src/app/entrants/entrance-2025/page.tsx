@@ -4,9 +4,9 @@ import "./styles.scss";
 import { useState } from "react";
 import useCardScrollAnimation from "@/hooks/cardScrollAnimation";
 import { BackLink } from "@/components/common/BackLink/BackLink";
-import { DocumentSidebar } from "@/components/Enterants/Documents/DocumentSidebar";
-import { DocumentViewer } from "@/components/Enterants/Documents/DocumentViewer";
-import { documents } from "@/lib/enterants/entrance-2025-documents";
+import { DocumentSidebar } from "@/components/entrants/Documents/DocumentSidebar";
+import { DocumentViewer } from "@/components/entrants/Documents/DocumentViewer";
+import { documents } from "@/lib/entrants/entrance-2025-documents";
 
 export default function DocumentsPage() {
   useCardScrollAnimation();
@@ -21,7 +21,7 @@ export default function DocumentsPage() {
   return (
     <section className="bg-gray-50 dark:bg-blue-900/10 min-h-screen">
       <div className="container mx-auto py-8 px-4">
-        <BackLink href="/enterants" />
+        <BackLink href="/entrants" />
         <div
           className="grid lg:grid-cols-[380px_1fr] gap-6 animation-card"
           data-id="2"

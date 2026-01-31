@@ -20,7 +20,7 @@ export default function AdmissionCommissionPage() {
   return (
     <section className="bg-gray-50 dark:bg-blue-900/10 py-16 md:py-24">
       <div className="container mx-auto max-w-[900px] space-y-12">
-        <BackLink href="/enterants" />
+        <BackLink href="/entrants" />
 
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="inline-block rounded-full bg-blue-100 p-2">
