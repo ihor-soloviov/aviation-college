@@ -18,7 +18,6 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Розклад занять",
         href: "/students/schedule",
-        isInDevelopment: true,
       },
       {
         title: "Графік освітнього процесу",
