@@ -4,8 +4,8 @@ import "./styles.scss";
 import { useState } from "react";
 import useCardScrollAnimation from "@/hooks/cardScrollAnimation";
 import { BackLink } from "@/components/common/BackLink/BackLink";
-import { DocumentSidebar } from "@/components/entrants/Documents/DocumentSidebar";
-import { DocumentViewer } from "@/components/entrants/Documents/DocumentViewer";
+import { DocumentSidebar } from "@/components/Entrants/Documents/DocumentSidebar";
+import { DocumentViewer } from "@/components/Entrants/Documents/DocumentViewer";
 import { documents } from "@/lib/entrants/entrance-2025-documents";
 
 export default function DocumentsPage() {
