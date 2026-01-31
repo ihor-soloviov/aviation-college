@@ -24,7 +24,10 @@ const openPdfInNewTab = (url: string): void => {
 
 export const SchedulePage = () => {
   const [expandedPeriods, setExpandedPeriods] = useState<Set<string>>(
-    new Set(["denna-2024-2025"])
+    new Set()
+  );
+  const [expandedYears, setExpandedYears] = useState<Set<string>>(
+    new Set()
   );
   const [expandedSessions, setExpandedSessions] = useState<Set<string>>(
     new Set()
@@ -32,6 +35,10 @@ export const SchedulePage = () => {
 
   const handleTogglePeriod = useCallback((id: string) => {
     setExpandedPeriods((prev) => toggleSetValue(prev, id));
+  }, []);
+
+  const handleToggleYear = useCallback((yearKey: string) => {
+    setExpandedYears((prev) => toggleSetValue(prev, yearKey));
   }, []);
 
   const handleToggleSession = useCallback((sessionKey: string) => {
@@ -50,8 +57,10 @@ export const SchedulePage = () => {
           period={period}
           periodIndex={periodIndex}
           isPeriodExpanded={expandedPeriods.has(period.id)}
+          expandedYears={expandedYears}
           expandedSessions={expandedSessions}
           onTogglePeriod={() => handleTogglePeriod(period.id)}
+          onToggleYear={handleToggleYear}
           onToggleSession={handleToggleSession}
           onOpenPdf={handleOpenPdf}
         />

@@ -11,8 +11,10 @@ type PeriodCardProps = {
   period: SchedulePeriod;
   periodIndex: number;
   isPeriodExpanded: boolean;
+  expandedYears: Set<string>;
   expandedSessions: Set<string>;
   onTogglePeriod: () => void;
+  onToggleYear: (yearKey: string) => void;
   onToggleSession: (sessionKey: string) => void;
   onOpenPdf: (url: string) => void;
 };
@@ -21,8 +23,10 @@ export const PeriodCard = ({
   period,
   periodIndex,
   isPeriodExpanded,
+  expandedYears,
   expandedSessions,
   onTogglePeriod,
+  onToggleYear,
   onToggleSession,
   onOpenPdf,
 }: PeriodCardProps) => {
@@ -52,14 +56,14 @@ export const PeriodCard = ({
                 {period.title}
               </CardTitle>
               <div className="mt-1 flex items-center gap-2">
-                <Badge variant="secondary" className="text-xs font-normal">
-                  {period.academicYear} н.р.
-                </Badge>
                 <Badge
                   variant={period.studyForm === "Денна" ? "default" : "outline"}
                   className="text-xs font-normal"
                 >
                   {period.studyForm} форма
+                </Badge>
+                <Badge variant="secondary" className="text-xs font-normal">
+                  {period.academicYears.length} навч. {period.academicYears.length === 1 ? "рік" : "роки"}
                 </Badge>
               </div>
             </div>
@@ -83,20 +87,78 @@ export const PeriodCard = ({
       >
         <div className="overflow-hidden">
           <CardContent className="space-y-4 pt-0">
-            {period.sessions.map((session, sessionIndex) => {
-              const sessionKey = `${period.id}-${sessionIndex}`;
-              const isSessionExpanded = expandedSessions.has(sessionKey);
+            {period.academicYears.map((academicYear, yearIndex) => {
+              const yearKey = `${period.id}-${academicYear.year}`;
+              const isYearExpanded = expandedYears.has(yearKey);
 
               return (
-                <SessionCard
-                  key={sessionKey}
-                  session={session}
-                  sessionKey={sessionKey}
-                  index={sessionIndex}
-                  isExpanded={isSessionExpanded}
-                  onToggle={() => onToggleSession(sessionKey)}
-                  onOpenPdf={onOpenPdf}
-                />
+                <div
+                  key={yearKey}
+                  className={cn(
+                    "rounded-lg border bg-muted/30 transition-all duration-200",
+                    "animate-in fade-in slide-in-from-left-2",
+                    isYearExpanded && "bg-muted/50"
+                  )}
+                  style={{
+                    animationDelay: `${yearIndex * 50}ms`,
+                    animationFillMode: "backwards",
+                  }}
+                >
+                  <button
+                    onClick={() => onToggleYear(yearKey)}
+                    className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-muted/50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-sm font-bold text-white shadow-sm">
+                        {academicYear.year.split("-")[0].slice(-2)}
+                      </div>
+                      <div>
+                        <span className="font-semibold text-foreground">
+                          {academicYear.year} навчальний рік
+                        </span>
+                        <p className="text-xs text-muted-foreground">
+                          {academicYear.sessions.length} {academicYear.sessions.length === 1 ? "сесія" : academicYear.sessions.length < 5 ? "сесії" : "сесій"}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 text-muted-foreground transition-transform duration-200",
+                        isYearExpanded && "rotate-180"
+                      )}
+                    />
+                  </button>
+
+                  <div
+                    className={cn(
+                      "grid transition-all duration-200 ease-in-out",
+                      isYearExpanded
+                        ? "grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0"
+                    )}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="space-y-3 px-4 pb-4">
+                        {academicYear.sessions.map((session, sessionIndex) => {
+                          const sessionKey = `${yearKey}-${sessionIndex}`;
+                          const isSessionExpanded = expandedSessions.has(sessionKey);
+
+                          return (
+                            <SessionCard
+                              key={sessionKey}
+                              session={session}
+                              sessionKey={sessionKey}
+                              index={sessionIndex}
+                              isExpanded={isSessionExpanded}
+                              onToggle={() => onToggleSession(sessionKey)}
+                              onOpenPdf={onOpenPdf}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </CardContent>

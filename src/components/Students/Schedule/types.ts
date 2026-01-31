@@ -8,10 +8,14 @@ export type ScheduleSession = {
   groups: ScheduleGroup[];
 };
 
+export type AcademicYear = {
+  year: string;
+  sessions: ScheduleSession[];
+};
+
 export type SchedulePeriod = {
   id: string;
   title: string;
-  academicYear: string;
   studyForm: "Денна" | "Заочна";
-  sessions: ScheduleSession[];
+  academicYears: AcademicYear[];
 };
