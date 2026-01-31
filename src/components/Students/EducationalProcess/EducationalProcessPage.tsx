@@ -20,21 +20,9 @@ const openPdfInNewTab = (url: string) => {
 
 export const EducationalProcessPage = () => {
   const [expandedForms, setExpandedForms] = useState<Set<string>>(new Set());
-  const [expandedYears, setExpandedYears] = useState<Set<string>>(new Set());
-  const [expandedSemesters, setExpandedSemesters] = useState<Set<string>>(
-    new Set()
-  );
 
   const toggleForm = useCallback((formId: string) => {
     setExpandedForms((prev) => toggleSetValue(prev, formId));
-  }, []);
-
-  const toggleYear = useCallback((yearKey: string) => {
-    setExpandedYears((prev) => toggleSetValue(prev, yearKey));
-  }, []);
-
-  const toggleSemester = useCallback((semesterKey: string) => {
-    setExpandedSemesters((prev) => toggleSetValue(prev, semesterKey));
   }, []);
 
   return (
@@ -44,12 +32,8 @@ export const EducationalProcessPage = () => {
           key={studyForm.id}
           studyForm={studyForm}
           formIndex={formIndex}
-          isFormExpanded={expandedForms.has(studyForm.id)}
-          expandedYears={expandedYears}
-          expandedSemesters={expandedSemesters}
-          onToggleForm={() => toggleForm(studyForm.id)}
-          onToggleYear={toggleYear}
-          onToggleSemester={toggleSemester}
+          isExpanded={expandedForms.has(studyForm.id)}
+          onToggle={() => toggleForm(studyForm.id)}
           onOpenPdf={openPdfInNewTab}
         />
       ))}

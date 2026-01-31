@@ -1,6 +1,5 @@
 export { EducationalProcessPage } from "./EducationalProcessPage";
 export { StudyFormCard } from "./StudyFormCard";
-export { SemesterCard } from "./SemesterCard";
-export { DocumentButton } from "./DocumentButton";
+export { ScheduleItemCard } from "./ScheduleItemCard";
 export * from "./types";
 export { educationalProcessData } from "./data";
