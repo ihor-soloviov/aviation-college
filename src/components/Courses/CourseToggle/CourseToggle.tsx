@@ -1,7 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { GraduationCap, Award } from "lucide-react";
 
-const options = ["Фаховий молодший бакалавр", "Бакалавр"];
+const options = [
+  { value: "Фаховий молодший бакалавр", icon: GraduationCap, short: "ФМБ" },
+  { value: "Бакалавр", icon: Award, short: "Бакалавр" },
+];
 
 export default function CourseToggle({
   current,
@@ -10,21 +14,29 @@ export default function CourseToggle({
   current: string;
   onSelect: (value: string) => void;
 }) {
-  const hoverClass =
-    "bg-blue-600 hover:bg-blue-700 dark:white/10 dark:hover:bg-white-900/20";
-
   return (
-    <div className="mx-auto flex flex-wrap gap-2">
-      {options.map((option) => (
-        <Button
-          key={option}
-          value={option}
-          className={`cursor-pointer ${option === current ? hoverClass : ""}`}
-          onClick={() => onSelect(option)}
-        >
-          {option}
-        </Button>
-      ))}
+    <div className="flex flex-wrap justify-center gap-2 mt-4">
+      {options.map(({ value, icon: Icon, short }) => {
+        const isActive = value === current;
+        return (
+          <Button
+            key={value}
+            variant={isActive ? "default" : "outline"}
+            className={`
+              cursor-pointer transition-all duration-200
+              ${isActive 
+                ? "bg-blue-600 hover:bg-blue-700 shadow-md scale-105" 
+                : "hover:border-blue-400 hover:text-blue-600"
+              }
+            `}
+            onClick={() => onSelect(value)}
+          >
+            <Icon className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">{value}</span>
+            <span className="sm:hidden">{short}</span>
+          </Button>
+        );
+      })}
     </div>
   );
 }

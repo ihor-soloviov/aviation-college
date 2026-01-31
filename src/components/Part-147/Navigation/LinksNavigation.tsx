@@ -5,11 +5,11 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { Part147PageLink } from "@/types/part-147";
+import { DefaultPageLink } from "@/types/part-147";
 import Link from "next/link";
 
 type Props = {
-  links: Part147PageLink[];
+  links: DefaultPageLink[];
 };
 
 export const LinksNavigation: React.FC<Props> = ({ links }) => {
@@ -18,15 +18,17 @@ export const LinksNavigation: React.FC<Props> = ({ links }) => {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {links.map(
-        ({ href, title, description, icon, isInDevelopment = false }) => (
-          <Link href={href} key={href}>
+        ({ href, title, description, icon, isInDevelopment = false }) => {
+          const itemKey = href ?? title;
+          const card = (
             <Card
+              key={itemKey}
               className={`group relative overflow-hidden ${
                 isInDevelopment
                   ? "opacity-50 cursor-not-allowed"
                   : animationClass
               }`}
-            >   
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -60,8 +62,22 @@ export const LinksNavigation: React.FC<Props> = ({ links }) => {
                 </CardDescription>
               </CardContent>
             </Card>
-          </Link>
-        )
+          );
+
+          if (isInDevelopment) {
+            return card;
+          }
+
+          return (
+            <Link
+              href={href}
+              className={isInDevelopment ? "cursor-not-allowed" : ""}
+              key={itemKey}
+            >
+              {card}
+            </Link>
+          );
+        }
       )}
     </div>
   );

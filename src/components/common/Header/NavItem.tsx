@@ -6,15 +6,17 @@ import { usePathname } from "next/navigation"
 interface NavItemProps {
   label: string
   href: string
+  onClick?: () => void
 }
 
-const NavItem = ({ label, href }: NavItemProps) => {
+const NavItem = ({ label, href, onClick }: NavItemProps) => {
   const pathname = usePathname()
   const isActive = pathname === href
 
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={clsx(
         "relative inline-block text-sm font-medium transition-colors group",
         isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",

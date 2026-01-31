@@ -9,9 +9,9 @@ import {
   Users,
   Shield,
 } from "lucide-react";
-import { Part147PageContent } from "@/types/part-147";  
+import { DefaultPageContent } from "@/types/part-147";  
 
-export const pageContent: Part147PageContent[] = [
+export const pageContent: DefaultPageContent[] = [
   {
     title: "Основні сторінки",
     description: "Головні розділи сайту коледжу",

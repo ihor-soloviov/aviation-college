@@ -12,7 +12,7 @@ export const FooterNavigation = () => {
           <li key={item.label}>
             <Link
               href={item.href}
-              className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
+              className="-mx-2 -my-1 inline-block px-2 py-1 text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
             >
               {item.label}
             </Link>
