@@ -23,7 +23,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Авіаційний коледж",
-  description: "ВСП КРФК НАУ",
+  description: "Криворізький Фаховий Коледж НАУ",
 };
 
 export default function RootLayout({
