@@ -22,7 +22,6 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Графік освітнього процесу",
         href: "/students/educational-process",
-        isInDevelopment: true,
       },
       {
         title: "Графік консультацій",
