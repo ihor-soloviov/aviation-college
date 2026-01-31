@@ -22,7 +22,7 @@ export function NewsGrid({ news, variant = "default", maxItems }: NewsGridProps)
   const isCompact = variant === "compact"
 
   return (
-    <section className="bg-background dark:bg-blue-900/10 py-16 md:py-24">
+    <section className="bg-background dark:b-gray-900/10 py-16 md:py-24">
       <div className="container space-y-8 mx-auto">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Останні новини коледжу</h2>
