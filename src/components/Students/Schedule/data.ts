@@ -132,10 +132,28 @@ export const scheduleData: SchedulePeriod[] = [
     studyForm: "Заочна",
     sessions: [
       {
-        title: "Розклад занять заочної форми навчання (новий рік)",
+        title: "Настановна сесія - Бакалаврат",
         groups: [
-          { name: "Інформація буде додана пізніше", pdfUrl: "#" },
+          { name: "Бакалаврат", pdfUrl: "http://kk.nau.edu.ua/files/zaochna-2025-2026-nastav-bak.pdf" },
         ],
+      },
+      {
+        title: "Настановна сесія - Фаховий молодший бакалавр",
+        groups: [
+          { name: "ФМБ", pdfUrl: "http://kk.nau.edu.ua/files/zaochna-2025-2026-nastav-fmb.pdf" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "denna-2025-2026",
+    title: "Денна форма навчання",
+    academicYear: "2025-2026",
+    studyForm: "Денна",
+    sessions: [
+      {
+        title: "Інформація буде додана пізніше",
+        groups: [],
       },
     ],
   },
