@@ -42,7 +42,6 @@ export const studentsCategories: NavigationCategory[] = [
         title: "Розмір плати за навчання",
         href: "/students/tuition-fees",
         description: "Вартість навчання, підготовки, перепідготовки та проживання",
-        isInDevelopment: true,
       },
       {
         title: "Реквізити для оплати",
