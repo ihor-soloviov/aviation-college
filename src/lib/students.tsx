@@ -46,7 +46,6 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Реквізити для оплати",
         href: "/students/payment-details",
-        isInDevelopment: true,
       },
       {
         title: "Договори",
