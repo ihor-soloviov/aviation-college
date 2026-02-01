@@ -13,27 +13,22 @@ export const studentsCategories: NavigationCategory[] = [
     title: "Розклад та графіки",
     description: "Розклади занять, екзаменів, консультацій та графік освітнього процесу",
     icon: <Calendar className="h-5 w-5" />,
-    defaultExpanded: true,
     links: [
       {
         title: "Розклад занять",
         href: "/students/schedule",
-        isInDevelopment: true,
       },
       {
         title: "Графік освітнього процесу",
         href: "/students/educational-process",
-        isInDevelopment: true,
       },
       {
         title: "Графік консультацій",
         href: "/students/consultations",
-        isInDevelopment: true,
       },
       {
         title: "Розклад екзаменів",
         href: "/students/exams",
-        isInDevelopment: true,
       },
     ],
   },
@@ -46,17 +41,14 @@ export const studentsCategories: NavigationCategory[] = [
         title: "Розмір плати за навчання",
         href: "/students/tuition-fees",
         description: "Вартість навчання, підготовки, перепідготовки та проживання",
-        isInDevelopment: true,
       },
       {
         title: "Реквізити для оплати",
         href: "/students/payment-details",
-        isInDevelopment: true,
       },
       {
         title: "Договори",
         href: "/students/contracts",
-        isInDevelopment: true,
       },
     ],
   },
@@ -68,12 +60,10 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Практичне навчання",
         href: "/students/practical-training",
-        isInDevelopment: true,
       },
       {
         title: "Каталог дисциплін за вибором",
         href: "/students/elective-courses",
-        isInDevelopment: true,
       },
       {
         title: "Дистанційне навчання",
