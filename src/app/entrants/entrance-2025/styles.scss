@@ -38,7 +38,7 @@
   }
 }
 
-:global(.dark) .custom-scrollbar {
+.dark .custom-scrollbar {
   scrollbar-color: rgb(71 85 105) transparent;
 
   &::-webkit-scrollbar-thumb {

@@ -38,7 +38,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NavigationLoadingProvider>
-            <LoadingBar />
+            {/* <LoadingBar /> */}
             <MobileMenuProvider>
               <div className="flex min-h-screen flex-col">
                 <Header />
