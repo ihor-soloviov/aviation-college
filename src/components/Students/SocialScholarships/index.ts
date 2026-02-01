@@ -1,0 +1,1 @@
+export { SocialScholarshipsPage } from "./SocialScholarshipsPage";

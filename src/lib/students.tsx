@@ -80,17 +80,14 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Правила поведінки здобувача освіти",
         href: "/students/code-of-conduct",
-        isInDevelopment: true,
       },
       {
         title: "Курсантське самоврядування",
         href: "/students/self-governance",
-        isInDevelopment: true,
       },
       {
         title: "Протидія булінгу",
         href: "/students/anti-bullying",
-        isInDevelopment: true,
       },
     ],
   },
@@ -102,12 +99,10 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Стипендія (рейтинг)",
         href: "/students/scholarship-rating",
-        isInDevelopment: true,
       },
       {
         title: "Соціальні стипендії",
         href: "/students/social-scholarships",
-        isInDevelopment: true,
       },
     ],
   },
@@ -119,12 +114,10 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Наука",
         href: "/students/science",
-        isInDevelopment: true,
       },
       {
         title: "Корисні посилання",
         href: "/students/useful-links",
-        isInDevelopment: true,
       },
     ],
   },
