@@ -1,26 +1,11 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Calendar } from "lucide-react";
-import { ExpandableCard } from "../shared/ExpandableCard";
+import { useCallback } from "react";
 import { InfoCard } from "./InfoCard";
+import { YearTabs } from "./YearTabs";
 import { tuitionFeesData, currentInfoCards } from "./data";
 
 export const TuitionFeesPage = () => {
-  const [expandedYears, setExpandedYears] = useState<Set<string>>(new Set());
-
-  const toggleYear = useCallback((yearId: string) => {
-    setExpandedYears((prev) => {
-      const next = new Set(prev);
-      if (next.has(yearId)) {
-        next.delete(yearId);
-      } else {
-        next.add(yearId);
-      }
-      return next;
-    });
-  }, []);
-
   const openPdfInNewTab = useCallback((url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
   }, []);
@@ -55,22 +40,7 @@ export const TuitionFeesPage = () => {
             Архів документів по роках
           </h2>
         </div>
-        <div className="space-y-3">
-          {tuitionFeesData.map((yearData, index) => (
-            <ExpandableCard
-              key={yearData.id}
-              id={yearData.id}
-              title={yearData.title}
-              icon={<Calendar className="h-6 w-6" />}
-              items={yearData.items}
-              index={index}
-              isExpanded={expandedYears.has(yearData.id)}
-              onToggle={() => toggleYear(yearData.id)}
-              onOpenPdf={openPdfInNewTab}
-              gridCols={2}
-            />
-          ))}
-        </div>
+        <YearTabs data={tuitionFeesData} onOpenPdf={openPdfInNewTab} />
       </div>
     </div>
   );
