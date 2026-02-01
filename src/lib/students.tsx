@@ -13,7 +13,6 @@ export const studentsCategories: NavigationCategory[] = [
     title: "Розклад та графіки",
     description: "Розклади занять, екзаменів, консультацій та графік освітнього процесу",
     icon: <Calendar className="h-5 w-5" />,
-    defaultExpanded: true,
     links: [
       {
         title: "Розклад занять",
