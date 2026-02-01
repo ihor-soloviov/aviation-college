@@ -112,17 +112,18 @@ export const YearTabs = ({ data, onOpenPdf }: YearTabsProps) => {
                 className={cn(
                   "group flex items-center gap-3 rounded-lg border p-3 text-left transition-all duration-200",
                   "animate-in fade-in zoom-in-95",
-                  "hover:border-primary/50 hover:bg-muted/50 hover:shadow-sm"
+                  "hover:border-primary/50 hover:bg-muted/50 hover:shadow-sm",
+                  "min-w-0 overflow-hidden"
                 )}
                 style={{
                   animationDelay: `${index * 20}ms`,
                   animationFillMode: "backwards",
                 }}
               >
-                <div className="rounded-lg bg-red-100 p-2 text-red-600 transition-colors group-hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400">
-                  <FileText className="h-4 w-4" />
+                <div className="shrink-0 rounded-lg bg-red-100 p-2 text-red-600 transition-colors group-hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400">
+                  <FileText className="h-4 w-4 shrink-0" />
                 </div>
-                <p className="flex-1 truncate text-sm font-medium">{item.title}</p>
+                <p className="min-w-0 flex-1 truncate text-sm font-medium">{item.title}</p>
                 <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
               </button>
             ))}

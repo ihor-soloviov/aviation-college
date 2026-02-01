@@ -75,18 +75,18 @@ export const InfoCard = ({
       }}
       onClick={() => onOpenPdf(pdfUrl)}
     >
-      <CardContent className="flex items-start gap-4 p-5">
+      <CardContent className="flex items-start gap-3 p-4 sm:gap-4 sm:p-5">
         <div
           className={cn(
-            "shrink-0 rounded-xl p-3 transition-transform duration-300 group-hover:scale-110",
+            "shrink-0 rounded-xl p-2 transition-transform duration-300 group-hover:scale-110 sm:p-3",
             colors.iconBg
           )}
         >
-          <Icon className={cn("h-6 w-6", colors.iconColor)} />
+          <Icon className={cn("h-5 w-5 sm:h-6 sm:w-6", colors.iconColor)} />
         </div>
-        <div className="flex-1 min-w-0 space-y-1">
+        <div className="min-w-0 flex-1 space-y-1 overflow-hidden">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold text-foreground leading-tight">
+            <h3 className="break-words text-sm font-semibold leading-tight text-foreground sm:text-base">
               {title}
             </h3>
             {highlight && (
@@ -95,13 +95,13 @@ export const InfoCard = ({
               </Badge>
             )}
           </div>
-          <p className="text-sm text-muted-foreground line-clamp-2">
+          <p className="line-clamp-2 break-words text-xs text-muted-foreground sm:text-sm">
             {description}
           </p>
         </div>
         <ExternalLink
           className={cn(
-            "h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
+            "hidden h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 sm:block"
           )}
         />
       </CardContent>
