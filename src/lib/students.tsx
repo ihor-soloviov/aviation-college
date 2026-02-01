@@ -50,7 +50,6 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Договори",
         href: "/students/contracts",
-        isInDevelopment: true,
       },
     ],
   },
