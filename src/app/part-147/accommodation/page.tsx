@@ -43,7 +43,7 @@ export default function AccommodationPage() {
           </CardHeader>
           <CardContent className="pt-6">
             <p className="text-muted-foreground dark:text-gray-300 leading-relaxed">
-              На території коледжу, на першому поверсі гуртожитку № 10,
+              На території коледжу, на першому п��версі гуртожитку № 10,
               функціонує готель, де можуть розміщатися слухачі курсів
               Організації PART-147. Відстань від готелю до навчальних корпусів
               коледжу – близько 100 метрів.

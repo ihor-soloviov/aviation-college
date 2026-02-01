@@ -1,0 +1,1 @@
+export { ScholarshipRatingPage } from "./ScholarshipRatingPage";

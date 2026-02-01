@@ -73,7 +73,7 @@ export const PracticalTrainingPage = () => {
               <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
                 Практична підготовка є невід&apos;ємною складовою освітнього
                 процесу. Здобувачі освіти проходять практику на провідних
-                підприємствах України, що дозволяє отримати реальний досвід
+                підприємствах України, що дозволя�� отримати реальний досвід
                 роботи за обраною спеціальністю.
               </p>
             </div>
@@ -269,7 +269,7 @@ export const PracticalTrainingPage = () => {
         <div className="flex items-center gap-2">
           <div className="h-1 w-1 rounded-full bg-muted-foreground" />
           <h2 className="text-lg font-semibold text-foreground">
-            Інші підприємства-партнери
+            Інші підприємства-партнер��
           </h2>
           <Badge variant="secondary" className="ml-2">
             {otherBases.length}
