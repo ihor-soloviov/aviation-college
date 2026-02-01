@@ -413,7 +413,7 @@ export const UsefulLinksPage = () => {
                             <BookOpen className="h-3.5 w-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                           </div>
                           <p className="mt-1 text-xs text-muted-foreground">
-                            Натисніть, щоб пр��читати
+                            Натисніть, щоб прочитати
                           </p>
                         </div>
                       </div>
