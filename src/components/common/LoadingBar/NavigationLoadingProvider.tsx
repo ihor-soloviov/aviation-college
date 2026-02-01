@@ -30,15 +30,34 @@ export function NavigationLoadingProvider({
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Сбрасываем загрузку при изменении маршрута
+  // Завершаем загрузку при изменении маршрута
   useEffect(() => {
-    setIsLoading(false);
-    setProgress(0);
+    // Очищаем предыдущий таймаут завершения
+    if (completionTimeoutRef.current) {
+      clearTimeout(completionTimeoutRef.current);
+    }
+
+    // Останавливаем интервал прогресса
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+
+    // Доводим прогресс до 100% и скрываем лоадер
+    setProgress(100);
+    
+    completionTimeoutRef.current = setTimeout(() => {
+      setIsLoading(false);
+      setProgress(0);
+    }, 300);
+    
+    return () => {
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+      }
+    };
   }, [pathname]);
 
   const startLoading = useCallback(() => {
@@ -50,10 +69,15 @@ export function NavigationLoadingProvider({
     setIsLoading(true);
     setProgress(0);
 
-    // Анимация прогресса
+    // Анимация прогресса со случайным увеличением
     let currentProgress = 0;
     intervalRef.current = setInterval(() => {
-      currentProgress += Math.random() * 15;
+      const increment = Math.random() * 15;
+      const newProgress = currentProgress + increment;
+      
+      // Гарантируем, что прогресс всегда увеличивается и не превышает 90%
+      currentProgress = Math.min(90, newProgress);
+      
       if (currentProgress >= 90) {
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
