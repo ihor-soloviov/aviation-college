@@ -4,6 +4,7 @@ import { Plane } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const socials = [
   {
@@ -42,6 +43,12 @@ const socials = [
 
 export const Socials = () => {
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div>
       <div className="flex items-center gap-2">
@@ -59,21 +66,16 @@ export const Socials = () => {
             className="text-muted-foreground hover:text-blue-600"
           >
             <span className="sr-only">{social.name}</span>
-            {theme === "dark" ? (
-              <Image
-                src={social.iconPath.dark}
-                alt={social.name}
-                width={24}
-                height={24}
-              />
-            ) : (
-              <Image
-                src={social.iconPath.light}
-                alt={social.name}
-                width={24}
-                height={24}
-              />
-            )}
+            <Image
+              src={
+                mounted && theme === "dark"
+                  ? social.iconPath.dark
+                  : social.iconPath.light
+              }
+              alt={social.name}
+              width={24}
+              height={24}
+            />
           </Link>
         ))}
       </div>
