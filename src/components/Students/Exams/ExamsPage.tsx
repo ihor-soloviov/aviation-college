@@ -2,12 +2,16 @@
 
 import { useState, useCallback } from "react";
 import { examsData } from "./data";
-import { YearCard } from "./YearCard";
+import { ExpandableCard } from "../shared";
+
+const openPdfInNewTab = (url: string) => {
+  window.open(url, "_blank", "noopener,noreferrer");
+};
 
 export const ExamsPage = () => {
   const [expandedYears, setExpandedYears] = useState<Set<string>>(new Set());
 
-  const toggleYear = useCallback((yearId: string) => {
+  const handleToggleYear = useCallback((yearId: string) => {
     setExpandedYears((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(yearId)) {
@@ -19,20 +23,19 @@ export const ExamsPage = () => {
     });
   }, []);
 
-  const openPdfInNewTab = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  }, []);
-
   return (
     <div className="space-y-4">
       {examsData.map((yearData, index) => (
-        <YearCard
+        <ExpandableCard
           key={yearData.id}
-          yearData={yearData}
-          yearIndex={index}
+          id={yearData.id}
+          title={yearData.year}
+          items={yearData.items}
+          index={index}
           isExpanded={expandedYears.has(yearData.id)}
-          onToggle={() => toggleYear(yearData.id)}
+          onToggle={() => handleToggleYear(yearData.id)}
           onOpenPdf={openPdfInNewTab}
+          gridCols={3}
         />
       ))}
     </div>

@@ -2,17 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { educationalProcessData } from "./data";
-import { StudyFormCard } from "./StudyFormCard";
-
-const toggleSetValue = (set: Set<string>, value: string): Set<string> => {
-  const newSet = new Set(set);
-  if (newSet.has(value)) {
-    newSet.delete(value);
-  } else {
-    newSet.add(value);
-  }
-  return newSet;
-};
+import { ExpandableCard } from "../shared";
 
 const openPdfInNewTab = (url: string) => {
   window.open(url, "_blank", "noopener,noreferrer");
@@ -21,20 +11,32 @@ const openPdfInNewTab = (url: string) => {
 export const EducationalProcessPage = () => {
   const [expandedForms, setExpandedForms] = useState<Set<string>>(new Set());
 
-  const toggleForm = useCallback((formId: string) => {
-    setExpandedForms((prev) => toggleSetValue(prev, formId));
+  const handleToggleForm = useCallback((formId: string) => {
+    setExpandedForms((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(formId)) {
+        newSet.delete(formId);
+      } else {
+        newSet.add(formId);
+      }
+      return newSet;
+    });
   }, []);
 
   return (
-    <div className="space-y-6">
-      {educationalProcessData.map((studyForm, formIndex) => (
-        <StudyFormCard
+    <div className="space-y-4">
+      {educationalProcessData.map((studyForm, index) => (
+        <ExpandableCard
           key={studyForm.id}
-          studyForm={studyForm}
-          formIndex={formIndex}
+          id={studyForm.id}
+          title={studyForm.title}
+          badge={`${studyForm.studyForm} форма`}
+          items={studyForm.items}
+          index={index}
           isExpanded={expandedForms.has(studyForm.id)}
-          onToggle={() => toggleForm(studyForm.id)}
+          onToggle={() => handleToggleForm(studyForm.id)}
           onOpenPdf={openPdfInNewTab}
+          gridCols={3}
         />
       ))}
     </div>
