@@ -1,246 +1,146 @@
-export interface ElectiveCourse {
+export const catalogUrl = "http://kk.nau.edu.ua/article/3752";
+
+export interface Specialty {
   id: string;
-  title: string;
-  description: string;
-  credits: number;
+  code: string;
+  name: string;
+  program: string;
+  level: string;
+  color: "blue" | "green" | "orange" | "purple" | "red" | "cyan";
+}
+
+export interface SemesterCourses {
   semester: string;
-  specialty: string;
-  pdfUrl?: string;
+  courses: string[];
 }
 
-export interface CourseCategory {
-  id: string;
-  title: string;
-  description: string;
-  courses: ElectiveCourse[];
+export interface SpecialtyCatalog {
+  specialty: Specialty;
+  semesters: SemesterCourses[];
 }
 
-export interface YearCatalog {
-  id: string;
-  year: string;
-  categories: CourseCategory[];
-}
-
-export const electiveCatalogs: YearCatalog[] = [
+export const specialties: Specialty[] = [
   {
-    id: "2024",
-    year: "2024-2025",
-    categories: [
-      {
-        id: "it",
-        title: "Інформаційні технології",
-        description: "Дисципліни для спеціальностей 121, 123, 126",
-        courses: [
-          {
-            id: "1",
-            title: "Веб-технології та веб-дизайн",
-            description: "Основи HTML, CSS, JavaScript та принципи створення сучасних веб-сайтів",
-            credits: 4,
-            semester: "5-6",
-            specialty: "121, 123",
-          },
-          {
-            id: "2",
-            title: "Мобільна розробка",
-            description: "Розробка мобільних додатків для Android та iOS платформ",
-            credits: 4,
-            semester: "6-7",
-            specialty: "121, 123",
-          },
-          {
-            id: "3",
-            title: "Хмарні технології",
-            description: "Основи роботи з хмарними сервісами AWS, Azure, Google Cloud",
-            credits: 3,
-            semester: "7",
-            specialty: "123",
-          },
-          {
-            id: "4",
-            title: "Кібербезпека",
-            description: "Захист інформації, криптографія та мережева безпека",
-            credits: 4,
-            semester: "6-7",
-            specialty: "123, 126",
-          },
-        ],
-      },
-      {
-        id: "aviation",
-        title: "Авіаційні технології",
-        description: "Дисципліни для спеціальностей 173, 272, 275",
-        courses: [
-          {
-            id: "5",
-            title: "Сучасні авіаційні системи",
-            description: "Вивчення новітніх систем авіоніки та навігаційного обладнання",
-            credits: 4,
-            semester: "5-6",
-            specialty: "173, 272",
-          },
-          {
-            id: "6",
-            title: "Безпілотні авіаційні комплекси",
-            description: "Конструкція, експлуатація та програмування БПЛА",
-            credits: 4,
-            semester: "6-7",
-            specialty: "173, 272",
-          },
-          {
-            id: "7",
-            title: "Авіаційна логістика",
-            description: "Організація авіаційних перевезень та логістичні процеси",
-            credits: 3,
-            semester: "5",
-            specialty: "275",
-          },
-        ],
-      },
-      {
-        id: "electrical",
-        title: "Електротехніка та автоматизація",
-        description: "Дисципліни для спеціальностей 141, 174",
-        courses: [
-          {
-            id: "8",
-            title: "Альтернативні джерела енергії",
-            description: "Сонячна, вітрова енергетика та інші відновлювані джерела",
-            credits: 3,
-            semester: "6",
-            specialty: "141",
-          },
-          {
-            id: "9",
-            title: "Промислова робототехніка",
-            description: "Програмування та експлуатація промислових роботів",
-            credits: 4,
-            semester: "6-7",
-            specialty: "174",
-          },
-          {
-            id: "10",
-            title: "Розумний дім та IoT",
-            description: "Системи автоматизації будівель та Інтернет речей",
-            credits: 3,
-            semester: "7",
-            specialty: "141, 174",
-          },
-        ],
-      },
-      {
-        id: "general",
-        title: "Загальноосвітні дисципліни",
-        description: "Дисципліни для всіх спеціальностей",
-        courses: [
-          {
-            id: "11",
-            title: "Ділова англійська мова",
-            description: "Професійна англійська для технічних спеціальностей",
-            credits: 3,
-            semester: "5-6",
-            specialty: "Всі",
-          },
-          {
-            id: "12",
-            title: "Основи підприємництва",
-            description: "Створення та розвиток власного бізнесу в технічній сфері",
-            credits: 2,
-            semester: "7",
-            specialty: "Всі",
-          },
-          {
-            id: "13",
-            title: "Soft skills для інженерів",
-            description: "Комунікація, робота в команді, презентаційні навички",
-            credits: 2,
-            semester: "5",
-            specialty: "Всі",
-          },
-        ],
-      },
-    ],
+    id: "121",
+    code: "121",
+    name: "Інженерія програмного забезпечення",
+    program: "Інженерія програмного забезпечення",
+    level: "Фахова передвища освіта",
+    color: "blue",
   },
   {
-    id: "2023",
-    year: "2023-2024",
-    categories: [
-      {
-        id: "it-2023",
-        title: "Інформаційні технології",
-        description: "Дисципліни для IT спеціальностей",
-        courses: [
-          {
-            id: "14",
-            title: "Основи штучного інтелекту",
-            description: "Вступ до машинного навчання та нейронних мереж",
-            credits: 4,
-            semester: "6-7",
-            specialty: "121, 123",
-          },
-          {
-            id: "15",
-            title: "DevOps практики",
-            description: "CI/CD, контейнеризація та автоматизація розгортання",
-            credits: 3,
-            semester: "7",
-            specialty: "121, 123",
-          },
-        ],
-      },
-      {
-        id: "aviation-2023",
-        title: "Авіаційні технології",
-        description: "Дисципліни для авіаційних спеціальностей",
-        courses: [
-          {
-            id: "16",
-            title: "Технічна діагностика авіаційної техніки",
-            description: "Методи та засоби діагностування повітряних суден",
-            credits: 4,
-            semester: "6",
-            specialty: "173, 272",
-          },
-        ],
-      },
-    ],
+    id: "123",
+    code: "123",
+    name: "Комп'ютерна інженерія",
+    program: "Комп'ютерна інженерія",
+    level: "Фахова передвища освіта",
+    color: "purple",
   },
   {
-    id: "2022",
-    year: "2022-2023",
-    categories: [
-      {
-        id: "general-2022",
-        title: "Загальноосвітні дисципліни",
-        description: "Дисципліни для всіх спеціальностей",
-        courses: [
-          {
-            id: "17",
-            title: "Академічна доброчесність",
-            description: "Етика наукової діяльності та академічне письмо",
-            credits: 2,
-            semester: "3",
-            specialty: "Всі",
-          },
-        ],
-      },
-    ],
+    id: "141",
+    code: "141",
+    name: "Електроенергетика, електротехніка та електромеханіка",
+    program: "Електрозабезпечення промислових підприємств та цивільних споруд",
+    level: "Фахова передвища освіта",
+    color: "orange",
+  },
+  {
+    id: "173",
+    code: "173",
+    name: "Авіоніка",
+    program: "Авіоніка",
+    level: "Фахова передвища освіта",
+    color: "cyan",
+  },
+  {
+    id: "174",
+    code: "174",
+    name: "Автоматизація, комп'ютерно-інтегровані технології та робототехніка",
+    program: "Автоматизація та комп'ютерно-інтегровані технології",
+    level: "Фахова передвища освіта",
+    color: "green",
+  },
+  {
+    id: "272",
+    code: "J6/272",
+    name: "Авіаційний транспорт",
+    program: "Авіаційний транспорт",
+    level: "Фахова передвища освіта",
+    color: "red",
+  },
+  {
+    id: "275",
+    code: "275",
+    name: "Транспортні технології",
+    program: "Транспортні технології (на повітряному транспорті)",
+    level: "Фахова передвища освіта",
+    color: "orange",
+  },
+  {
+    id: "D3",
+    code: "D3",
+    name: "Менеджмент",
+    program: "Менеджмент транспорту та логістики",
+    level: "Перший (бакалаврський) рівень",
+    color: "green",
   },
 ];
 
-export const catalogDocuments = [
+// Приклади дисциплін за вибором (скорочений список для відображення)
+export const sampleCourses: SpecialtyCatalog[] = [
   {
-    id: "1",
-    title: "Каталог дисциплін за вибором 2024-2025",
-    pdfUrl: "http://kk.nau.edu.ua/files/elective_catalog_2024.pdf",
+    specialty: specialties[0], // 121 Інженерія ПЗ
+    semesters: [
+      {
+        semester: "3/5",
+        courses: ["Комп'ютерна логіка", "Програмування Python", "Інтернет-технології"],
+      },
+      {
+        semester: "4/6",
+        courses: ["Комп'ютерні системи та архітектура комп'ютерів", "Програмування JavaScript", "Графічне та геометричне моделювання"],
+      },
+      {
+        semester: "5/7",
+        courses: ["Авіаційні бортові обчислювальні системи", "Програмування мобільних додатків", "Програмування чисельних методів"],
+      },
+      {
+        semester: "6/8",
+        courses: ["Основи кібербезпеки", "Хмарні технології", "Автоматизовані інформаційні системи"],
+      },
+    ],
   },
   {
-    id: "2",
-    title: "Каталог дисциплін за вибором 2023-2024",
-    pdfUrl: "http://kk.nau.edu.ua/files/elective_catalog_2023.pdf",
+    specialty: specialties[3], // 173 Авіоніка
+    semesters: [
+      {
+        semester: "3",
+        courses: ["Основи авіаційного радіозв'язку, радіолокації і радіонавігації", "Комплекси безпілотних літальних апаратів", "Світлотехнічне обладнання"],
+      },
+      {
+        semester: "5",
+        courses: ["Радіонавігаційні системи", "Супутникові радіонавігаційні системи", "Радіонавігаційні системи повітряних суден"],
+      },
+      {
+        semester: "6",
+        courses: ["Радіолокаційні системи", "Моноімпульсні радіолокаційні системи спостереження", "Вторинні радіолокатори режиму S"],
+      },
+    ],
   },
   {
-    id: "3",
-    title: "Каталог дисциплін за вибором 2022-2023",
-    pdfUrl: "http://kk.nau.edu.ua/files/elective_catalog_2022.pdf",
+    specialty: specialties[2], // 141 Електроенергетика
+    semesters: [
+      {
+        semester: "4",
+        courses: ["Світлотехнічне обладнання промислових об'єктів та аеропортів", "Автоматизація будівлі (Building automation)", "Електросвітлотехнічне обладнання аеропортів"],
+      },
+      {
+        semester: "5",
+        courses: ["Альтернативна енергетика", "Джерела живлення електротехнічних установок", "Електропостачання повітряних суден"],
+      },
+      {
+        semester: "6",
+        courses: ["Основи проектування та конструювання електроустановок", "Електричний моніторинг, управління якістю електроенергії", "Основи проектування енергетичних об'єктів"],
+      },
+    ],
   },
 ];

@@ -3,28 +3,59 @@
 import { useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Building2,
-  MapPin,
-  Clock,
-  GraduationCap,
+  Plane,
+  Zap,
+  Truck,
   FileText,
   ExternalLink,
   Briefcase,
+  GraduationCap,
+  Clock,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   practiceBases,
-  practiceDocuments,
   practiceTypes,
-  iconMap,
+  practiceRegulationUrl,
+  practiceBasesUrl,
 } from "./data";
 
+const getTypeIcon = (type: string) => {
+  switch (type) {
+    case "aviation":
+      return Plane;
+    case "energy":
+      return Zap;
+    case "transport":
+      return Truck;
+    default:
+      return Building2;
+  }
+};
+
+const getTypeColor = (type: string) => {
+  switch (type) {
+    case "aviation":
+      return "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400";
+    case "energy":
+      return "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400";
+    case "transport":
+      return "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400";
+    default:
+      return "bg-gray-100 text-gray-600 dark:bg-gray-900/30 dark:text-gray-400";
+  }
+};
+
 export const PracticalTrainingPage = () => {
-  const openPdfInNewTab = useCallback((url: string) => {
+  const openInNewTab = useCallback((url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
   }, []);
+
+  const aviationBases = practiceBases.filter((b) => b.type === "aviation");
+  const otherBases = practiceBases.filter((b) => b.type !== "aviation");
 
   return (
     <div className="space-y-10">
@@ -40,31 +71,113 @@ export const PracticalTrainingPage = () => {
                 </h2>
               </div>
               <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-                Практична підготовка є невід'ємною складовою освітнього процесу.
-                Здобувачі освіти проходять практику на провідних підприємствах
-                міста та регіону, що дозволяє отримати реальний досвід роботи за
-                обраною спеціальністю.
+                Практична підготовка є невід&apos;ємною складовою освітнього
+                процесу. Здобувачі освіти проходять практику на провідних
+                підприємствах України, що дозволяє отримати реальний досвід
+                роботи за обраною спеціальністю.
               </p>
             </div>
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <div className="flex items-center gap-2 rounded-lg bg-white/80 px-4 py-2 dark:bg-white/10">
                 <Building2 className="h-5 w-5 text-orange-600" />
                 <div>
-                  <p className="text-lg font-bold text-foreground">6+</p>
-                  <p className="text-xs text-muted-foreground">Баз практики</p>
+                  <p className="text-lg font-bold text-foreground">30+</p>
+                  <p className="text-xs text-muted-foreground">
+                    Баз практики
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 rounded-lg bg-white/80 px-4 py-2 dark:bg-white/10">
-                <GraduationCap className="h-5 w-5 text-orange-600" />
+                <Plane className="h-5 w-5 text-orange-600" />
                 <div>
-                  <p className="text-lg font-bold text-foreground">3</p>
-                  <p className="text-xs text-muted-foreground">Види практик</p>
+                  <p className="text-lg font-bold text-foreground">14</p>
+                  <p className="text-xs text-muted-foreground">Аеропортів</p>
                 </div>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Main Navigation Cards */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {/* Положення про практику */}
+        <button
+          onClick={() => openInNewTab(practiceRegulationUrl)}
+          className="group text-left"
+        >
+          <Card
+            className={cn(
+              "h-full overflow-hidden transition-all duration-300",
+              "hover:shadow-lg hover:border-blue-500/50",
+              "animate-in fade-in slide-in-from-bottom-4"
+            )}
+          >
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-600" />
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 rounded-xl bg-blue-100 p-4 text-blue-600 transition-transform duration-300 group-hover:scale-110 dark:bg-blue-900/30 dark:text-blue-400">
+                  <FileText className="h-8 w-8" />
+                </div>
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-lg font-semibold text-foreground">
+                      Положення про проведення практики
+                    </h3>
+                    <ExternalLink className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Нормативний документ, що регламентує організацію та
+                    проведення практичної підготовки здобувачів освіти
+                  </p>
+                  <Badge variant="secondary" className="mt-2">
+                    PDF документ
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </button>
+
+        {/* Бази практики */}
+        <button
+          onClick={() => openInNewTab(practiceBasesUrl)}
+          className="group text-left"
+        >
+          <Card
+            className={cn(
+              "h-full overflow-hidden transition-all duration-300",
+              "hover:shadow-lg hover:border-orange-500/50",
+              "animate-in fade-in slide-in-from-bottom-4"
+            )}
+            style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+          >
+            <div className="h-1.5 bg-gradient-to-r from-orange-500 to-amber-500" />
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 rounded-xl bg-orange-100 p-4 text-orange-600 transition-transform duration-300 group-hover:scale-110 dark:bg-orange-900/30 dark:text-orange-400">
+                  <Building2 className="h-8 w-8" />
+                </div>
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-lg font-semibold text-foreground">
+                      Бази практичного навчання
+                    </h3>
+                    <ExternalLink className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Перелік підприємств та організацій, з якими коледж має
+                    договори про співпрацю
+                  </p>
+                  <Badge variant="secondary" className="mt-2">
+                    Переглянути список
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </button>
+      </div>
 
       {/* Practice Types */}
       <div className="space-y-4">
@@ -74,10 +187,10 @@ export const PracticalTrainingPage = () => {
             Види практичної підготовки
           </h2>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-3">
           {practiceTypes.map((type, index) => (
             <Card
-              key={type.id}
+              key={type.title}
               className={cn(
                 "group overflow-hidden transition-all duration-300 hover:shadow-md",
                 "animate-in fade-in slide-in-from-bottom-4"
@@ -90,20 +203,19 @@ export const PracticalTrainingPage = () => {
               <div className="h-1 bg-gradient-to-r from-orange-500 to-amber-500" />
               <CardContent className="p-5">
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-foreground">{type.title}</h3>
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-orange-600" />
+                    <h3 className="font-semibold text-foreground">
+                      {type.title}
+                    </h3>
+                  </div>
                   <p className="text-sm text-muted-foreground">
                     {type.description}
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="gap-1">
-                      <Clock className="h-3 w-3" />
-                      {type.duration}
-                    </Badge>
-                    <Badge variant="outline" className="gap-1">
-                      <GraduationCap className="h-3 w-3" />
-                      {type.course}
-                    </Badge>
-                  </div>
+                  <Badge variant="outline" className="gap-1">
+                    <GraduationCap className="h-3 w-3" />
+                    {type.course}
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -111,97 +223,85 @@ export const PracticalTrainingPage = () => {
         </div>
       </div>
 
-      {/* Practice Bases */}
+      {/* Aviation Partners */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <div className="h-1 w-1 rounded-full bg-primary" />
+          <div className="h-1 w-1 rounded-full bg-blue-500" />
           <h2 className="text-lg font-semibold text-foreground">
-            Бази практичного навчання
+            Авіаційні підприємства-партнери
           </h2>
+          <Badge variant="secondary" className="ml-2">
+            {aviationBases.length}
+          </Badge>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {practiceBases.map((base, index) => {
-            const Icon = iconMap[base.icon];
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {aviationBases.map((base, index) => {
+            const Icon = getTypeIcon(base.type);
             return (
-              <Card
-                key={base.id}
+              <div
+                key={base.name}
                 className={cn(
-                  "group overflow-hidden transition-all duration-300 hover:shadow-md",
-                  "animate-in fade-in slide-in-from-bottom-4"
+                  "flex items-center gap-3 rounded-lg border bg-card p-3 transition-all duration-200",
+                  "hover:border-blue-500/50 hover:bg-blue-50/50 dark:hover:bg-blue-950/20",
+                  "animate-in fade-in slide-in-from-bottom-2"
                 )}
                 style={{
-                  animationDelay: `${index * 80}ms`,
+                  animationDelay: `${index * 30}ms`,
                   animationFillMode: "backwards",
                 }}
               >
-                <CardContent className="p-5">
-                  <div className="flex gap-4">
-                    <div className="shrink-0 rounded-xl bg-orange-100 p-3 text-orange-600 transition-transform duration-300 group-hover:scale-110 dark:bg-orange-900/30 dark:text-orange-400">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="min-w-0 flex-1 space-y-2">
-                      <h3 className="font-semibold leading-tight text-foreground">
-                        {base.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {base.description}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {base.specialties.map((specialty) => (
-                          <Badge
-                            key={specialty}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {specialty}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                <div
+                  className={cn("shrink-0 rounded-lg p-2", getTypeColor(base.type))}
+                >
+                  <Icon className="h-4 w-4" />
+                </div>
+                <p className="min-w-0 flex-1 truncate text-sm font-medium">
+                  {base.name}
+                </p>
+              </div>
             );
           })}
         </div>
       </div>
 
-      {/* Documents */}
+      {/* Other Partners */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <div className="h-1 w-1 rounded-full bg-muted-foreground" />
           <h2 className="text-lg font-semibold text-foreground">
-            Документи та положення
+            Інші підприємства-партнери
           </h2>
+          <Badge variant="secondary" className="ml-2">
+            {otherBases.length}
+          </Badge>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {practiceDocuments.map((doc, index) => (
-            <Button
-              key={doc.id}
-              variant="outline"
-              className={cn(
-                "group h-auto justify-start gap-3 p-4 text-left transition-all duration-200",
-                "hover:border-orange-500/50 hover:bg-orange-50/50 dark:hover:bg-orange-950/20",
-                "animate-in fade-in slide-in-from-bottom-2"
-              )}
-              style={{
-                animationDelay: `${index * 50}ms`,
-                animationFillMode: "backwards",
-              }}
-              onClick={() => openPdfInNewTab(doc.pdfUrl)}
-            >
-              <div className="shrink-0 rounded-lg bg-red-100 p-2 text-red-600 transition-colors group-hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400">
-                <FileText className="h-5 w-5" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-medium leading-tight">{doc.title}</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {doc.description}
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {otherBases.map((base, index) => {
+            const Icon = getTypeIcon(base.type);
+            return (
+              <div
+                key={base.name}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg border bg-card p-3 transition-all duration-200",
+                  "hover:border-primary/50 hover:bg-muted/50",
+                  "animate-in fade-in slide-in-from-bottom-2"
+                )}
+                style={{
+                  animationDelay: `${index * 30}ms`,
+                  animationFillMode: "backwards",
+                }}
+              >
+                <div
+                  className={cn("shrink-0 rounded-lg p-2", getTypeColor(base.type))}
+                >
+                  <Icon className="h-4 w-4" />
+                </div>
+                <p className="min-w-0 flex-1 truncate text-sm font-medium">
+                  {base.name}
                 </p>
               </div>
-              <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-            </Button>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -209,17 +309,17 @@ export const PracticalTrainingPage = () => {
       <Card className="border-orange-200 bg-orange-50/50 dark:border-orange-800/50 dark:bg-orange-950/20">
         <CardContent className="flex items-start gap-4 p-5">
           <div className="shrink-0 rounded-full bg-orange-100 p-2 dark:bg-orange-900/50">
-            <MapPin className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+            <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
           </div>
           <div className="space-y-1">
             <p className="font-medium text-foreground">
               Організація практичного навчання
             </p>
             <p className="text-sm text-muted-foreground">
-              За питаннями організації практики звертайтеся до навчально-виробничого
-              відділу коледжу. Розподіл здобувачів освіти на бази практики
-              здійснюється відповідно до спеціальності та наявних договорів з
-              підприємствами.
+              Для всіх договорів та угод передбачена автоматична пролонгація,
+              якщо жодна із сторін не вимагає її перегляду або розірвання. За
+              питаннями організації практики звертайтеся до
+              навчально-виробничого відділу коледжу.
             </p>
           </div>
         </CardContent>

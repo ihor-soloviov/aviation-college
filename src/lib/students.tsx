@@ -60,12 +60,10 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Практичне навчання",
         href: "/students/practical-training",
-        isInDevelopment: true,
       },
       {
         title: "Каталог дисциплін за вибором",
         href: "/students/elective-courses",
-        isInDevelopment: true,
       },
       {
         title: "Дистанційне навчання",
