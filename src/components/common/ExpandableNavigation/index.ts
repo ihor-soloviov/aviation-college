@@ -1,5 +1,2 @@
-export {
-  ExpandableNavigation,
-  type NavigationCategory,
-  type NavigationLink,
-} from "./ExpandableNavigation";
+export { ExpandableNavigation } from "./ExpandableNavigation";
+export type { NavigationCategory, NavigationLink } from "./types";

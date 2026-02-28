@@ -1,9 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Sun, Moon, ListFilter } from "lucide-react";
+import { memo } from "react";
 
 const categoryIcons: Record<string, React.ElementType> = {
-  "Всі": ListFilter,
+  Всі: ListFilter,
   "Денна форма навчання": Sun,
   "Заочна форма навчання": Moon,
 };
@@ -28,9 +29,10 @@ const Categories = ({
             variant={isActive ? "default" : "outline"}
             className={`
               cursor-pointer transition-all duration-200
-              ${isActive 
-                ? "bg-blue-600 hover:bg-blue-700 shadow-md scale-105" 
-                : "hover:border-blue-400 hover:text-blue-600"
+              ${
+                isActive
+                  ? "bg-blue-600 hover:bg-blue-700 shadow-md scale-105"
+                  : "hover:border-blue-400 hover:text-blue-600"
               }
             `}
             onClick={() => onSelect(category)}
@@ -47,4 +49,4 @@ const Categories = ({
   );
 };
 
-export default Categories;
+export default memo(Categories);

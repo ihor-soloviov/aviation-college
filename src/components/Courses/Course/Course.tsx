@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, GraduationCap } from "lucide-react";
-import React from "react";
+import React, { memo } from "react";
 import { ICourse } from "@/types/courses";
 import Link from "next/link";
 
@@ -80,4 +80,4 @@ const Course = ({
   );
 };
 
-export default Course;
+export default memo(Course);

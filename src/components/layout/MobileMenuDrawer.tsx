@@ -1,9 +1,10 @@
 "use client";
-import { X } from "lucide-react";
+import { X, Plane } from "lucide-react";
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 
 import ThemeToggle from "../common/ThemeToggle/ThemeToggle";
-import NavItem from "../common/Header/NavItem";
+import MobileNavItem from "../common/Header/MobileNavItem";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 import { links } from "@/lib/navigation";
@@ -32,7 +33,7 @@ const MobileMenuDrawer = () => {
       }`}
     >
       <div
-        className={`absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 backdrop-blur-sm transition-opacity duration-300 ${
           isMenuOpen ? "opacity-100" : "opacity-0"
         }`}
         onClick={closeMenu}
@@ -40,12 +41,19 @@ const MobileMenuDrawer = () => {
 
       <div
         ref={menuRef}
-        className={`ml-auto flex h-full w-full flex-col overflow-y-auto bg-blue-100 px-4 py-4 shadow-2xl transition-transform duration-300 dark:bg-blue-900/30 ${
+        className={`ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-background border-l border-border shadow-2xl transition-transform duration-300 ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-border pb-4">
-          <span className="text-lg font-semibold">Меню</span>
+        <div className="flex items-center justify-between border-b border-border px-4 py-4">
+          <Link
+            href="/"
+            onClick={closeMenu}
+            className="flex items-center gap-2"
+          >
+            <Plane className="h-5 w-5 text-blue-600" />
+            <span className="text-base font-bold">Авіаційний коледж</span>
+          </Link>
           <button
             type="button"
             className="inline-flex items-center justify-center rounded-md border border-input p-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -56,9 +64,9 @@ const MobileMenuDrawer = () => {
           </button>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-2 py-6">
+        <nav className="flex flex-1 flex-col gap-1 p-3">
           {links.map((link) => (
-            <NavItem
+            <MobileNavItem
               key={link.label}
               label={link.label}
               href={link.href}
@@ -67,7 +75,7 @@ const MobileMenuDrawer = () => {
           ))}
         </nav>
 
-        <div className="border-t border-border pt-4">
+        <div className="border-t border-border p-4">
           <ThemeToggle />
         </div>
       </div>

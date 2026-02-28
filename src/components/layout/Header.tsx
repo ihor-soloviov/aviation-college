@@ -29,11 +29,24 @@ const Header = () => {
           </div>
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md border border-input p-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-input text-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Закрити меню" : "Відкрити меню"}
           >
-            {!isMenuOpen && <Menu className="h-5 w-5" />}
+            <Menu
+              className={`h-5 w-5 absolute transition-all duration-200 ${
+                isMenuOpen
+                  ? "opacity-0 rotate-90 scale-75"
+                  : "opacity-100 rotate-0 scale-100"
+              }`}
+            />
+            <X
+              className={`h-5 w-5 absolute transition-all duration-200 ${
+                isMenuOpen
+                  ? "opacity-100 rotate-0 scale-100"
+                  : "opacity-0 -rotate-90 scale-75"
+              }`}
+            />
           </button>
         </div>
       </div>

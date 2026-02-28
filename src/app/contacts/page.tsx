@@ -203,7 +203,7 @@ export default function AboutPage() {
                   Для подачі запитань, пропозицій та скарг скористайтеся
                   електронною формою звернень.
                 </p>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 dark:text-white">
                   Заповнити форму звернення
                 </Button>
               </CardContent>
