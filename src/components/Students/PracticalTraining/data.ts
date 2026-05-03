@@ -1,5 +1,5 @@
-export const practiceRegulationUrl = "http://kk.nau.edu.ua/article/192";
-export const practiceBasesUrl = "http://kk.nau.edu.ua/article/28";
+export const practiceRegulationUrl = "/api/articles/192/file";
+export const practiceBasesUrl = "/api/articles/28/file";
 
 export const practiceBases = [
   { name: "Товариство з обмеженою відповідальністю \"КОМ ТРАНС СЕРВІС\"", type: "transport" },

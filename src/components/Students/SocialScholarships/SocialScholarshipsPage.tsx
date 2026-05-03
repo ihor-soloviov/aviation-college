@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const mainPageUrl = "http://kk.nau.edu.ua/article/4585";
+const mainPageUrl = "/api/articles/4585/file";
 
 const categories = [
   {

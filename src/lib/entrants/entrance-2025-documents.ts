@@ -14,7 +14,7 @@ export const documents: DocumentItem[] = [
         id: "1.1",
         title:
           "Витяг з Єдиної державної електронної бази з питань освіти щодо права провадження освітньої діяльності у сфері фахової предвищої освіти",
-        pdfUrl: "http://kk.nau.edu.ua/article/4568",
+        pdfUrl: "/api/articles/4568/file",
       },
       {
         id: "1.2",

@@ -6,32 +6,32 @@
 /** PDF-файли з kk.nau.edu.ua/uploads/files/files/ */
 export const attestationPdfUrls = {
   /** Список педагогічних працівників, які підлягають атестації в 2026 році (PDF з article/3668) */
-  teachersList2026: "http://kk.nau.edu.ua/article/3668",
+  teachersList2026: "/api/articles/3668/file",
   /** План підвищення кваліфікації на 2026 рік (сторінка article/5563, PDF може бути вкладенням) */
-  qualificationPlan2026: "http://kk.nau.edu.ua/article/5563",
+  qualificationPlan2026: "/api/articles/5563/file",
   /** Графік засідань атестаційної комісії */
-  schedule: "http://kk.nau.edu.ua/article/3861",
+  schedule: "/api/articles/3861/file",
   /** Положення про атестацію педагогічних працівників */
-  position: "http://kk.nau.edu.ua/article/53",
+  position: "/api/articles/53/file",
 } as const;
 
 /** Підсторінки МОН про атестацію (article/2144) */
 export const monLinks = [
   {
     title: "Про проведення атестації педагогічних працівників у 2024/2025 навчальному році",
-    href: "http://kk.nau.edu.ua/article/5562",
+    href: "/api/articles/5562/file",
   },
   {
     title: "Положення про атестацію педагогічних працівників, затверджене наказом МОН України 10.09.2024 № 1277",
-    href: "http://kk.nau.edu.ua/article/3398",
+    href: "/api/articles/3398/file",
   },
   {
     title: "Щодо підвищення кваліфікації",
-    href: "http://kk.nau.edu.ua/article/2143",
+    href: "/api/articles/2143/file",
   },
   {
     title: "Порядок підвищення кваліфікації",
-    href: "http://kk.nau.edu.ua/article/2141",
+    href: "/api/articles/2141/file",
   },
 ];
 
@@ -39,23 +39,23 @@ export const monLinks = [
 export const ordersLinks = [
   {
     title: "Наказ № 107-од від 08.09.2025 Про склад атестаційної комісії та проведення атестації педагогічних працівників в 2025/2026 році",
-    href: "http://kk.nau.edu.ua/article/6281",
+    href: "/api/articles/6281/file",
   },
   {
     title: "Наказ № 29-од від 01.04.2025 «Про результати атестації педагогічних та бібліотечних працівників коледжу»",
-    href: "http://kk.nau.edu.ua/article/5690",
+    href: "/api/articles/5690/file",
   },
   {
     title: "Наказ № 14-од від 13.11.2024 Про склад атестаційної комісії та проведення атестації педагогічних працівників в 2024-2025 р.",
-    href: "http://kk.nau.edu.ua/article/4907",
+    href: "/api/articles/4907/file",
   },
   {
     title: "Наказ № 18-од від 01.04.2024 Про результати атестації педагогічних працівників коледжу",
-    href: "http://kk.nau.edu.ua/article/4562",
+    href: "/api/articles/4562/file",
   },
   {
     title: "Наказ № 88-од від 15.09.2023 Про склад атестаційної комісії та проведення атестації педагогічних працівників в 2023/2024 н.р.",
-    href: "http://kk.nau.edu.ua/article/3339",
+    href: "/api/articles/3339/file",
   },
 ];
 

@@ -24,7 +24,7 @@ const documents = [
     subtitle: "Протидія булінгу в закладі освіти: системний підхід",
     icon: BookOpen,
     color: "blue",
-    url: "http://kk.nau.edu.ua/article/526",
+    url: "/api/articles/526/file",
   },
   {
     id: "together",
@@ -32,7 +32,7 @@ const documents = [
     subtitle: "Інформаційні матеріали про протидію булінгу",
     icon: Heart,
     color: "pink",
-    url: "http://kk.nau.edu.ua/article/527",
+    url: "/api/articles/527/file",
   },
   {
     id: "tips",
@@ -40,7 +40,7 @@ const documents = [
     subtitle: "Практичні рекомендації для здобувачів освіти",
     icon: AlertTriangle,
     color: "yellow",
-    url: "http://kk.nau.edu.ua/article/528",
+    url: "/api/articles/528/file",
   },
   {
     id: "responsibility",
@@ -48,7 +48,7 @@ const documents = [
     subtitle: "Інформація про відповідальність за булінг",
     icon: Scale,
     color: "red",
-    url: "http://kk.nau.edu.ua/article/529",
+    url: "/api/articles/529/file",
   },
   {
     id: "plan",
@@ -56,7 +56,7 @@ const documents = [
     subtitle: "Комплексний план заходів з протидії булінгу в коледжі",
     icon: ClipboardList,
     color: "green",
-    url: "http://kk.nau.edu.ua/article/3899",
+    url: "/api/articles/3899/file",
   },
   {
     id: "regulation",
@@ -64,7 +64,7 @@ const documents = [
     subtitle: "Нормативний документ, що регламентує протидію булінгу",
     icon: FileText,
     color: "purple",
-    url: "http://kk.nau.edu.ua/article/983",
+    url: "/api/articles/983/file",
   },
 ];
 

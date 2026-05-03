@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const mainPageUrl = "http://kk.nau.edu.ua/article/112";
+const mainPageUrl = "/api/articles/112/file";
 
 const departments = [
   {
@@ -26,15 +26,15 @@ const departments = [
       {
         year: "2025-2026 н.р.",
         items: [
-          { title: "І семестр", url: "http://kk.nau.edu.ua/article/4789" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4790" },
+          { title: "І семестр", url: "/api/articles/4789/file" },
+          { title: "ІІ семестр", url: "/api/articles/4790/file" },
         ],
       },
       {
         year: "2024-2025 н.р.",
         items: [
-          { title: "І семестр", url: "http://kk.nau.edu.ua/article/4311" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4550" },
+          { title: "І семестр", url: "/api/articles/4311/file" },
+          { title: "ІІ семестр", url: "/api/articles/4550/file" },
         ],
       },
     ],
@@ -48,15 +48,15 @@ const departments = [
       {
         year: "2025-2026 н.р.",
         items: [
-          { title: "І семестр", url: "http://kk.nau.edu.ua/article/4791" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4792" },
+          { title: "І семестр", url: "/api/articles/4791/file" },
+          { title: "ІІ семестр", url: "/api/articles/4792/file" },
         ],
       },
       {
         year: "2024-2025 н.р.",
         items: [
-          { title: "І семестр", url: "http://kk.nau.edu.ua/article/4312" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4551" },
+          { title: "І семестр", url: "/api/articles/4312/file" },
+          { title: "ІІ семестр", url: "/api/articles/4551/file" },
         ],
       },
     ],
@@ -70,15 +70,15 @@ const departments = [
       {
         year: "2025-2026 н.р.",
         items: [
-          { title: "І семестр", url: "http://kk.nau.edu.ua/article/4793" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4794" },
+          { title: "І семестр", url: "/api/articles/4793/file" },
+          { title: "ІІ семестр", url: "/api/articles/4794/file" },
         ],
       },
       {
         year: "2024-2025 н.р.",
         items: [
-          { title: "І семестр", url: "http://kk.nau.edu.ua/article/4313" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4552" },
+          { title: "І семестр", url: "/api/articles/4313/file" },
+          { title: "ІІ семестр", url: "/api/articles/4552/file" },
         ],
       },
     ],
@@ -92,9 +92,9 @@ const departments = [
       {
         year: "2025-2026 н.р.",
         items: [
-          { title: "І курс", url: "http://kk.nau.edu.ua/article/4795" },
-          { title: "ІІ курс", url: "http://kk.nau.edu.ua/article/4796" },
-          { title: "ІІ семестр", url: "http://kk.nau.edu.ua/article/4797" },
+          { title: "І курс", url: "/api/articles/4795/file" },
+          { title: "ІІ курс", url: "/api/articles/4796/file" },
+          { title: "ІІ семестр", url: "/api/articles/4797/file" },
         ],
       },
     ],

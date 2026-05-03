@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const regulationUrl = "http://kk.nau.edu.ua/article/3898";
+const regulationUrl = "/api/articles/3898/file";
 
 const keyPoints = [
   {

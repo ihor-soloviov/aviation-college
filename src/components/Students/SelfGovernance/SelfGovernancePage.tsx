@@ -22,7 +22,7 @@ const sections = [
     description:
       "Нормативний документ, що регламентує діяльність органів студентського самоврядування",
     icon: FileText,
-    url: "http://kk.nau.edu.ua/article/175",
+    url: "/api/articles/175/file",
     color: "blue",
   },
   {
@@ -31,7 +31,7 @@ const sections = [
     description:
       "Календарний план заходів та подій, організованих студентським самоврядуванням",
     icon: Calendar,
-    url: "http://kk.nau.edu.ua/article/1906",
+    url: "/api/articles/1906/file",
     color: "purple",
   },
   {
@@ -40,7 +40,7 @@ const sections = [
     description:
       "Інформація про членів та керівництво органів студентського самоврядування",
     icon: UserCheck,
-    url: "http://kk.nau.edu.ua/article/674",
+    url: "/api/articles/674/file",
     color: "green",
   },
   {
@@ -49,7 +49,7 @@ const sections = [
     description:
       "Протоколи засідань, звіти про діяльність та результати роботи самоврядування",
     icon: BarChart3,
-    url: "http://kk.nau.edu.ua/article/680",
+    url: "/api/articles/680/file",
     color: "orange",
   },
   {
@@ -58,7 +58,7 @@ const sections = [
     description:
       "Фотоматеріали заходів та подій, організованих студентським самоврядуванням",
     icon: Image,
-    url: "http://kk.nau.edu.ua/article/3382",
+    url: "/api/articles/3382/file",
     color: "pink",
   },
 ];

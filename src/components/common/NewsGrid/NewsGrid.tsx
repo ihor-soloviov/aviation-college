@@ -24,10 +24,6 @@ export function NewsGrid({ news, variant = "default", maxItems }: NewsGridProps)
   return (
     <section className="bg-background dark:b-gray-900/10 py-16 md:py-24">
       <div className="container space-y-8 mx-auto">
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Останні новини коледжу</h2>
-        </div>
-
         <div
           className={`grid gap-8 ${isCompact ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             }`}

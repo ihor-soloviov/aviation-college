@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const mainPageUrl = "http://kk.nau.edu.ua/article/215";
+const mainPageUrl = "/api/articles/215/file";
 
 // Загальна інформація - посилання на статті сайту
 const generalInfo = [
@@ -31,7 +31,7 @@ const generalInfo = [
     title: "Положення про НТК",
     description: "Нормативний документ, що регламентує діяльність наукового товариства",
     icon: FileText,
-    url: "http://kk.nau.edu.ua/article/3270",
+    url: "/api/articles/3270/file",
     color: "blue",
     type: "external",
   },
@@ -40,7 +40,7 @@ const generalInfo = [
     title: "Положення про студентські наукові гуртки та проблемні групи",
     description: "Правила організації та функціонування наукових гуртків",
     icon: Users,
-    url: "http://kk.nau.edu.ua/article/3271",
+    url: "/api/articles/3271/file",
     color: "purple",
     type: "external",
   },
@@ -49,7 +49,7 @@ const generalInfo = [
     title: "Перелік наукових секцій НТК",
     description: "Студентські наукові гуртки та проблемні групи коледжу",
     icon: BookOpen,
-    url: "http://kk.nau.edu.ua/article/3272",
+    url: "/api/articles/3272/file",
     color: "green",
     type: "external",
   },
@@ -62,7 +62,7 @@ const conferences = [
     title: "Авіація і космонавтика",
     description: "Науково-практична конференція з питань авіації та космонавтики",
     icon: Plane,
-    url: "http://kk.nau.edu.ua/article/3273",
+    url: "/api/articles/3273/file",
     color: "sky",
   },
   {
@@ -70,7 +70,7 @@ const conferences = [
     title: "Козацтво - традиції через роки!",
     description: "Конференція присвячена історії та традиціям українського козацтва",
     icon: History,
-    url: "http://kk.nau.edu.ua/article/3274",
+    url: "/api/articles/3274/file",
     color: "amber",
   },
   {
@@ -78,7 +78,7 @@ const conferences = [
     title: "Сучасний науково-педагогічний досвід при викладанні фундаментальних дисциплін",
     description: "Обмін досвідом викладання фундаментальних дисциплін у закладах освіти",
     icon: BookOpen,
-    url: "http://kk.nau.edu.ua/article/3275",
+    url: "/api/articles/3275/file",
     color: "emerald",
   },
   {
@@ -86,7 +86,7 @@ const conferences = [
     title: "Всесвітній день інформації",
     description: "Науково-практична конференція з питань інформаційних технологій",
     icon: Monitor,
-    url: "http://kk.nau.edu.ua/article/3276",
+    url: "/api/articles/3276/file",
     color: "cyan",
   },
   {
@@ -94,7 +94,7 @@ const conferences = [
     title: "Академічна доброчесність: основи теорії та практики",
     description: "Конференція з питань академічної доброчесності в освіті",
     icon: GraduationCap,
-    url: "http://kk.nau.edu.ua/article/4089",
+    url: "/api/articles/4089/file",
     color: "indigo",
   },
 ];
@@ -106,7 +106,7 @@ const achievements = [
     title: "Математика",
     description: "Перемоги та досягнення на олімпіадах з математики",
     icon: Calculator,
-    url: "http://kk.nau.edu.ua/article/3277",
+    url: "/api/articles/3277/file",
     color: "rose",
   },
   {
@@ -114,7 +114,7 @@ const achievements = [
     title: "Комп'ютерна графіка",
     description: "Досягнення здобувачів у галузі комп'ютерної графіки та дизайну",
     icon: Monitor,
-    url: "http://kk.nau.edu.ua/article/3278",
+    url: "/api/articles/3278/file",
     color: "violet",
   },
 ];
@@ -126,7 +126,7 @@ const regulations = [
     title: "Положення про олімпіади",
     description: "Нормативний документ щодо проведення олімпіад",
     icon: ScrollText,
-    url: "http://kk.nau.edu.ua/article/3279",
+    url: "/api/articles/3279/file",
     color: "slate",
   },
 ];

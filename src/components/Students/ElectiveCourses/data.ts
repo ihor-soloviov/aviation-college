@@ -1,4 +1,4 @@
-export const catalogUrl = "http://kk.nau.edu.ua/article/3752";
+export const catalogUrl = "/api/articles/3752/file";
 
 export interface Specialty {
   id: string;
