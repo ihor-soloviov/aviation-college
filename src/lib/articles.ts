@@ -10,6 +10,7 @@ export interface ArticleDetail {
     view_mode: 'html' | 'docx_to_html' | 'pdf'
     file_format: string | null
     content_path: string
+    html: string | null
 }
 
 const UPLOADS_DIR = process.env.UPLOADS_DIR ?? '/var/www/uploads'
@@ -21,6 +22,15 @@ export async function getArticleById(id: number): Promise<ArticleDetail | null> 
     )
     if (!rows[0]) return null
     const row = rows[0]
+
+    let html: string | null = null
+    if (row.view_mode !== 'pdf') {
+        const filePath = path.join(UPLOADS_DIR, row.content_path)
+        if (fs.existsSync(filePath)) {
+            html = fs.readFileSync(filePath, 'utf-8')
+        }
+    }
+
     return {
         id: row.id,
         old_id: row.old_id,
@@ -28,6 +38,7 @@ export async function getArticleById(id: number): Promise<ArticleDetail | null> 
         view_mode: row.view_mode,
         file_format: row.file_format,
         content_path: row.content_path,
+        html,
     }
 }
 

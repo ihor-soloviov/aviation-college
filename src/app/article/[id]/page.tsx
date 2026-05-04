@@ -12,7 +12,7 @@ export default async function ArticlePage({ params }: Props) {
 
     if (!article) notFound()
 
-    const isPdf = article.viewMode === 'pdf'
+    const isPdf = article.view_mode === 'pdf'
 
     return (
         <main className="flex-1">

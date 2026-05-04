@@ -21,10 +21,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
     const mime = MIME_TYPES[file.fileFormat] ?? 'application/octet-stream'
 
-    return new Response(file.data, {
+    const body = new Uint8Array(file.data)
+
+    return new Response(body, {
         headers: {
             'Content-Type': mime,
-            'Content-Length': String(file.data.length),
+            'Content-Length': String(body.byteLength),
         },
     })
 }
