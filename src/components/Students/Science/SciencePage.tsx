@@ -21,6 +21,7 @@ import {
   ScrollText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveFileUrl } from "@/lib/files-url";
 
 const mainPageUrl = "/api/articles/215/file";
 
@@ -150,7 +151,7 @@ const getColorClasses = (color: string) => {
 
 export const SciencePage = () => {
   const openInNewTab = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
   }, []);
 
   const scrollToSection = useCallback((sectionId: string) => {

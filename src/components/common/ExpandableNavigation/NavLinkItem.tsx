@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NavigationLink } from "./types";
+import { resolveFileUrl } from "@/lib/files-url";
 
 export const NavLinkItem = ({ link }: { link: NavigationLink }) => {
   if (link.isInDevelopment) {
@@ -26,7 +27,7 @@ export const NavLinkItem = ({ link }: { link: NavigationLink }) => {
 
   return (
     <Link
-      href={link.href}
+      href={resolveFileUrl(link.href)}
       target={link.isExternal ? "_blank" : undefined}
       rel={link.isExternal ? "noopener noreferrer" : undefined}
       className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-start gap-2"

@@ -1,3 +1,5 @@
+export type CourseCategory = 'it' | 'engineering' | 'aviation' | 'management' | 'telecom'
+
 export interface ICourse {
     id: string
     title: string
@@ -6,4 +8,5 @@ export interface ICourse {
     icon: React.ElementType
     description: string
     tuition: string
+    category: CourseCategory
 }

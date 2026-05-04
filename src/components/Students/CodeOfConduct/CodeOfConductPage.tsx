@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveFileUrl } from "@/lib/files-url";
 
 const regulationUrl = "/api/articles/3898/file";
 
@@ -41,7 +42,7 @@ const keyPoints = [
 
 export const CodeOfConductPage = () => {
   const openInNewTab = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
   }, []);
 
   return (

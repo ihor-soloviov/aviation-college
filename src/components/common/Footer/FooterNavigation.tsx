@@ -7,7 +7,7 @@ export const FooterNavigation = () => {
       <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">
         Навігація
       </h4>
-      <ul className="space-y-2 text-sm">
+      <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm lg:grid-cols-1">
         {links.map((item) => (
           <li key={item.label}>
             <Link

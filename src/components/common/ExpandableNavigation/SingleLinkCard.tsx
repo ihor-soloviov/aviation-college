@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { NavigationCategory } from "./types";
+import { resolveFileUrl } from "@/lib/files-url";
 
 type Props = {
   category: NavigationCategory;
@@ -9,7 +10,7 @@ type Props = {
 
 export const SingleLinkCard = ({ category, href, isExternal }: Props) => (
   <a
-    href={href}
+    href={resolveFileUrl(href)}
     {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
     className="block"
     aria-label={category.title}

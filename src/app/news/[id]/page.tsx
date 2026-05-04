@@ -22,6 +22,13 @@ export default async function NewsDetailPage({ params }: Props) {
     const filePath = path.join(uploadsDir, news.content_path)
     const html = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : ''
 
+    const remoteRes = await fetch(`${process.env.FILES_API_URL}/api/news/${id}/file`, {
+        cache: 'no-store',
+    })
+    const htmlRemote = remoteRes.ok ? await remoteRes.text() : ''
+
+    const renderedHtml = html || htmlRemote
+
     const otherRaw = await getNewsList(4)
     const otherNews = otherRaw
         .filter((item) => item.id !== news.id)
@@ -81,7 +88,7 @@ export default async function NewsDetailPage({ params }: Props) {
                     <div className="prose prose-lg max-w-none">
                         <div
                             className="leading-relaxed space-y-6"
-                            dangerouslySetInnerHTML={{ __html: html }}
+                            dangerouslySetInnerHTML={{ __html: renderedHtml }}
                         />
                     </div>
                 </div>

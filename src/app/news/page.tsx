@@ -45,9 +45,9 @@ export default async function NewsPage({ searchParams }: Props) {
         : 'Новини'
 
     return (
-        <div className="container mx-auto py-12">
-            <h1 className="text-4xl font-bold tracking-tight mb-8">{pageTitle}</h1>
-            <div className="flex gap-10">
+        <div className="container mx-auto py-8 md:py-12 px-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-6 md:mb-8">{pageTitle}</h1>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-10">
                 <Suspense>
                     <NewsArchive archive={archive} />
                 </Suspense>

@@ -16,6 +16,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveFileUrl } from "@/lib/files-url";
 import {
   practiceBases,
   practiceTypes,
@@ -51,7 +52,7 @@ const getTypeColor = (type: string) => {
 
 export const PracticalTrainingPage = () => {
   const openInNewTab = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
   }, []);
 
   const aviationBases = practiceBases.filter((b) => b.type === "aviation");

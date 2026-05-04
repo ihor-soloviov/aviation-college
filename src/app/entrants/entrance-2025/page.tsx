@@ -7,6 +7,7 @@ import { BackLink } from "@/components/common/BackLink/BackLink";
 import { DocumentSidebar } from "@/components/Entrants/Documents/DocumentSidebar";
 import { DocumentViewer } from "@/components/Entrants/Documents/DocumentViewer";
 import { documents } from "@/lib/entrants/entrance-2025-documents";
+import { resolveFileUrl } from "@/lib/files-url";
 
 export default function DocumentsPage() {
   useCardScrollAnimation();
@@ -14,7 +15,7 @@ export default function DocumentsPage() {
   const [selectedTitle, setSelectedTitle] = useState<string>("");
 
   const handleDocumentSelect = (pdfUrl: string, title: string) => {
-    setSelectedDocument(pdfUrl);
+    setSelectedDocument(resolveFileUrl(pdfUrl));
     setSelectedTitle(title);
   };
 

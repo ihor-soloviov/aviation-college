@@ -20,6 +20,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveFileUrl } from "@/lib/files-url";
 
 const mainPageUrl = "/api/articles/4585/file";
 
@@ -139,7 +140,7 @@ const getColorClasses = (color: string) => {
 
 export const SocialScholarshipsPage = () => {
   const openInNewTab = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
   }, []);
 
   return (

@@ -1,25 +1,27 @@
-"use client"
-import clsx from "clsx"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+"use client";
+import clsx from "clsx";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavItemProps {
-  label: string
-  href: string
-  onClick?: () => void
+  label: string;
+  href: string;
+  onClick?: () => void;
 }
 
 const NavItem = ({ label, href, onClick }: NavItemProps) => {
-  const pathname = usePathname()
-  const isActive = pathname === href
+  const pathname = usePathname();
+  const isActive = pathname === href;
 
   return (
     <Link
       href={href}
       onClick={onClick}
       className={clsx(
-        "relative inline-block text-sm font-medium transition-colors group",
-        isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+        "relative inline-block text-[0.65rem] lg:text-[0.75rem] xl:text-[0.8rem] font-medium transition-colors group",
+        isActive
+          ? "text-primary"
+          : "text-muted-foreground hover:text-foreground",
       )}
     >
       {label}
@@ -30,7 +32,7 @@ const NavItem = ({ label, href, onClick }: NavItemProps) => {
         )}
       />
     </Link>
-  )
-}
+  );
+};
 
-export default NavItem
+export default NavItem;

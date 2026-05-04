@@ -1,5 +1,6 @@
 import { getArticleById } from '@/lib/articles'
 import { notFound } from 'next/navigation'
+import { resolveFileUrl } from '@/lib/files-url'
 
 type Props = {
     params: Promise<{ id: string }>
@@ -20,7 +21,8 @@ export default async function ArticlePage({ params }: Props) {
 
                 {isPdf ? (
                     <iframe
-                        src={`/api/articles/${id}/file`}
+                        src={resolveFileUrl(`/api/articles/${id}/file`)}
+                        loading="lazy"
                         className="w-full border-0 rounded-lg"
                         style={{ height: '85vh' }}
                     />

@@ -13,6 +13,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveFileUrl } from "@/lib/files-url";
 
 const mainPageUrl = "/api/articles/112/file";
 
@@ -140,7 +141,7 @@ const getColorClasses = (color: string) => {
 
 export const ScholarshipRatingPage = () => {
   const openInNewTab = useCallback((url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
   }, []);
 
   return (

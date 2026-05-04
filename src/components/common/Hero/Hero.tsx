@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import useParallax from "@/hooks/useParallax";
+import Link from "next/link";
 
 interface HeroProps {
   imgPath: string;
@@ -40,30 +41,28 @@ const Hero = ({ imgPath }: HeroProps) => {
           Авіаційний коледж
         </h1>
 
-        <p className="max-w-[700px] text-lg text-white/90 md:text-xl">
+        <p className="max-w-175 text-lg text-white/90 md:text-xl">
           КРИВОРІЗЬКИЙ ФАХОВИЙ КОЛЕДЖ ДЕРЖАВНОГО НЕКОМЕРЦІЙНОГО ПІДПРИЄМСТВА
           «ДЕРЖАВНИЙ УНІВЕРСИТЕТ «КИЇВСЬКИЙ АВІАЦІЙНИЙ ІНСТИТУТ»
         </p>
 
         <div className="flex flex-col gap-4 sm:flex-row">
           <Button
+            asChild
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-lg"
-            onClick={() => {
-              window.location.href = "#courses";
-            }}
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
           >
-            Дізнатися більше
+            <Link href="/about-us">Дізнатися більше</Link>
           </Button>
+
           <Button
+            asChild
             size="lg"
             variant="outline"
-            className="border-white/80 text-white hover:bg-white hover:text-foreground hover:border-white cursor-pointer backdrop-blur-sm bg-white/10"
-            onClick={() => {
-              window.location.href = "/contacts#contacts-page";
-            }}
+            className="border-white/80 text-white hover:bg-white hover:text-foreground hover:border-white backdrop-blur-sm
+             bg-white/10"
           >
-            Записатися на навчання
+            <Link href="/contacts">Контакти</Link>
           </Button>
         </div>
       </div>
