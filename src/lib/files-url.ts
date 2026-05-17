@@ -5,3 +5,9 @@ export function resolveFileUrl(href: string): string {
     const base = process.env.FILES_API_URL ?? process.env.NEXT_PUBLIC_FILES_API_URL
     return base ? `${base}${href}` : href
 }
+
+export function getUploadedFileUrl(relativePath: string): string {
+    if (process.env.UPLOAD_MODE === 'local') return `/uploads/${relativePath}`
+    const base = process.env.FILES_API_URL ?? process.env.NEXT_PUBLIC_FILES_API_URL
+    return base ? `${base}/uploads/${relativePath}` : `/uploads/${relativePath}`
+}
