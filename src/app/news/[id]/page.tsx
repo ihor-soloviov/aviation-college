@@ -8,6 +8,8 @@ import { NewsCard } from "@/components/common/NewsCard/NewsCard"
 import fs from 'fs'
 import path from 'path'
 
+export const dynamic = "force-dynamic"
+
 type Props = {
     params: Promise<{ id: string }>
 }

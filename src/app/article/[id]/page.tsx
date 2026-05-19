@@ -2,6 +2,8 @@ import { getArticleById } from '@/lib/articles'
 import { notFound } from 'next/navigation'
 import { resolveFileUrl } from '@/lib/files-url'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
     params: Promise<{ id: string }>
 }

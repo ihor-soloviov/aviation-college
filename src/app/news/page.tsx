@@ -3,6 +3,8 @@ import { getNewsList, getNewsCount, getNewsArchive } from "@/lib/news"
 import { NewsFeed } from "@/components/common/NewsFeed/NewsFeed"
 import { NewsArchive } from "@/components/common/NewsArchive/NewsArchive"
 
+export const dynamic = "force-dynamic"
+
 interface Props {
     searchParams: Promise<{ year?: string; month?: string }>
 }
