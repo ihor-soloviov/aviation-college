@@ -39,6 +39,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# server-side runtime data (bind-mounted; never committed)
+/data
+/build.log
+/migration.log
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
