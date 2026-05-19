@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.gitignore
+.vercel
+.env
+.env.*
+!.env.production.example
+*.log
+.DS_Store
+docs
+README.md
+.hintrc
+.vscode
+.idea
+coverage
+*.tsbuildinfo

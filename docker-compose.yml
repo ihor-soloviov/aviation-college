@@ -1,0 +1,61 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      # Не монтуємо ./migrations як initdb — на Етапі 3 заллємо дамп зі старого сервера,
+      # потім окремо застосуємо нові міграції (001_news_v2_structured.sql) ручно.
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  next:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      UPLOAD_MODE: local
+      UPLOADS_DIR: /var/www/uploads
+      FILES_API_URL: ${FILES_API_URL}
+      NEXT_PUBLIC_FILES_API_URL: ${NEXT_PUBLIC_FILES_API_URL}
+      FILES_API_UPLOAD_TOKEN: ${FILES_API_UPLOAD_TOKEN}
+    volumes:
+      - ./data/uploads:/var/www/uploads
+      - ./data/legacy:/var/www/aviation-legacy:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks: [internal]
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./data/uploads:/var/www/uploads:ro
+      - ./data/letsencrypt:/etc/letsencrypt:ro
+      - ./data/certbot-webroot:/var/www/certbot:ro
+    depends_on: [next]
+    networks: [internal]
+
+networks:
+  internal:
+    driver: bridge
