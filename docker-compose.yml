@@ -37,9 +37,12 @@ services:
       FILES_API_URL: ${FILES_API_URL}
       NEXT_PUBLIC_FILES_API_URL: ${NEXT_PUBLIC_FILES_API_URL}
       FILES_API_UPLOAD_TOKEN: ${FILES_API_UPLOAD_TOKEN}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      DATABASE_URI: ${DATABASE_URI}
     volumes:
       - ./data/uploads:/var/www/uploads
       - ./data/legacy:/var/www/aviation-legacy:ro
+      - ./data/payload:/app/data/payload
     depends_on:
       mysql:
         condition: service_healthy
