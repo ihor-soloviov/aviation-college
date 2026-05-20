@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { getPayload } from 'payload'
-import config from '../../../payload.config.ts'
+import config from '../../../payload.config'
 
 import { migrateOneNews } from './migrate-news'
 
