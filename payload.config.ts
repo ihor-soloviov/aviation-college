@@ -28,6 +28,7 @@ export default buildConfig({
         client: {
             url: process.env.DATABASE_URI || 'file:./data/payload/cms.sqlite',
         },
+        push: true,
     }),
     typescript: {
         outputFile: path.resolve(dirname, 'src/payload-types.ts'),
