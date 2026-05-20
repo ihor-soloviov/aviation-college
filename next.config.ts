@@ -1,23 +1,17 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://38.242.201.228/api/:path*',
-      },
-    ]
-  },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        pathname: '/**',
-      },
-    ],
-    dangerouslyAllowSVG: true,
-  },
+import type { NextConfig } from 'next'
+import { withPayload } from '@payloadcms/next/withPayload'
+
+const nextConfig: NextConfig = {
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'placehold.co',
+                pathname: '/**',
+            },
+        ],
+        dangerouslyAllowSVG: true,
+    },
 }
 
-module.exports = nextConfig;
+export default withPayload(nextConfig)

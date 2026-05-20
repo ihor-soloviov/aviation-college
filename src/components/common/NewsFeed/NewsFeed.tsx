@@ -10,7 +10,7 @@ interface NewsItem {
     title: string
     excerpt: string
     content: string
-    image: string
+    image: string | null
     date: string
     category: string
     author: string
@@ -54,7 +54,7 @@ export function NewsFeed({ initialNews, total, year, month }: NewsFeedProps) {
                 title: item.title,
                 excerpt: '',
                 content: '',
-                image: '/placeholder.svg',
+                image: null,
                 date: formatDate(item.add_date),
                 category: item.tags ?? '',
                 author: '',
@@ -67,9 +67,9 @@ export function NewsFeed({ initialNews, total, year, month }: NewsFeedProps) {
 
     return (
         <div className="space-y-8">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="flex flex-col gap-4">
                 {news.map((item) => (
-                    <NewsCard key={item.id} news={item} />
+                    <NewsCard key={item.id} news={item} variant="wide" />
                 ))}
             </div>
 
