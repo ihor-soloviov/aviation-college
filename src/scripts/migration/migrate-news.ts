@@ -21,6 +21,9 @@ const IMAGES_OUT_DIR = process.env.MIGRATION_IMAGES_OUT_DIR ?? path.join(UPLOADS
 const IMAGES_URL_PREFIX = process.env.MIGRATION_IMAGES_URL_PREFIX ?? '/uploads/news-images'
 const LIMIT = process.env.MIGRATION_LIMIT ? Number(process.env.MIGRATION_LIMIT) : undefined
 const DRY_RUN = process.env.MIGRATION_DRY_RUN === '1'
+const IDS = process.env.MIGRATION_IDS
+    ? process.env.MIGRATION_IDS.split(',').map((s) => Number(s.trim())).filter((n) => !Number.isNaN(n))
+    : undefined
 
 export function slugify(input: string): string {
     return input
@@ -179,13 +182,23 @@ async function main() {
     const payload = await getPayload({ config })
     console.log(`✓ Payload initialised`)
 
-    const sql = LIMIT
-        ? `SELECT id, old_id, title, tags, add_date, content_type, content_path FROM news_v2 ORDER BY old_id ASC LIMIT ${LIMIT}`
-        : `SELECT id, old_id, title, tags, add_date, content_type, content_path FROM news_v2 ORDER BY old_id ASC`
+    const baseSelect = `SELECT id, old_id, title, tags, add_date, content_type, content_path FROM news_v2`
+    let sql: string
+    let params: number[] = []
+    if (IDS && IDS.length > 0) {
+        const placeholders = IDS.map(() => '?').join(',')
+        sql = `${baseSelect} WHERE old_id IN (${placeholders}) ORDER BY old_id ASC`
+        params = IDS
+    } else if (LIMIT) {
+        sql = `${baseSelect} ORDER BY old_id ASC LIMIT ${LIMIT}`
+    } else {
+        sql = `${baseSelect} ORDER BY old_id ASC`
+    }
 
-    const [rows] = await conn.execute(sql)
+    const [rows] = await conn.execute(sql, params)
     const newsRows = rows as LegacyNewsRow[]
-    console.log(`Found ${newsRows.length} legacy news rows${LIMIT ? ` (LIMIT=${LIMIT})` : ''}`)
+    const filterLabel = IDS ? ` (IDS=${IDS.join(',')})` : LIMIT ? ` (LIMIT=${LIMIT})` : ''
+    console.log(`Found ${newsRows.length} legacy news rows${filterLabel}`)
     if (DRY_RUN) console.log(`*** DRY RUN — no writes ***`)
 
     const stats = { ok: 0, skipped: 0, failed: 0, images: 0 }
