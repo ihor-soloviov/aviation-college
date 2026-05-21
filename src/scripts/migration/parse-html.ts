@@ -264,7 +264,9 @@ function processNode($: CheerioAPI, node: AnyNode, ctx: ParseContext, formatMask
             return
 
         case 'a': {
-            const href = (el.attribs.href ?? '').trim()
+            // MS Word HTML often leaves junk in href like:  https://x.com" \t "_blank
+            // (escaped target/tooltip leaks). Cut at first whitespace or quote.
+            const href = (el.attribs.href ?? '').trim().split(/[\s"']/)[0]
             const text = $(el).text().replace(/\s+/g, ' ').trim()
             if (!text) return
             if (ctx.imgBuffer.length > 0) flushImages(ctx)

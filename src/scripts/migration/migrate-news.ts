@@ -121,7 +121,9 @@ export async function migrateOneNews(
     const baseSlug = slugify(title)
     const slug = await findFreeSlug(payload, baseSlug, oldId)
 
-    const publishedAt = row.add_date ? new Date(row.add_date) : new Date()
+    const parsedDate = row.add_date ? new Date(row.add_date) : null
+    const publishedAt =
+        parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate : new Date()
     publishedAt.setHours(0, 0, 0, 0)
 
     const tags = row.tags
