@@ -34,8 +34,7 @@
 │   ├── legacy/                            # SiteNodeJS resources (1.9 GB)
 │   ├── letsencrypt/                       # сертифікати (Етап 4)
 │   ├── certbot-webroot/                   # ACME challenge (Етап 4)
-│   ├── payload/                           # PayloadCMS SQLite (cms.sqlite, chown 100:101)
-│   └── kknau-dump-2026-05-19.sql.gz       # дамп; видалити після cutover
+│   └── payload/                           # PayloadCMS SQLite (cms.sqlite, chown 100:101)
 └── build.log, migration.log
 ```
 
@@ -199,16 +198,7 @@ crontab -e
 0 */12 * * * docker run --rm -v /home/deploy/aviation/data/letsencrypt:/etc/letsencrypt -v /home/deploy/aviation/data/certbot-webroot:/var/www/certbot certbot/certbot renew --quiet && docker exec aviation-nginx-1 nginx -s reload
 ```
 
-### F. Прибрати дамп
-
-Після того як сайт стабільно живе ≥1 тиждень на HTTPS:
-```bash
-ssh aviation
-rm /home/deploy/aviation/data/kknau-dump-2026-05-19.sql.gz
-```
-Звільнить ~9 GB.
-
-### G. Оновити NEXT_PUBLIC_SITE_URL
+### F. Оновити NEXT_PUBLIC_SITE_URL
 
 У `.env.production`:
 ```
@@ -256,7 +246,7 @@ docker compose --env-file .env.production restart nginx
 
 ## Відомі компроміси
 
-- **Дві БД одного типу контенту.** Стара (`articles`, `news` з BLOB-ами) перенесена як є; нова логіка йде через `articles_v2` / `news_v2`. Якщо щось не показується — спершу перевір яку таблицю читає відповідна сторінка/route.
+- **MySQL + Payload SQLite гібрид.** Новини (1268) і документи (5178 PDF) повністю в Payload SQLite. Legacy HTML-статті (1328) досі в MySQL `articles_v2` — `/article/:id` має фолбек. Старі BLOB-таблиці (`articles`, `news`) — orphan, не читаються. План доміграції — у [`future-work.md`](future-work.md).
 - **`next.config.ts` досі має rewrite** `/api/*` → `http://38.242.201.228`. Це інший IP, не той що `195.54.163.114`. Поки старі бекенди живі — нічого не ламається. Прибрати rewrite коли всі API перенесені у Next.
 - **`FILES_API_URL` у `.env.production`** дивиться на `195.54.163.114`. Поки потрібен для `lib/files-url.ts`. Коли резолвимо всі файлові посилання локально — прибрати.
 - **`feature/colors`** UI-зміни висять у локальному stash (`stash@{0}: On feature/colors: feature/colors UI WIP (auto-stash for deploy branch)`). `git stash pop` коли захочете повернутись.
@@ -266,6 +256,6 @@ docker compose --env-file .env.production restart nginx
 ## Що залишилось після Етапу 4
 
 - Прибрати legacy rewrite з `next.config.ts` (коли API повністю мігровано).
-- Розгорнути PayloadCMS — план у [`docs/admin-plan.md`](admin-plan.md) (там була пауза, тепер сервер є).
+- Список залишкових міграцій і покращень — у [`future-work.md`](future-work.md).
 - Зарядити регулярні бекапи БД у cron (вище є команда).
 - Подумати про моніторинг (uptime ping, disk alerts).
