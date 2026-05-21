@@ -1,7 +1,7 @@
 import nextDynamic from "next/dynamic";
 import Hero from "@/components/common/Hero/Hero";
 import { NewsCard } from "@/components/common/NewsCard/NewsCard";
-import { getMergedNewsList } from "@/lib/payload-news";
+import { getPayloadNewsList } from "@/lib/payload-news";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -23,22 +23,7 @@ const Partners = nextDynamic(() => import("@/components/Home/Partners/Partners")
 });
 
 export default async function HomePage() {
-  const merged = await getMergedNewsList(4);
-
-  const news = merged.map((item) => ({
-    id: item.href.replace("/news/", ""),
-    title: item.title,
-    excerpt: item.excerpt,
-    content: "",
-    image: item.imageUrl,
-    date: item.publishedAt.toLocaleDateString("uk-UA", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }),
-    category: item.tags.join(" · "),
-    author: "",
-  }));
+  const { items: news } = await getPayloadNewsList({ limit: 4, offset: 0 });
 
   return (
     <>

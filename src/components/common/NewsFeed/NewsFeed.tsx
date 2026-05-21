@@ -25,14 +25,6 @@ interface NewsFeedProps {
 
 const LIMIT = 10
 
-function formatDate(dateStr: string) {
-    return new Date(dateStr).toLocaleDateString('uk-UA', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    })
-}
-
 export function NewsFeed({ initialNews, total, year, month }: NewsFeedProps) {
     const [news, setNews] = useState(initialNews)
     const [loading, setLoading] = useState(false)
@@ -46,20 +38,8 @@ export function NewsFeed({ initialNews, total, year, month }: NewsFeedProps) {
             if (year) params.set('year', String(year))
             if (month) params.set('month', String(month))
             const res = await fetch(`/api/news?${params}`)
-            const data = await res.json()
-            const mapped = data.news.map((item: {
-                id: number, title: string, tags: string | null, add_date: string
-            }) => ({
-                id: String(item.id),
-                title: item.title,
-                excerpt: '',
-                content: '',
-                image: null,
-                date: formatDate(item.add_date),
-                category: item.tags ?? '',
-                author: '',
-            }))
-            setNews((prev) => [...prev, ...mapped])
+            const data: { news: NewsItem[] } = await res.json()
+            setNews((prev) => [...prev, ...data.news])
         } finally {
             setLoading(false)
         }

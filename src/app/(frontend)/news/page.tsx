@@ -1,10 +1,5 @@
 import { Suspense } from "react"
-import { getNewsList, getNewsCount, getNewsArchive } from "@/lib/news"
-import {
-    getPayloadPublishedNews,
-    extractPayloadCoverUrl,
-    getMigratedLegacyIds,
-} from "@/lib/payload-news"
+import { getPayloadNewsList, getPayloadNewsArchive } from "@/lib/payload-news"
 import { NewsFeed } from "@/components/common/NewsFeed/NewsFeed"
 import { NewsArchive } from "@/components/common/NewsArchive/NewsArchive"
 
@@ -19,60 +14,15 @@ const MONTH_NAMES = [
     'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень',
 ]
 
-function formatDate(input: string | Date) {
-    return new Date(input).toLocaleDateString('uk-UA', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    })
-}
-
 export default async function NewsPage({ searchParams }: Props) {
     const { year: yearStr, month: monthStr } = await searchParams
     const year = yearStr ? Number(yearStr) : undefined
     const month = monthStr ? Number(monthStr) : undefined
 
-    const isFiltered = Boolean(year || month)
-
-    const [rawNews, total, archive, payloadDocs, migratedLegacyIds] = await Promise.all([
-        getNewsList(10, 0, year, month),
-        getNewsCount(year, month),
-        getNewsArchive(),
-        isFiltered ? Promise.resolve([]) : getPayloadPublishedNews(20),
-        getMigratedLegacyIds(),
+    const [list, archive] = await Promise.all([
+        getPayloadNewsList({ limit: 10, offset: 0, year, month }),
+        getPayloadNewsArchive(),
     ])
-
-    const filteredRawNews = rawNews.filter((item) => !migratedLegacyIds.has(item.id))
-
-    const payloadItems = payloadDocs.map((doc) => ({
-        id: String(doc.slug ?? doc.id ?? ''),
-        title: String(doc.title ?? ''),
-        excerpt: String(doc.excerpt ?? ''),
-        content: '',
-        image: extractPayloadCoverUrl(doc.coverImage, 'card'),
-        date: formatDate(doc.publishedAt ? String(doc.publishedAt) : new Date()),
-        category: Array.isArray(doc.tags)
-            ? (doc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean).join(' · ')
-            : '',
-        author: '',
-        _sort: doc.publishedAt ? new Date(String(doc.publishedAt)).getTime() : Date.now(),
-    }))
-
-    const legacyItems = filteredRawNews.map((item) => ({
-        id: String(item.id),
-        title: item.title,
-        excerpt: item.excerpt,
-        content: '',
-        image: null,
-        date: formatDate(item.add_date),
-        category: item.tags ?? '',
-        author: '',
-        _sort: new Date(item.add_date).getTime(),
-    }))
-
-    const initialNews = [...payloadItems, ...legacyItems]
-        .sort((a, b) => b._sort - a._sort)
-        .map(({ _sort, ...rest }) => rest)
 
     const pageTitle = year && month
         ? `${MONTH_NAMES[month - 1]} ${year}`
@@ -90,8 +40,8 @@ export default async function NewsPage({ searchParams }: Props) {
                 <div className="flex-1 min-w-0">
                     <NewsFeed
                         key={`${year}-${month}`}
-                        initialNews={initialNews}
-                        total={total + payloadItems.length}
+                        initialNews={list.items}
+                        total={list.total}
                         year={year}
                         month={month}
                     />

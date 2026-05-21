@@ -2,19 +2,17 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { getNewsById } from "@/lib/news"
 import {
     getPayloadNewsBySlug,
     getPayloadNewsByLegacyId,
-    getMergedNewsList,
+    getPayloadPublishedNews,
     extractPayloadCoverUrl,
+    payloadDocToCardItem,
 } from "@/lib/payload-news"
 import { BlocksRenderer } from "@/components/news/BlocksRenderer"
 import { ArrowLeft, Calendar, Share2 } from "lucide-react"
 import { notFound } from "next/navigation"
 import { NewsCard } from "@/components/common/NewsCard/NewsCard"
-import fs from 'fs'
-import path from 'path'
 
 export const dynamic = "force-dynamic"
 
@@ -26,78 +24,30 @@ function isNumericId(value: string): boolean {
     return /^\d+$/.test(value)
 }
 
-async function renderLegacyHtml(id: string, contentPath: string): Promise<string> {
-    const uploadsDir = process.env.UPLOADS_DIR ?? '/var/www/uploads'
-    const filePath = path.join(uploadsDir, contentPath)
-    const html = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : ''
-    if (html) return html
-    const remoteRes = await fetch(`${process.env.FILES_API_URL}/api/news/${id}/file`, {
-        cache: 'no-store',
-    })
-    return remoteRes.ok ? await remoteRes.text() : ''
-}
-
 export default async function NewsDetailPage({ params }: Props) {
     const { idOrSlug } = await params
 
-    let title = ''
-    let dateRaw: string | Date = new Date()
-    let tagsLabel = ''
-    let coverUrl: string | null = null
-    let bodyNode: React.ReactNode = null
-
     const numeric = isNumericId(idOrSlug)
-    const payloadDoc = numeric
+    const doc = numeric
         ? await getPayloadNewsByLegacyId(Number(idOrSlug))
         : await getPayloadNewsBySlug(idOrSlug)
 
-    if (payloadDoc) {
-        title = String(payloadDoc.title ?? '')
-        dateRaw = payloadDoc.publishedAt ? String(payloadDoc.publishedAt) : new Date()
-        const tagsArr = Array.isArray(payloadDoc.tags)
-            ? (payloadDoc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean)
-            : []
-        tagsLabel = tagsArr.join(' · ')
-        coverUrl = extractPayloadCoverUrl(payloadDoc.coverImage, 'feature')
-        const blocks = (payloadDoc.content ?? []) as Parameters<typeof BlocksRenderer>[0]['blocks']
-        bodyNode = <BlocksRenderer blocks={blocks} />
-    } else if (numeric) {
-        const news = await getNewsById(Number(idOrSlug))
-        if (!news) notFound()
-        title = news.title
-        dateRaw = news.add_date
-        tagsLabel = news.tags ?? ''
-        const html = await renderLegacyHtml(idOrSlug, news.content_path)
-        bodyNode = (
-            <div className="prose prose-lg max-w-none">
-                <div
-                    className="leading-relaxed space-y-6"
-                    dangerouslySetInnerHTML={{ __html: html }}
-                />
-            </div>
-        )
-    } else {
-        notFound()
-    }
+    if (!doc) notFound()
 
-    const merged = await getMergedNewsList(4)
-    const otherNews = merged
-        .filter((item) => item.href !== `/news/${idOrSlug}`)
+    const title = String(doc.title ?? '')
+    const dateRaw = doc.publishedAt ? String(doc.publishedAt) : new Date().toISOString()
+    const tagsArr = Array.isArray(doc.tags)
+        ? (doc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean)
+        : []
+    const tagsLabel = tagsArr.join(' · ')
+    const coverUrl = extractPayloadCoverUrl(doc.coverImage, 'feature')
+    const blocks = (doc.content ?? []) as Parameters<typeof BlocksRenderer>[0]['blocks']
+
+    const recent = await getPayloadPublishedNews(4)
+    const otherNews = recent
+        .map((d) => payloadDocToCardItem(d as Record<string, unknown>))
+        .filter((item) => item.id !== doc.slug)
         .slice(0, 3)
-        .map((item) => ({
-            id: item.href.replace('/news/', ''),
-            title: item.title,
-            excerpt: item.excerpt,
-            content: '',
-            image: item.imageUrl,
-            date: item.publishedAt.toLocaleDateString('uk-UA', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-            }),
-            category: item.tags.join(' · '),
-            author: '',
-        }))
 
     const formattedDate = new Date(dateRaw).toLocaleDateString('uk-UA', {
         day: 'numeric',
@@ -159,7 +109,7 @@ export default async function NewsDetailPage({ params }: Props) {
 
             <section className="py-12 dark:bg-blue-900/10">
                 <div className="container max-w-4xl mx-auto">
-                    {bodyNode}
+                    <BlocksRenderer blocks={blocks} />
                 </div>
             </section>
 

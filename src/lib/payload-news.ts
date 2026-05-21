@@ -1,16 +1,22 @@
-import { getPayload } from 'payload'
+import { getPayload, type Where } from 'payload'
 import config from '@payload-config'
 
-import { getNewsList, type NewsListItem } from './news'
-
-export interface UnifiedNewsItem {
-    source: 'payload' | 'legacy'
-    href: string
+export interface NewsCardItem {
+    id: string
     title: string
     excerpt: string
-    publishedAt: Date
-    tags: string[]
-    imageUrl: string | null
+    content: string
+    image: string | null
+    date: string
+    category: string
+    author: string
+    publishedAtIso: string
+}
+
+export interface ArchiveMonth {
+    year: number
+    month: number
+    count: number
 }
 
 export async function getPayloadInstance() {
@@ -45,23 +51,6 @@ export async function getPayloadNewsByLegacyId(legacyId: number) {
     return res.docs[0] ?? null
 }
 
-export async function getMigratedLegacyIds(): Promise<Set<number>> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'news',
-        where: { legacyId: { exists: true } },
-        limit: 10000,
-        depth: 0,
-        pagination: false,
-    })
-    const ids = new Set<number>()
-    for (const doc of res.docs) {
-        const lid = (doc as Record<string, unknown>).legacyId
-        if (typeof lid === 'number') ids.add(lid)
-    }
-    return ids
-}
-
 export async function getPayloadPublishedNews(limit = 20) {
     const payload = await getPayload({ config })
     const res = await payload.find({
@@ -88,47 +77,100 @@ export function extractPayloadCoverUrl(
     return typeof c.url === 'string' && c.url ? c.url : null
 }
 
-function toUnifiedFromPayload(doc: Record<string, unknown>): UnifiedNewsItem {
+function formatUkDate(iso: string): string {
+    return new Date(iso).toLocaleDateString('uk-UA', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    })
+}
+
+export function payloadDocToCardItem(doc: Record<string, unknown>): NewsCardItem {
     const slug = String(doc.slug ?? '')
-    const imageUrl = extractPayloadCoverUrl(doc.coverImage, 'card')
     const tags = Array.isArray(doc.tags)
         ? (doc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean)
         : []
-    const publishedAt = doc.publishedAt
-        ? new Date(String(doc.publishedAt))
-        : new Date()
+    const publishedAtIso = doc.publishedAt
+        ? String(doc.publishedAt)
+        : new Date().toISOString()
     return {
-        source: 'payload',
-        href: `/news/${slug}`,
+        id: slug,
         title: String(doc.title ?? ''),
         excerpt: String(doc.excerpt ?? ''),
-        publishedAt,
-        tags,
-        imageUrl,
+        content: '',
+        image: extractPayloadCoverUrl(doc.coverImage, 'card'),
+        date: formatUkDate(publishedAtIso),
+        category: tags.join(' · '),
+        author: '',
+        publishedAtIso,
     }
 }
 
-function toUnifiedFromLegacy(row: NewsListItem): UnifiedNewsItem {
+function buildDateRangeFilter(year?: number, month?: number) {
+    if (year && month) {
+        const start = new Date(year, month - 1, 1).toISOString()
+        const end = new Date(year, month, 1).toISOString()
+        return { greater_than_equal: start, less_than: end }
+    }
+    if (year) {
+        const start = new Date(year, 0, 1).toISOString()
+        const end = new Date(year + 1, 0, 1).toISOString()
+        return { greater_than_equal: start, less_than: end }
+    }
+    return null
+}
+
+export async function getPayloadNewsList(opts: {
+    limit?: number
+    offset?: number
+    year?: number
+    month?: number
+}): Promise<{ items: NewsCardItem[]; total: number }> {
+    const { limit = 10, offset = 0, year, month } = opts
+    const payload = await getPayload({ config })
+    const where: Where = { _status: { equals: 'published' } }
+    const dateFilter = buildDateRangeFilter(year, month)
+    if (dateFilter) where.publishedAt = dateFilter
+
+    const page = Math.floor(offset / limit) + 1
+    const res = await payload.find({
+        collection: 'news',
+        where,
+        sort: '-publishedAt',
+        limit,
+        page,
+        depth: 1,
+    })
     return {
-        source: 'legacy',
-        href: `/news/${row.id}`,
-        title: row.title,
-        excerpt: row.excerpt,
-        publishedAt: new Date(row.add_date),
-        tags: row.tags ? [row.tags] : [],
-        imageUrl: null,
+        items: res.docs.map((d) => payloadDocToCardItem(d as Record<string, unknown>)),
+        total: res.totalDocs,
     }
 }
 
-export async function getMergedNewsList(limit = 20): Promise<UnifiedNewsItem[]> {
-    const [payloadDocs, legacyRows] = await Promise.all([
-        getPayloadPublishedNews(limit),
-        getNewsList(limit, 0),
-    ])
-    const merged: UnifiedNewsItem[] = [
-        ...payloadDocs.map(toUnifiedFromPayload),
-        ...legacyRows.map(toUnifiedFromLegacy),
-    ]
-    merged.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-    return merged.slice(0, limit)
+export async function getPayloadNewsArchive(): Promise<ArchiveMonth[]> {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+        collection: 'news',
+        where: { _status: { equals: 'published' } },
+        limit: 10000,
+        pagination: false,
+        depth: 0,
+    })
+    const counts = new Map<string, ArchiveMonth>()
+    for (const doc of res.docs) {
+        const iso = (doc as Record<string, unknown>).publishedAt
+        if (typeof iso !== 'string') continue
+        const d = new Date(iso)
+        if (Number.isNaN(d.getTime())) continue
+        const year = d.getFullYear()
+        const month = d.getMonth() + 1
+        const key = `${year}-${month}`
+        const entry = counts.get(key) ?? { year, month, count: 0 }
+        entry.count++
+        counts.set(key, entry)
+    }
+    return Array.from(counts.values()).sort((a, b) => {
+        if (b.year !== a.year) return b.year - a.year
+        return b.month - a.month
+    })
 }
