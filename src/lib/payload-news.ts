@@ -23,32 +23,19 @@ export async function getPayloadInstance() {
     return getPayload({ config })
 }
 
-export async function getPayloadNewsBySlug(slug: string) {
+export async function getPayloadNewsById(id: number) {
     const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'news',
-        where: {
-            slug: { equals: slug },
-            _status: { equals: 'published' },
-        },
-        limit: 1,
-        depth: 2,
-    })
-    return res.docs[0] ?? null
-}
-
-export async function getPayloadNewsByLegacyId(legacyId: number) {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'news',
-        where: {
-            legacyId: { equals: legacyId },
-            _status: { equals: 'published' },
-        },
-        limit: 1,
-        depth: 2,
-    })
-    return res.docs[0] ?? null
+    try {
+        const doc = await payload.findByID({
+            collection: 'news',
+            id,
+            depth: 2,
+        })
+        if ((doc as Record<string, unknown>)._status !== 'published') return null
+        return doc
+    } catch {
+        return null
+    }
 }
 
 export async function getPayloadPublishedNews(limit = 20) {
@@ -86,7 +73,6 @@ function formatUkDate(iso: string): string {
 }
 
 export function payloadDocToCardItem(doc: Record<string, unknown>): NewsCardItem {
-    const slug = String(doc.slug ?? '')
     const tags = Array.isArray(doc.tags)
         ? (doc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean)
         : []
@@ -94,7 +80,7 @@ export function payloadDocToCardItem(doc: Record<string, unknown>): NewsCardItem
         ? String(doc.publishedAt)
         : new Date().toISOString()
     return {
-        id: slug,
+        id: String(doc.id ?? ''),
         title: String(doc.title ?? ''),
         excerpt: String(doc.excerpt ?? ''),
         content: '',

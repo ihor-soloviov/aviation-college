@@ -3,8 +3,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-    getPayloadNewsBySlug,
-    getPayloadNewsByLegacyId,
+    getPayloadNewsById,
     getPayloadPublishedNews,
     extractPayloadCoverUrl,
     payloadDocToCardItem,
@@ -17,21 +16,15 @@ import { NewsCard } from "@/components/common/NewsCard/NewsCard"
 export const dynamic = "force-dynamic"
 
 type Props = {
-    params: Promise<{ idOrSlug: string }>
-}
-
-function isNumericId(value: string): boolean {
-    return /^\d+$/.test(value)
+    params: Promise<{ id: string }>
 }
 
 export default async function NewsDetailPage({ params }: Props) {
-    const { idOrSlug } = await params
+    const { id } = await params
+    const numericId = Number(id)
+    if (!Number.isFinite(numericId)) notFound()
 
-    const numeric = isNumericId(idOrSlug)
-    const doc = numeric
-        ? await getPayloadNewsByLegacyId(Number(idOrSlug))
-        : await getPayloadNewsBySlug(idOrSlug)
-
+    const doc = await getPayloadNewsById(numericId)
     if (!doc) notFound()
 
     const title = String(doc.title ?? '')
@@ -46,7 +39,7 @@ export default async function NewsDetailPage({ params }: Props) {
     const recent = await getPayloadPublishedNews(4)
     const otherNews = recent
         .map((d) => payloadDocToCardItem(d as Record<string, unknown>))
-        .filter((item) => item.id !== doc.slug)
+        .filter((item) => item.id !== String(doc.id))
         .slice(0, 3)
 
     const formattedDate = new Date(dateRaw).toLocaleDateString('uk-UA', {
