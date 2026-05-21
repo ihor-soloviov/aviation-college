@@ -75,7 +75,9 @@ export const Documents: CollectionConfig = {
         },
     ],
     upload: {
-        staticDir: path.resolve(dirname, '../../data/uploads/payload/documents'),
+        staticDir: process.env.UPLOADS_DIR
+            ? path.join(process.env.UPLOADS_DIR, 'payload/documents')
+            : path.resolve(dirname, '../../data/uploads/payload/documents'),
         mimeTypes: [
             'application/pdf',
             'application/msword',
