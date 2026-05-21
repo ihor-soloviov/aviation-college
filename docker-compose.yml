@@ -41,7 +41,6 @@ services:
       DATABASE_URI: ${DATABASE_URI}
     volumes:
       - ./data/uploads:/var/www/uploads
-      - ./data/legacy:/var/www/aviation-legacy:ro
       - ./data/payload:/app/data/payload
     depends_on:
       mysql:

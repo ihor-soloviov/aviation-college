@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import type { CollectionConfig } from 'payload'
+import { getDocumentCategoryOptions } from '../lib/document-categories'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -19,6 +20,18 @@ export const Documents: CollectionConfig = {
     },
     fields: [
         {
+            name: 'legacyId',
+            type: 'number',
+            unique: true,
+            index: true,
+            label: 'Legacy ID',
+            admin: {
+                position: 'sidebar',
+                readOnly: true,
+                description: 'Оригінальний old_id з articles_v2 (заповнюється лише при міграції).',
+            },
+        },
+        {
             name: 'title',
             type: 'text',
             required: true,
@@ -31,11 +44,20 @@ export const Documents: CollectionConfig = {
         },
         {
             name: 'category',
+            type: 'select',
+            hasMany: true,
+            required: true,
+            index: true,
+            label: 'Категорії',
+            options: getDocumentCategoryOptions(),
+        },
+        {
+            name: 'subcategory',
             type: 'text',
-            label: 'Категорія',
+            label: 'Підкатегорія (legacy hub titles)',
             index: true,
             admin: {
-                description: 'Напр.: Положення, Накази, Програми, Розклади',
+                description: 'Оригінальні назви розділів зі старого сайту, через "; ". Для пошуку.',
             },
         },
         {
