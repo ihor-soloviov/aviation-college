@@ -31,6 +31,37 @@ export async function getPayloadNewsBySlug(slug: string) {
     return res.docs[0] ?? null
 }
 
+export async function getPayloadNewsByLegacyId(legacyId: number) {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+        collection: 'news',
+        where: {
+            legacyId: { equals: legacyId },
+            _status: { equals: 'published' },
+        },
+        limit: 1,
+        depth: 2,
+    })
+    return res.docs[0] ?? null
+}
+
+export async function getMigratedLegacyIds(): Promise<Set<number>> {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+        collection: 'news',
+        where: { legacyId: { exists: true } },
+        limit: 10000,
+        depth: 0,
+        pagination: false,
+    })
+    const ids = new Set<number>()
+    for (const doc of res.docs) {
+        const lid = (doc as Record<string, unknown>).legacyId
+        if (typeof lid === 'number') ids.add(lid)
+    }
+    return ids
+}
+
 export async function getPayloadPublishedNews(limit = 20) {
     const payload = await getPayload({ config })
     const res = await payload.find({

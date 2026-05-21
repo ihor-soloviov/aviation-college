@@ -3,7 +3,12 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { getNewsById } from "@/lib/news"
-import { getPayloadNewsBySlug, getMergedNewsList, extractPayloadCoverUrl } from "@/lib/payload-news"
+import {
+    getPayloadNewsBySlug,
+    getPayloadNewsByLegacyId,
+    getMergedNewsList,
+    extractPayloadCoverUrl,
+} from "@/lib/payload-news"
 import { BlocksRenderer } from "@/components/news/BlocksRenderer"
 import { ArrowLeft, Calendar, Share2 } from "lucide-react"
 import { notFound } from "next/navigation"
@@ -41,7 +46,22 @@ export default async function NewsDetailPage({ params }: Props) {
     let coverUrl: string | null = null
     let bodyNode: React.ReactNode = null
 
-    if (isNumericId(idOrSlug)) {
+    const numeric = isNumericId(idOrSlug)
+    const payloadDoc = numeric
+        ? await getPayloadNewsByLegacyId(Number(idOrSlug))
+        : await getPayloadNewsBySlug(idOrSlug)
+
+    if (payloadDoc) {
+        title = String(payloadDoc.title ?? '')
+        dateRaw = payloadDoc.publishedAt ? String(payloadDoc.publishedAt) : new Date()
+        const tagsArr = Array.isArray(payloadDoc.tags)
+            ? (payloadDoc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean)
+            : []
+        tagsLabel = tagsArr.join(' · ')
+        coverUrl = extractPayloadCoverUrl(payloadDoc.coverImage, 'feature')
+        const blocks = (payloadDoc.content ?? []) as Parameters<typeof BlocksRenderer>[0]['blocks']
+        bodyNode = <BlocksRenderer blocks={blocks} />
+    } else if (numeric) {
         const news = await getNewsById(Number(idOrSlug))
         if (!news) notFound()
         title = news.title
@@ -57,17 +77,7 @@ export default async function NewsDetailPage({ params }: Props) {
             </div>
         )
     } else {
-        const doc = await getPayloadNewsBySlug(idOrSlug)
-        if (!doc) notFound()
-        title = String(doc.title ?? '')
-        dateRaw = doc.publishedAt ? String(doc.publishedAt) : new Date()
-        const tagsArr = Array.isArray(doc.tags)
-            ? (doc.tags as Array<{ tag: string }>).map((t) => t.tag).filter(Boolean)
-            : []
-        tagsLabel = tagsArr.join(' · ')
-        coverUrl = extractPayloadCoverUrl(doc.coverImage, 'feature')
-        const blocks = (doc.content ?? []) as Parameters<typeof BlocksRenderer>[0]['blocks']
-        bodyNode = <BlocksRenderer blocks={blocks} />
+        notFound()
     }
 
     const merged = await getMergedNewsList(4)

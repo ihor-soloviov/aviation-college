@@ -1,6 +1,10 @@
 import { Suspense } from "react"
 import { getNewsList, getNewsCount, getNewsArchive } from "@/lib/news"
-import { getPayloadPublishedNews, extractPayloadCoverUrl } from "@/lib/payload-news"
+import {
+    getPayloadPublishedNews,
+    extractPayloadCoverUrl,
+    getMigratedLegacyIds,
+} from "@/lib/payload-news"
 import { NewsFeed } from "@/components/common/NewsFeed/NewsFeed"
 import { NewsArchive } from "@/components/common/NewsArchive/NewsArchive"
 
@@ -30,12 +34,15 @@ export default async function NewsPage({ searchParams }: Props) {
 
     const isFiltered = Boolean(year || month)
 
-    const [rawNews, total, archive, payloadDocs] = await Promise.all([
+    const [rawNews, total, archive, payloadDocs, migratedLegacyIds] = await Promise.all([
         getNewsList(10, 0, year, month),
         getNewsCount(year, month),
         getNewsArchive(),
         isFiltered ? Promise.resolve([]) : getPayloadPublishedNews(20),
+        getMigratedLegacyIds(),
     ])
+
+    const filteredRawNews = rawNews.filter((item) => !migratedLegacyIds.has(item.id))
 
     const payloadItems = payloadDocs.map((doc) => ({
         id: String(doc.slug ?? doc.id ?? ''),
@@ -51,7 +58,7 @@ export default async function NewsPage({ searchParams }: Props) {
         _sort: doc.publishedAt ? new Date(String(doc.publishedAt)).getTime() : Date.now(),
     }))
 
-    const legacyItems = rawNews.map((item) => ({
+    const legacyItems = filteredRawNews.map((item) => ({
         id: String(item.id),
         title: item.title,
         excerpt: item.excerpt,
