@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Local deploy: SSH в aviation, git pull, перебудова стека.
+# Local deploy: SSH в aviation, бекап Payload SQLite, git pull, перебудова стека,
+# health-check для next.
 # Перед запуском: git push гілки в origin.
 
 set -euo pipefail
@@ -8,12 +9,45 @@ BRANCH="${1:-}"
 HOST=aviation
 REMOTE_DIR=/home/deploy/aviation
 
-if [ -n "$BRANCH" ]; then
-  ssh "$HOST" "cd $REMOTE_DIR && git fetch origin && git checkout $BRANCH && git pull --ff-only && docker compose --env-file .env.production up -d --build"
-else
-  ssh "$HOST" "cd $REMOTE_DIR && git pull --ff-only && docker compose --env-file .env.production up -d --build"
+ssh "$HOST" bash -s <<REMOTE
+set -euo pipefail
+cd "$REMOTE_DIR"
+
+# 1. Backup Payload SQLite (якщо існує)
+if [ -f data/payload/cms.sqlite ]; then
+  ts=\$(date +%F-%H%M%S)
+  sudo cp data/payload/cms.sqlite "data/payload/cms.sqlite.bak-\$ts"
+  echo "=== backup: data/payload/cms.sqlite.bak-\$ts ==="
 fi
 
+# 2. Pull + rebuild
+if [ -n "${BRANCH}" ]; then
+  git fetch origin
+  git checkout "${BRANCH}"
+fi
+git pull --ff-only
+docker compose --env-file .env.production up -d --build
+
+# 3. Health check (next через nginx на localhost)
+echo
+echo "=== waiting for next ==="
+ok=0
+for i in 1 2 3 4 5 6 7 8 9 10; do
+  if curl -fsS -o /dev/null http://localhost/; then
+    echo "=== next OK (try \$i) ==="
+    ok=1
+    break
+  fi
+  sleep 3
+done
+if [ \$ok -ne 1 ]; then
+  echo "!!! next not responding after 30s, last logs:" >&2
+  docker compose --env-file .env.production logs --tail=80 next >&2
+  exit 1
+fi
+
+# 4. Status
 echo
 echo "=== status ==="
-ssh "$HOST" "cd $REMOTE_DIR && docker compose --env-file .env.production ps"
+docker compose --env-file .env.production ps
+REMOTE

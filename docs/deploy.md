@@ -1,7 +1,7 @@
 # Деплой на власний сервер
 
 Робочий зошит з міграції з Vercel + старого SiteNodeJS на власний Docker-стек.
-Стан на **2026-05-19**.
+Стан на **2026-05-21**.
 
 ---
 
@@ -15,7 +15,7 @@
 | 4. Домен + SSL | DNS A-запис, certbot, HTTP→HTTPS redirect, renew cron | ⏳ |
 
 **IP:** `204.168.161.68`, **alias:** `ssh aviation` (ключ `~/.ssh/id_ed25519_aviation`).
-**Прод-гілка:** `chore/docker-deploy`. Сайт зараз працює на `http://204.168.161.68/`.
+**Прод-гілка:** `main` (з 2026-05-20; раніше була `chore/docker-deploy`, тепер не використовується). Сайт зараз працює на `http://204.168.161.68/`.
 
 ---
 
@@ -34,8 +34,54 @@
 │   ├── legacy/                            # SiteNodeJS resources (1.9 GB)
 │   ├── letsencrypt/                       # сертифікати (Етап 4)
 │   ├── certbot-webroot/                   # ACME challenge (Етап 4)
+│   ├── payload/                           # PayloadCMS SQLite (cms.sqlite, chown 100:101)
 │   └── kknau-dump-2026-05-19.sql.gz       # дамп; видалити після cutover
 └── build.log, migration.log
+```
+
+---
+
+## PayloadCMS на проді
+
+Розгорнуто 2026-05-20. Admin доступний на `/admin`, дані в `data/payload/cms.sqlite` (bind-mount у `next` контейнер).
+
+**Перший запуск на новому хості** (вже зроблено, тримати як шпаргалку):
+```bash
+ssh aviation
+cd /home/deploy/aviation
+sudo mkdir -p data/payload data/uploads/news-images
+sudo chown 100:101 data/payload data/uploads/news-images   # uid/gid юзера nextjs у контейнері
+docker compose --env-file .env.production up -d --build
+# One-shot schema push (sqlite-адаптер пушить схему тільки коли NODE_ENV != production):
+docker compose --env-file .env.production exec -e NODE_ENV=development next \
+  node_modules/.bin/tsx -e "import config from './payload.config'; import { getPayload } from 'payload'; getPayload({ config }).then(() => process.exit(0))"
+```
+
+**Schema push gotcha.** `@payloadcms/db-sqlite` пушить схему ТІЛЬКИ коли `NODE_ENV !== 'production'`. У звичайному деплої прод-контейнер не оновить таблиці навіть якщо додалось нове поле. Сценарії:
+- Тільки поля, які не блокують стартап → задеплоїти, потім окремо запустити exec-команду вище.
+- Зміни, що ламають існуючі дані → перейти на `payload migrate` (відкритий пункт у [[project_admin_flow]]).
+
+**Перший адмін** створюється через `/admin` (GUI) одразу після першого вдалого пушу схеми.
+
+**Міграція новин зі старої БД у Payload:**
+```bash
+ssh aviation
+cd /home/deploy/aviation
+# Dry-run (без запису):
+docker compose --env-file .env.production exec -e MIGRATION_DRY_RUN=1 -e MIGRATION_LIMIT=20 next \
+  node_modules/.bin/tsx src/scripts/migration/migrate-news.ts
+# Повний прогін (1248 рядків залишається після 20 у тестовому батчі, ~кілька ГБ зображень):
+nohup docker compose --env-file .env.production exec -T next \
+  node_modules/.bin/tsx src/scripts/migration/migrate-news.ts \
+  > /tmp/aviation-migrate.log 2>&1 &
+```
+
+Env-vars для `migrate-news.ts`: `MIGRATION_LIMIT`, `MIGRATION_DRY_RUN`, `MIGRATION_UPLOADS_DIR`, `MIGRATION_IMAGES_OUT_DIR`, `MIGRATION_IMAGES_URL_PREFIX`. Повторний прогін безпечний — `legacyId` юнік-індекс пропускає вже мігровані.
+
+**Бекап SQLite перед ризикованими операціями:**
+```bash
+cp /home/deploy/aviation/data/payload/cms.sqlite \
+   /home/deploy/aviation/data/payload/cms.sqlite.bak-$(date +%F-%H%M)
 ```
 
 ---
@@ -63,7 +109,7 @@
 ```nginx
 server_name your-domain.tld www.your-domain.tld;
 ```
-Запушити в `chore/docker-deploy`, на сервері `git pull && docker compose --env-file .env.production restart nginx`.
+Запушити в `main`, на сервері `git pull && docker compose --env-file .env.production restart nginx`.
 
 Перевірити: `curl -sS -I http://your-domain.tld/` має повернути 200.
 
