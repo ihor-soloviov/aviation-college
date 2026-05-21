@@ -28,6 +28,10 @@ fi
 git pull --ff-only
 docker compose --env-file .env.production up -d --build
 
+# nginx тримає DNS-резолв upstream'ів у пам'яті — при перебудові next
+# (новий внутрішній IP) лишається висіти 502, поки nginx не рестартонути.
+docker compose --env-file .env.production restart nginx
+
 # 3. Health check (next через nginx на localhost)
 echo
 echo "=== waiting for next ==="
