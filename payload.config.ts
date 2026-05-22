@@ -6,7 +6,9 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { en } from '@payloadcms/translations/languages/en'
 import { uk } from '@payloadcms/translations/languages/uk'
 
+import { Articles } from './src/collections/Articles'
 import { Documents } from './src/collections/Documents'
+import { LinkLists } from './src/collections/LinkLists'
 import { Media } from './src/collections/Media'
 import { News } from './src/collections/News'
 import { Users } from './src/collections/Users'
@@ -22,7 +24,7 @@ export default buildConfig({
         supportedLanguages: { uk, en },
         fallbackLanguage: 'uk',
     },
-    collections: [Users, Media, News, Documents],
+    collections: [Users, Media, News, Documents, Articles, LinkLists],
     editor: lexicalEditor({}),
     db: sqliteAdapter({
         client: {
