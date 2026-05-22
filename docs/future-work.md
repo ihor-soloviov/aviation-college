@@ -2,66 +2,80 @@
 
 Перелік того, що ще треба зробити, з контекстом і конкретними кроками. Кожен пункт можна закривати окремо — порядок не критичний, окрім явних залежностей.
 
-Стан на **2026-05-21**.
+Стан на **2026-05-22**.
 
 ---
 
-## 1. Legacy HTML-статті (1328) — рішення
+## 1. Articles + LinkLists — Phase 2 (Phase 1 завершена)
 
-**Контекст.** `articles_v2` зберігає 6506 рядків. PDF-частина (5178) уже в Payload `documents`. Залишилось **1328 HTML-статей** (`view_mode IN ('html','docx_to_html')`), які досі рендеряться через `getArticleById` з MySQL + читання HTML-файлів з `/var/www/uploads/articles/*.html`.
+**Phase 1 (MVP) завершена 2026-05-22.** Створено три колекції: `articles` (контент-сторінки з блоками, drafts), `linkLists` (структурні списки посилань, 3 рівні вкладеності, polymorphic target). PoC: `SelfGovernancePage` тягне дані з linkList "self-governance" — дизайн зберігся, редактор керує з адмінки.
 
-Із цих 1328 приблизно **592 — це "hub-сторінки"** (контент = переважно список `<a href="/article/X">` на інші статті). Hub-сторінки сенсу мігрувати **немає**: у новому коді ми відтворюємо ці навігаційні розділи нативно (приклад: `src/components/Students/SelfGovernance/`).
+Повний дизайн і лог рішень: [`docs/architecture/articles-and-link-lists.md`](architecture/articles-and-link-lists.md).
+Дослідницькі дані: [`audit/coverage.md`](../audit/coverage.md), [`audit/clusters.json`](../audit/clusters.json).
 
-Реально цінного "новинного" контенту в legacy HTML — приблизно **736 сторінок**.
+### Що залишилось (Phase 2 backlog, у порядку залежностей)
 
-**Варіанти (треба обрати один):**
+**1.1. Розширити seed на решту 10 native компонентів.** Додати до `SEEDS` у `src/scripts/seed/seed-link-lists.ts`:
 
-1. **Pages collection у Payload.** Створити нову колекцію `pages` з блоковою структурою (схожою на `news`). Адаптувати `migrate-articles.ts` під HTML-флоу (перевикористати `parse-html.ts`). Це найчистіше — все в одній CMS, можна редагувати в адмінці.
-2. **Спалити.** Видалити `articles_v2` + HTML-файли, прибрати `lib/articles.ts` і `/article/:id` фолбек. Старі URL віддають 404. Прийнятно якщо у браузерах/Google нема цінних посилань.
-3. **Hybrid forever.** Залишити як зараз. `/article/:id` назавжди має фолбек на MySQL. Просто.
+- `anti-bullying` (6 items, 100% match з legacy hub #530)
+- `code-of-conduct` (1 doc + 4 narrative sections — narrative залишити в коді)
+- `social-scholarships` (1 doc + 8 категорій)
+- `science` (12 items)
+- `elective-courses` (1 catalog doc + 8 спеціальностей)
+- `practical-training` (2 docs + 30 баз — бази як окремий список)
+- `scholarship-rating` (16 items, tree-3 — використати `kind: group` з `children`)
+- `teachers-pedagogical-treasure` (38 items, 68% match з #3255)
+- `teachers-attestation` (13 items)
+- `entrants-2025-licenses` (1 doc мінімум; повний tree-4 entrance-2025 залишається native — занадто складний)
 
-Рекомендація — **варіант 1**, якщо є ресурс на ~1-2 дні роботи. Інакше **3** не критично, бо все працює.
+**1.2. Рефакторити решту 10 native компонентів у server-component з `getLinkListBySlug`.** Patternalready proven (SelfGovernance):
 
-**Якщо обрано варіант 1:**
+- Видалити hard-coded `sections = [...]`
+- Додати `export const dynamic = 'force-dynamic'` у відповідний `page.tsx`
+- Рендер з `list.items.map(...)`
+- Зберегти унікальний дизайн hero/banner
 
-- Нова колекція `src/collections/Pages.ts` з блоками `paragraph`, `heading`, `image`, `gallery`, `youtube`, `linkList` (готові з News).
-- Скрипт `migrate-pages.ts` за зразком `migrate-articles.ts`, але парсить HTML через `parse-html.ts`.
-- Нова сторінка `/pages/:id/page.tsx` (або `/article/:id` повністю переписана).
-- Hub-сторінки **пропускати** (heuristic: `≥3 href="/article/N"` link-density).
+**1.3. Міграція legacy HTML content у `articles`.**
 
-**Якщо обрано варіант 2:**
+Контекст: з 1328 HTML-сторінок ~589 — hub-сторінки (replaceable through linkLists), 737 — content. З 737 фактично цінних (word_count ≥ 50) — ~400.
 
-- Видалити `src/lib/articles.ts`, `src/app/(frontend)/article/`, `src/app/api/articles/`.
-- Перед цим — звільнити простір на сервері: `rm -rf data/uploads/articles/*.html` (1.6 GB).
-- Окремо подбати про cross-links з мігрованих новин/документів — пошукати в БД грепом і поправити вручну.
+- Адаптувати `migrate-articles.ts` (PDF-only) → `migrate-articles-content.ts` (HTML-only).
+- Перевикористати `parse-html.ts` (вже є, used by `migrate-news.ts`).
+- Зображення: base64 → Media, external URLs (`/uploads/...`) → теж завантажити в Media.
+- Фільтр: пропускати `kind in ('pure_hub','mixed_hub')` і `word_count < 50`.
+
+**1.4. Маршрут `/article/:id` — додати articles lookup.**
+
+Поточна логіка: documents.legacyId → redirect; інакше MySQL fallback.
+
+Додати між ними: articles.legacyId → redirect to `/articles/<slug>`.
+
+**1.5. Замінити в linkLists `kind: external → /article/X` на `kind: article → targetArticle`.**
+
+Після міграції articles запустити one-shot скрипт що пройдеться по linkLists і для кожного item з `targetUrl=/article/N` знайде `articles.legacyId=N` і переключить на `kind: article + targetArticle=<id>`.
+
+**1.6. Видалити MySQL-fallback.**
+
+Після того як §1.3-1.5 завершені і нема broken-links:
+
+- Видалити `src/lib/articles.ts`, `src/app/api/articles/`, `services/files-api/` (якщо тільки articles обслуговував — перевірити пункт 2 з future-work, §2).
+- `DROP TABLE articles_v2` у MySQL.
+- `rm -rf data/uploads/articles/*.html` на проді (1.6 GB free).
 
 ---
 
 ## 2. Static pages з hardcoded `/api/articles/X/file`
 
-**Контекст.** Кілька статичних сторінок мають hardcoded URL до legacy file API:
+**Стан:** SelfGovernance вже не використовує цей URL (Phase 1 PoC, замість нього — `/documents/<id>`). Залишилось 10 native компонентів з ~91 hardcoded ref (`grep` у `src/components/` + `src/lib/`).
 
-```bash
-$ grep -rn "/api/articles/.*/file" src/components/
-src/components/Students/CodeOfConduct/CodeOfConductPage.tsx
-src/components/Students/SelfGovernance/SelfGovernancePage.tsx   # 5 покликань
-src/components/Students/AntiBullying/AntiBullyingPage.tsx
-```
+**Шлях покриття:** автоматично через §1.2 (рефакторинг native на CMS-driven). Після того як кожен компонент тягне дані з linkList — він рендерить `/documents/<id>` замість `/api/articles/X/file` (resolver у `src/lib/link-lists.ts` робить це централізовано).
 
-Усі вони покликаються на PDF, які тепер у Payload `documents`. Зараз вони працюють завдяки тому, що `data/uploads/articles/*.pdf` ще на диску.
+**Після того як усі 11 native переписано:**
 
-**Що зробити:**
-
-1. Для кожного `/api/articles/X/file` запитати Payload: який Document має `legacyId=X`?
-   ```bash
-   curl "http://204.168.161.68/api/payload/documents?where%5BlegacyId%5D%5Bequals%5D=3898&depth=0" | jq '.docs[0].filename'
-   ```
-2. Замінити URL у компоненті на `/uploads/payload/documents/<filename>` (або на `/documents/<newId>`, якщо краще показати сторінку).
-3. Після того як **усі покликання переведені** — можна:
-   - Видалити `src/app/api/articles/[id]/file/route.ts`.
-   - Видалити `getArticleContent` з `src/lib/articles.ts`.
-   - Видалити `data/uploads/articles/*.pdf` на сервері (звільнить ~5.9 GB).
-   - Видалити `services/files-api/` — він обслуговує лише `/api/articles/*/file` тепер (та `/api/news/*/file`, який теж не потрібен бо новини в Payload). Перевірити чи інші покликання залишились.
+- Видалити `src/app/api/articles/[id]/file/route.ts` + `src/app/api/articles/[id]/file-remote/route.ts`.
+- Видалити `getArticleContent` з `src/lib/articles.ts`.
+- Видалити `data/uploads/articles/*.pdf` на сервері (звільнить ~5.9 GB).
+- Видалити `services/files-api/` — перевірити чи інші покликання залишились (можливо `/api/news/*/file` ще десь є).
 
 ---
 

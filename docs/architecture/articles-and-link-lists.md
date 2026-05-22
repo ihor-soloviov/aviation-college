@@ -1,8 +1,16 @@
 # Articles + LinkLists — design
 
-Стан: **draft** (потребує схвалення). Дата: 2026-05-22.
+Стан: **Phase 1 MVP виконано, Phase 2 у backlog'у**. Останнє оновлення: 2026-05-22.
 
 Базується на: `audit/coverage.md`, `audit/native-hubs.md`, `audit/clusters.json`.
+
+## Лог рішень (що сталося після фактичної реалізації)
+
+- **Назва nested arrays:** Drizzle не дозволяє два рівні з однаковим іменем `children`. Тому L1 = `items`, L2 = `children`, L3 = `entries`. Це різні поля з однаковим shape.
+- **Сторінки з `getLinkListBySlug` мусять бути `export const dynamic = 'force-dynamic'`** — Next.js prerender під час `npm run build` не має доступу до SQLite bind-mount.
+- **HTML legacy hubs у seed:** для self-governance 3 з 5 IDs виявилися HTML-сторінками (не PDFs). Поки articles ще не мігровані — seed їх як `kind: external, targetUrl: /article/<legacyId>`. Існуючий `/article/:id` route їх обробляє через MySQL fallback. Замінити на `kind: article` після Phase 2.
+- **payload-types.ts** локально не генерується автоматично через next 16 + payload bin incompat. Helper працює з ad-hoc типами в `src/lib/link-lists.ts`. Не блокує — type-check проходить.
+- **Drafts увімкнено** для обох колекцій (підтверджено в обговоренні).
 
 ---
 
@@ -337,19 +345,21 @@ export default async function ArticlePage({ params }: Props) {
 
 ## 8. Етапи реалізації
 
-| # | Етап | Залежить | Опис |
-|---|------|----------|------|
-| 1 | LinkLists schema + push | — | створити `src/collections/LinkLists.ts`, додати в `payload.config.ts`, push на прод |
-| 2 | Articles schema + push | — | створити `src/collections/Articles.ts`, новий блок `LinkListRef`, push |
-| 3 | `lib/link-lists.ts` helper | 1 | server-side fetch + resolve |
-| 4 | PoC: SelfGovernance CMS-driven | 1, 3 | створити запис вручну в admin, переписати компонент |
-| 5 | Migration script для linkLists | 1 | автонаповнення з 11 native файлів (опційно — можна руками) |
-| 6 | Перенос решти native компонентів | 4 | по 1-2 на тиждень |
-| 7 | Migration script articles | 2 | `migrate-articles-content.ts` — 736 content rows → articles |
-| 8 | Оновити `/article/:id` route | 2, 7 | додати articles lookup |
-| 9 | Прибрати MySQL fallback | 7, 8 | видалити `getArticleById`, `articles_v2` |
+| # | Етап | Стан | Опис |
+|---|------|------|------|
+| 1 | LinkLists schema + push | ✅ | `src/collections/LinkLists.ts`, push'нуто на прод, smoke-test 3-level CRUD passed |
+| 2 | Articles schema + push | ✅ | `src/collections/Articles.ts` + новий блок `LinkListRef`, push'нуто на прод |
+| 3 | `lib/link-lists.ts` helper | ✅ | server-only, polymorphic href resolver, flatten L2/L3 |
+| 4 | PoC: SelfGovernance CMS-driven | ✅ | seed-script + рефакторинг компонента, prod віддає 200 з 5 пунктів |
+| 5 | Розширити seed на решту native | ⏳ | додати ~10 SEEDS items: AntiBullying, CodeOfConduct, Science, ElectiveCourses, PracticalTraining, ScholarshipRating, Teachers (атестація + педагогічна скарбниця), SocialScholarships, Entrants-2025 |
+| 6 | Перенос решти native компонентів | ⏳ | повторити SelfGovernance pattern для кожного. 10 файлів |
+| 7 | Migration script articles | ⏳ | `migrate-articles-content.ts` — ~500 цінних content rows → articles (фільтр word_count>50) |
+| 8 | Оновити `/article/:id` route | ⏳ | додати articles.legacyId lookup перед MySQL fallback |
+| 9 | Замінити в linkLists `external→/article/X` на `article→targetArticle` | ⏳ | пройти всі linkLists, де kind=external + targetUrl починається з `/article/` — переключити |
+| 10 | Прибрати MySQL fallback | ⏳ | видалити `getArticleById`, `src/lib/articles.ts`, `articles_v2` таблицю (depends on §7-8 завершених) |
 
-Етапи 1-4 — **MVP** (один тиждень роботи). Решта — поступово.
+**Завершено:** Phase 1 MVP (#1-4).
+**Залишилось:** Phase 2 (#5-10) — приблизно 2-3 тижні поступової роботи.
 
 ---
 
@@ -380,21 +390,15 @@ export default async function ArticlePage({ params }: Props) {
 
 ---
 
-## 10. Відкриті питання / попередня перевірка
+## 10. Відкриті питання — поточний стан
 
-1. **Conditional fields в Payload-arrays.** Треба перевірити, що `admin.condition` працює всередині `array.fields` так як ми хочемо (показ/прих окремих полів за `targetType` siblings'а). У документації Payload — підтверджено для standalone, у nested — треба тестувати локально.
-2. **Migration linkLists з native файлів.** Робити одним скриптом, чи створити запис руками у admin (швидше для 11 файлів)? **Рекомендація:** руками — це швидше і дає змогу одразу вичистити legacy mess (icon-mapping, color-mapping).
-3. **Чи `intro` потрібен як Lexical?** Може textarea вистачить. Lexical — overkill для 1-2 параграфів, але дозволяє лінки/жирний у вступі.
-4. **Slug uniqueness across articles vs documents.** Зараз: `/articles/<slug>` і `/documents/<id>`. Слаги не перетинаються. Якщо колись робимо `/documents/<slug>` — треба check.
-5. **Cache.** `getLinkListBySlug` має бути cached (Next `unstable_cache` або revalidateTag). Інакше кожна сторінка тригерить DB. План: додати в helper.
-6. **Drafts для linkLists?** Корисно якщо редактор хоче готувати новий список без публікації. Рекомендую: yes, з drafts.
-
----
-
-## 11. Що очікую від тебе перед start coding
-
-- [ ] Підтвердити структуру item-полів (поля A/B vs щось інше)
-- [ ] Підтвердити порядок етапів (стартуємо з LinkLists, не Articles)
-- [ ] Назви полів: `targetType` vs `kind` vs `type`; `targetDoc` vs `document`; `items` vs `entries`
-- [ ] Опційно: розширити color/icon options згідно з фактичним вжитком у native компонентах
-- [ ] Drafts для linkLists — yes/no
+| # | Питання | Стан |
+|---|---------|------|
+| 1 | Conditional fields у nested arrays (Payload `admin.condition`) | ✅ Працює. Smoke-test підтвердив для 3-х рівнів. |
+| 2 | Seed-script vs ручне створення linkLists | ✅ Seed-script (`src/scripts/seed/seed-link-lists.ts`) обраний — ідемпотентний (upsert by slug), легко розширити. |
+| 3 | `intro` як Lexical vs textarea | ✅ Lexical (richText) — реалізовано. У PoC не використовується, але доступно. |
+| 4 | Slug uniqueness across articles vs documents | ⚠️ Поки `/articles/<slug>` і `/documents/<id>` не перетинаються. Якщо колись робимо `/documents/<slug>` — додати crossсcollection check. |
+| 5 | Cache helper'у `getLinkListBySlug` | ⏳ TODO. На SQLite-rеад без cache незначний overhead, але на масштабі додати `unstable_cache` + revalidateTag('linkLists'). |
+| 6 | Drafts для linkLists | ✅ Увімкнено. |
+| 7 | Type generation (payload-types.ts) | ⏳ `payload generate:types` падає на next 16. Helper працює з ad-hoc типами. Окрема задача — або patch'нути bin, або генерувати в build-step. |
+| 8 | Як обробляти кольори/іконки в admin UI | ⚠️ `color` — select з 10 опцій (Tailwind). `icon` — text input з Lucide name. Перевірити UX після того як редактор спробує. |
