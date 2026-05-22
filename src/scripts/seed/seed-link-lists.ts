@@ -51,29 +51,32 @@ const SEEDS: SeedList[] = [
                 kind: 'document',
                 legacyId: 175,
             },
+            // TODO: replace external→article kind after Articles migration (Phase 2).
+            // These three legacy IDs are HTML hubs in articles_v2, not PDFs, so for
+            // now they resolve through /article/:id which still proxies to MySQL.
             {
                 title: 'План роботи органів курсантського (студентського) самоврядування',
                 description: 'Календарний план заходів та подій, організованих студентським самоврядуванням',
                 icon: 'Calendar',
                 color: 'purple',
-                kind: 'document',
-                legacyId: 1906,
+                kind: 'external',
+                targetUrl: '/article/1906',
             },
             {
                 title: 'Склад органів курсантського (студентського) самоврядування',
                 description: 'Інформація про членів та керівництво органів студентського самоврядування',
                 icon: 'UserCheck',
                 color: 'green',
-                kind: 'document',
-                legacyId: 674,
+                kind: 'external',
+                targetUrl: '/article/674',
             },
             {
                 title: 'Звітність',
                 description: 'Протоколи засідань, звіти про діяльність та результати роботи самоврядування',
                 icon: 'BarChart3',
                 color: 'orange',
-                kind: 'document',
-                legacyId: 680,
+                kind: 'external',
+                targetUrl: '/article/680',
             },
             {
                 title: 'Галерея',
