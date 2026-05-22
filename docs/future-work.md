@@ -10,8 +10,10 @@
 
 **Phase 1 (MVP) завершена 2026-05-22.** Створено три колекції: `articles` (контент-сторінки з блоками, drafts), `linkLists` (структурні списки посилань, 3 рівні вкладеності, polymorphic target). PoC: `SelfGovernancePage` тягне дані з linkList "self-governance" — дизайн зберігся, редактор керує з адмінки.
 
+**Розширення PoC 2026-05-22:** додано accordion-UX для inline subgroup ("Звітність" з 15 PDFs у hub-картці, `HubItemCard.tsx`). Аудит підтвердив, що max-depth 3 у схемі покриває 96% legacy hubs.
+
 Повний дизайн і лог рішень: [`docs/architecture/articles-and-link-lists.md`](architecture/articles-and-link-lists.md).
-Дослідницькі дані: [`audit/coverage.md`](../audit/coverage.md), [`audit/clusters.json`](../audit/clusters.json).
+Дослідницькі дані: [`audit/coverage.md`](../audit/coverage.md), [`audit/tree-depth.md`](../audit/tree-depth.md), [`audit/clusters.json`](../audit/clusters.json).
 
 ### Що залишилось (Phase 2 backlog, у порядку залежностей)
 
@@ -28,12 +30,15 @@
 - `teachers-attestation` (13 items)
 - `entrants-2025-licenses` (1 doc мінімум; повний tree-4 entrance-2025 залишається native — занадто складний)
 
-**1.2. Рефакторити решту 10 native компонентів у server-component з `getLinkListBySlug`.** Patternalready proven (SelfGovernance):
+**1.2. Рефакторити решту 10 native компонентів у server-component з `getLinkListBySlug`.** Pattern already proven (SelfGovernance):
 
 - Видалити hard-coded `sections = [...]`
 - Додати `export const dynamic = 'force-dynamic'` у відповідний `page.tsx`
-- Рендер з `list.items.map(...)`
+- Рендер з `list.items.map(...)` через `HubItemCard`
 - Зберегти унікальний дизайн hero/banner
+- При другому рефакторингу — extract `HubItemCard` + accordion-логіку у `src/components/common/LinkListRenderer/`, щоб уникнути дублювання
+
+**1.2a. Уніфікувати legacy inline link styling.** `src/components/news/BlocksRenderer.tsx → LinkListBlock` ще використовує "синій-underlined" pattern. Перевести на compact-row design (як `ChildRow` у `HubItemCard.tsx`).
 
 **1.3. Міграція legacy HTML content у `articles`.**
 

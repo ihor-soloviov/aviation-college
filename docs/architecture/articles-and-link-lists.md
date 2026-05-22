@@ -11,6 +11,9 @@
 - **HTML legacy hubs у seed:** для self-governance 3 з 5 IDs виявилися HTML-сторінками (не PDFs). Поки articles ще не мігровані — seed їх як `kind: external, targetUrl: /article/<legacyId>`. Існуючий `/article/:id` route їх обробляє через MySQL fallback. Замінити на `kind: article` після Phase 2.
 - **payload-types.ts** локально не генерується автоматично через next 16 + payload bin incompat. Helper працює з ad-hoc типами в `src/lib/link-lists.ts`. Не блокує — type-check проходить.
 - **Drafts увімкнено** для обох колекцій (підтверджено в обговоренні).
+- **Max-depth 3 у схемі обґрунтована аудитом** (`audit/tree-depth.md`): 96% legacy hubs мають фактичну глибину ≤3 (81% — depth=1, 11% — depth=2, 4% — depth=3). Решта 4% — гігантські навігаційні центри типу "Навчальний відділ" (depth=8), які повинні бути окремими сторінками, а не inline.
+- **DAG-структура легасі-навігації.** Один sub-hub часто входить у кілька parents (наприклад "Співпраця з підприємствами" — у 12). У CMS це обробляємо через окремі linkLists records + `LinkListRef` block; не дублюємо.
+- **UX inline subgroup — accordion з chevron.** Card з `kind:group` стає кнопкою з ▾/▴ chevron'ом. Клік розкриває children всередині того ж grid-cell (`grid items-start` дозволяє ріст без впливу на сусідів). Children рендеряться як compact rows: icon + title + ↗. PoC: SelfGovernance "Звітність" з 15 PDFs (`HubItemCard.tsx`).
 
 ---
 
@@ -351,14 +354,18 @@ export default async function ArticlePage({ params }: Props) {
 | 2 | Articles schema + push | ✅ | `src/collections/Articles.ts` + новий блок `LinkListRef`, push'нуто на прод |
 | 3 | `lib/link-lists.ts` helper | ✅ | server-only, polymorphic href resolver, flatten L2/L3 |
 | 4 | PoC: SelfGovernance CMS-driven | ✅ | seed-script + рефакторинг компонента, prod віддає 200 з 5 пунктів |
+| 4a | Аналіз hub-tree depth | ✅ | `audit/tree-depth.md`: 96% покриття з max-depth 3, DAG-структура, deepest hubs |
+| 4b | Accordion subgroup UX | ✅ | `HubItemCard.tsx` (client) з chevron+toggle; pilot — "Звітність" #674 (15 PDFs) як `kind:group` |
 | 5 | Розширити seed на решту native | ⏳ | додати ~10 SEEDS items: AntiBullying, CodeOfConduct, Science, ElectiveCourses, PracticalTraining, ScholarshipRating, Teachers (атестація + педагогічна скарбниця), SocialScholarships, Entrants-2025 |
 | 6 | Перенос решти native компонентів | ⏳ | повторити SelfGovernance pattern для кожного. 10 файлів |
+| 6a | Винести `HubItemCard` у спільний `LinkListRenderer` | ⏳ | extract'нути коли торкаємось 2-го native — щоб не дублювати accordion-логіку |
+| 6b | Уніфікувати стилі inline links (BlocksRenderer.LinkListBlock) | ⏳ | замінити синій-underlined стиль на compact-row pattern як у ChildRow |
 | 7 | Migration script articles | ⏳ | `migrate-articles-content.ts` — ~500 цінних content rows → articles (фільтр word_count>50) |
 | 8 | Оновити `/article/:id` route | ⏳ | додати articles.legacyId lookup перед MySQL fallback |
 | 9 | Замінити в linkLists `external→/article/X` на `article→targetArticle` | ⏳ | пройти всі linkLists, де kind=external + targetUrl починається з `/article/` — переключити |
 | 10 | Прибрати MySQL fallback | ⏳ | видалити `getArticleById`, `src/lib/articles.ts`, `articles_v2` таблицю (depends on §7-8 завершених) |
 
-**Завершено:** Phase 1 MVP (#1-4).
+**Завершено:** Phase 1 MVP (#1-4) + аудит глибини + accordion-subgroup pilot (#4a-4b).
 **Залишилось:** Phase 2 (#5-10) — приблизно 2-3 тижні поступової роботи.
 
 ---
