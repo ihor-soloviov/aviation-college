@@ -1,6 +1,6 @@
 # Articles + LinkLists — design
 
-Стан: **Phase 1 MVP виконано, Phase 2 у backlog'у**. Останнє оновлення: 2026-05-22.
+Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 виконано і задеплоєно** (12 linkLists на проді, commit `b4d91d6`). Лишилось §1.2a + §1.3-§1.6. Останнє оновлення: 2026-05-25.
 
 Базується на: `audit/coverage.md`, `audit/native-hubs.md`, `audit/clusters.json`.
 
@@ -14,6 +14,16 @@
 - **Max-depth 3 у схемі обґрунтована аудитом** (`audit/tree-depth.md`): 96% legacy hubs мають фактичну глибину ≤3 (81% — depth=1, 11% — depth=2, 4% — depth=3). Решта 4% — гігантські навігаційні центри типу "Навчальний відділ" (depth=8), які повинні бути окремими сторінками, а не inline.
 - **DAG-структура легасі-навігації.** Один sub-hub часто входить у кілька parents (наприклад "Співпраця з підприємствами" — у 12). У CMS це обробляємо через окремі linkLists records + `LinkListRef` block; не дублюємо.
 - **UX inline subgroup — accordion з chevron.** Card з `kind:group` стає кнопкою з ▾/▴ chevron'ом. Клік розкриває children всередині того ж grid-cell (`grid items-start` дозволяє ріст без впливу на сусідів). Children рендеряться як compact rows: icon + title + ↗. PoC: SelfGovernance "Звітність" з 15 PDFs (`HubItemCard.tsx`).
+
+### Лог рішень Phase 2 §1.1-§1.2 (2026-05-25)
+
+- **`icon` — `select`, не `text`.** На запит замовника поле іконки стало випадайкою з курованим `ICON_OPTIONS` (~70 Lucide, укр. підписи `"Документ — FileText"`). Стовпець у БД лишається TEXT → schema-push безпечний. Значення = точна назва Lucide-компонента.
+- **Новий `kind: 'info'`** — картка без посилання. Виник на social-scholarships (8 пільгових категорій — це контент, не лінки). `resolveHref` повертає null; рендериться як неклікабельна картка. Дозволяє редактору керувати й контент-картками (бази практики, категорії).
+- **Кожен компонент — власний дизайн, спільного рендерера немає.** `LinkListRenderer` НЕ виносили: anti-bullying (border-l картки), scholarship-rating (tree-3 відділення→рік→badge-кнопки), science (4 секції), teachers-nav (ExpandableNavigation) — усі різні. Спільний лише helper `getLinkListBySlug` + `LinkListItem` тип. HubItemCard локальний для SelfGovernance.
+- **teachers-nav — ціле меню в CMS.** Замість лише «педагогічної скарбниці» мігрували всю навігацію «Викладачам» (6 категорій) в один linkList. `lib/teachers.tsx` тепер `getTeachersCategories()` — async-адаптер CMS→`NavigationCategory[]` (мапить group→category, icon-рядок→JSX `<Icon/>`, children→links). `ExpandableNavigation` без змін.
+- **Bug fix: tree-3 seed.** Drizzle/Payload nest L2 під `children`, L3 під `entries`. `buildItemForPayload` писав усе під `children` → L3 губився. Додано `depth`-параметр: nestedKey = `children` (depth 1) або `entries` (depth 2+). Виявлено на scholarship-rating.
+- **Прод-seed через one-off контейнер.** Runner-образ (standalone-style) не містить `src/`/`payload.config.ts`/`tsconfig.json`. Seed на проді: `docker compose run --rm` з bind-mount цих файлів з git-pulled хоста; node_modules+tsx беруться з образу. Порядок деплою: backup → pull → **seed** (до нового коду, бо мігровані сторінки роблять `notFound()` без даних) → build → nginx → health-check.
+- **HTML/missing legacy IDs → `kind:external /article/N` (тимчасово).** 28 (practical-training бази — HTML), 3274 (science Козацтво — відсутній у legacy), 4551/4793 (scholarship-rating — HTML зі сторонніми заголовками). Переключити на `kind:article` у §1.5 після §1.3.
 
 ---
 
@@ -356,17 +366,19 @@ export default async function ArticlePage({ params }: Props) {
 | 4 | PoC: SelfGovernance CMS-driven | ✅ | seed-script + рефакторинг компонента, prod віддає 200 з 5 пунктів |
 | 4a | Аналіз hub-tree depth | ✅ | `audit/tree-depth.md`: 96% покриття з max-depth 3, DAG-структура, deepest hubs |
 | 4b | Accordion subgroup UX | ✅ | `HubItemCard.tsx` (client) з chevron+toggle; pilot — "Звітність" #674 (15 PDFs) як `kind:group` |
-| 5 | Розширити seed на решту native | ⏳ | додати ~10 SEEDS items: AntiBullying, CodeOfConduct, Science, ElectiveCourses, PracticalTraining, ScholarshipRating, Teachers (атестація + педагогічна скарбниця), SocialScholarships, Entrants-2025 |
-| 6 | Перенос решти native компонентів | ⏳ | повторити SelfGovernance pattern для кожного. 10 файлів |
-| 6a | Винести `HubItemCard` у спільний `LinkListRenderer` | ⏳ | extract'нути коли торкаємось 2-го native — щоб не дублювати accordion-логіку |
-| 6b | Уніфікувати стилі inline links (BlocksRenderer.LinkListBlock) | ⏳ | замінити синій-underlined стиль на compact-row pattern як у ChildRow |
+| 5 | Розширити seed на решту native | ✅ | 11 нових SEEDS (anti-bullying, attestation-mon/orders, social-scholarships, practical-training, practice-bases, code-of-conduct, scholarship-rating, science, elective-courses, teachers-nav). Entrants-2025 лишився native. |
+| 6 | Перенос решти native компонентів | ✅ | SelfGovernance pattern повторено для кожного; дизайн збережено |
+| 6a | Винести `HubItemCard` у спільний `LinkListRenderer` | ❌ не потрібно | жоден інший компонент не перевикористовує grid+accordion — кожен має унікальний дизайн. HubItemCard лишається локальним |
+| 6b | Уніфікувати стилі inline links (BlocksRenderer.LinkListBlock) | ⏳ | замінити синій-underlined стиль на compact-row pattern як у ChildRow (§1.2a) |
+| 6c | `icon` text→select; новий `kind: 'info'`; +5 кольорів | ✅ | додано під час §1.2 (запит замовника + контент-картки) |
+| 6d | Fix seed для tree-3 (L3 → `entries`) | ✅ | `buildItemForPayload` отримав `depth`; виявлено на scholarship-rating |
 | 7 | Migration script articles | ⏳ | `migrate-articles-content.ts` — ~500 цінних content rows → articles (фільтр word_count>50) |
 | 8 | Оновити `/article/:id` route | ⏳ | додати articles.legacyId lookup перед MySQL fallback |
-| 9 | Замінити в linkLists `external→/article/X` на `article→targetArticle` | ⏳ | пройти всі linkLists, де kind=external + targetUrl починається з `/article/` — переключити |
+| 9 | Замінити в linkLists `external→/article/X` на `article→targetArticle` | ⏳ | пройти всі linkLists, де kind=external + targetUrl починається з `/article/` — переключити (вкл. 28, 3274, 4551, 4793) |
 | 10 | Прибрати MySQL fallback | ⏳ | видалити `getArticleById`, `src/lib/articles.ts`, `articles_v2` таблицю (depends on §7-8 завершених) |
 
-**Завершено:** Phase 1 MVP (#1-4) + аудит глибини + accordion-subgroup pilot (#4a-4b).
-**Залишилось:** Phase 2 (#5-10) — приблизно 2-3 тижні поступової роботи.
+**Завершено:** Phase 1 MVP (#1-4) + аудит глибини + accordion-subgroup pilot (#4a-4b) + **Phase 2 §1.1-§1.2 (#5, #6, #6c, #6d) — задеплоєно 2026-05-25**.
+**Залишилось:** #6b (§1.2a), #7-10 (§1.3-§1.6).
 
 ---
 

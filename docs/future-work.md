@@ -2,43 +2,72 @@
 
 Перелік того, що ще треба зробити, з контекстом і конкретними кроками. Кожен пункт можна закривати окремо — порядок не критичний, окрім явних залежностей.
 
-Стан на **2026-05-22**.
+Стан на **2026-05-25**.
 
 ---
 
-## 1. Articles + LinkLists — Phase 2 (Phase 1 завершена)
+## 1. Articles + LinkLists — Phase 2
 
 **Phase 1 (MVP) завершена 2026-05-22.** Створено три колекції: `articles` (контент-сторінки з блоками, drafts), `linkLists` (структурні списки посилань, 3 рівні вкладеності, polymorphic target). PoC: `SelfGovernancePage` тягне дані з linkList "self-governance" — дизайн зберігся, редактор керує з адмінки.
 
 **Розширення PoC 2026-05-22:** додано accordion-UX для inline subgroup ("Звітність" з 15 PDFs у hub-картці, `HubItemCard.tsx`). Аудит підтвердив, що max-depth 3 у схемі покриває 96% legacy hubs.
+
+### ✅ §1.1 + §1.2 ЗАВЕРШЕНО і ЗАДЕПЛОЄНО на прод (2026-05-25, commit `b4d91d6`)
+
+Усі native-компоненти, що лягають у патерн, переведено на CMS-driven `getLinkListBySlug` + `export const dynamic = 'force-dynamic'`. **12 linkLists** засіяно у прод (`src/scripts/seed/seed-link-lists.ts`, ідемпотентний upsert by slug). Редактор керує списками з `/admin` → «Списки посилань». Дизайн кожного компонента збережено.
+
+| linkList slug | Компонент | Структура |
+|---|---|---|
+| `self-governance` | SelfGovernance (PoC) | tree-2 + accordion |
+| `anti-bullying` | AntiBullying | flat, 6 docs |
+| `attestation-mon` / `attestation-orders` | teachers/attestation/mon, /orders | flat 4 / 5 |
+| `social-scholarships` | SocialScholarships | 8 `info`-карток |
+| `practical-training` + `practice-bases` | PracticalTraining | 2 docs + 2 групи (30 баз) |
+| `code-of-conduct` | CodeOfConduct | flat, 1 doc |
+| `scholarship-rating` | ScholarshipRating | **tree-3** (відділення→рік→семестр) |
+| `science` | Science | tree-2, 4 секції, 11 docs |
+| `elective-courses` | ElectiveCourses | flat, 1 doc |
+| `teachers-nav` | **усе меню «Викладачам»** (`lib/teachers.tsx` → `getTeachersCategories()`) | tree-2, 6 категорій, 38 docs |
+
+**Нова інфраструктура (під час §1.1/§1.2):**
+- `LinkLists.icon`: `text` input → **`select`** з курованим ICON_OPTIONS (~70 Lucide-іконок, укр. підписи). На запит замовника.
+- Новий `kind: 'info'` — картка без посилання (для контент-карток типу пільгових категорій). Зачеплено `LinkLists.ts`, `lib/link-lists.ts` (`LinkListItemKind`), seed.
+- `COLOR_OPTIONS` розширено: + `emerald`, `sky`, `cyan`, `violet`, `rose`.
+- Виправлено баг seed для tree-3: L3-вкладеність пишеться у поле `entries` (L2 — `children`); `buildItemForPayload` отримав параметр `depth`.
+
+**Лишається native свідомо:** `entrance-2025` (tree-4 інтерактивний DocumentSidebar/Viewer, 910 рядків — занадто складний, за рішенням).
+
+**Прибрано:** невживаний `attestationPdfUrls` з `lib/teachers/attestation.data.ts`; `practiceBases`/`*Url` з PracticalTraining/data.ts; hardcoded масиви в усіх перелічених компонентах.
+
+**⚠️ Data-quality (перевірити в адмінці):**
+- `3274` (science «Козацтво») — відсутній у legacy `articles_v2`, зламаний лінк ще до міграції → поки `kind:external` `/article/3274`.
+- `4551`, `4793` (scholarship-rating) — HTML зі сторонніми заголовками («Програми вступних випробувань», «анкетування»), позначені як семестрові рейтинги → поки `kind:external` `/article/N`.
+- Усі `external→/article/N` чекають §1.5 (переключення на `kind:article` після §1.3).
+
+**Деплой-нотатка:** seed на проді запускається one-off контейнером (runner-образ не містить `src/`, тож монтуємо з git-pulled хоста):
+```bash
+ssh aviation 'cd /home/deploy/aviation && docker compose --env-file .env.production run --rm \
+  -v $(pwd)/src:/app/src -v $(pwd)/payload.config.ts:/app/payload.config.ts \
+  -v $(pwd)/tsconfig.json:/app/tsconfig.json \
+  next node_modules/.bin/tsx src/scripts/seed/seed-link-lists.ts'
+```
+Порядок безпечного деплою: бекап cms.sqlite → `git pull` → **seed** (дані в живу БД до нового коду — інакше мігровані сторінки `notFound()`) → `docker compose up -d --build` → `restart nginx` → health-check.
 
 Повний дизайн і лог рішень: [`docs/architecture/articles-and-link-lists.md`](architecture/articles-and-link-lists.md).
 Дослідницькі дані: [`audit/coverage.md`](../audit/coverage.md), [`audit/tree-depth.md`](../audit/tree-depth.md), [`audit/clusters.json`](../audit/clusters.json).
 
 ### Що залишилось (Phase 2 backlog, у порядку залежностей)
 
-**1.1. Розширити seed на решту 10 native компонентів.** Додати до `SEEDS` у `src/scripts/seed/seed-link-lists.ts`:
+**~~1.1. Розширити seed на решту native компонентів.~~ ✅ ЗРОБЛЕНО (2026-05-25).** Усі засіяно (див. таблицю вище). Відмінності від початкового плану:
+- `teachers-pedagogical-treasure` → розширено до **всього меню «Викладачам»** (`teachers-nav`, 6 категорій, 38 docs) — рендериться через `ExpandableNavigation` з `getTeachersCategories()`.
+- `teachers-attestation` → два окремі списки `attestation-mon` (4) + `attestation-orders` (5); наративні підсторінки (general-info, qualification-requirements, email) лишились у коді.
+- `social-scholarships` → виявилось контент-сторінкою без лінків → 8 `info`-карток (категорії); чек-лист/контакт лишились у коді.
+- `practical-training` → 2 docs + окремий список `practice-bases` (30 баз як 2 групи `info`).
+- `entrants-2025-licenses` → **НЕ зроблено**: `entrance-2025` лишається native (tree-4 viewer, занадто складний).
 
-- `anti-bullying` (6 items, 100% match з legacy hub #530)
-- `code-of-conduct` (1 doc + 4 narrative sections — narrative залишити в коді)
-- `social-scholarships` (1 doc + 8 категорій)
-- `science` (12 items)
-- `elective-courses` (1 catalog doc + 8 спеціальностей)
-- `practical-training` (2 docs + 30 баз — бази як окремий список)
-- `scholarship-rating` (16 items, tree-3 — використати `kind: group` з `children`)
-- `teachers-pedagogical-treasure` (38 items, 68% match з #3255)
-- `teachers-attestation` (13 items)
-- `entrants-2025-licenses` (1 doc мінімум; повний tree-4 entrance-2025 залишається native — занадто складний)
+**~~1.2. Рефакторити native у server-component.~~ ✅ ЗРОБЛЕНО (2026-05-25).** Винесення спільного `LinkListRenderer` (з початкового плану) **не знадобилось** — жоден компонент, крім SelfGovernance, не перевикористовує grid+accordion патерн; кожен має унікальний дизайн. `HubItemCard` лишається локальним для SelfGovernance.
 
-**1.2. Рефакторити решту 10 native компонентів у server-component з `getLinkListBySlug`.** Pattern already proven (SelfGovernance):
-
-- Видалити hard-coded `sections = [...]`
-- Додати `export const dynamic = 'force-dynamic'` у відповідний `page.tsx`
-- Рендер з `list.items.map(...)` через `HubItemCard`
-- Зберегти унікальний дизайн hero/banner
-- При другому рефакторингу — extract `HubItemCard` + accordion-логіку у `src/components/common/LinkListRenderer/`, щоб уникнути дублювання
-
-**1.2a. Уніфікувати legacy inline link styling.** `src/components/news/BlocksRenderer.tsx → LinkListBlock` ще використовує "синій-underlined" pattern. Перевести на compact-row design (як `ChildRow` у `HubItemCard.tsx`).
+**1.2a. Уніфікувати legacy inline link styling.** ⏳ НЕ зроблено. `src/components/news/BlocksRenderer.tsx → LinkListBlock` ще використовує "синій-underlined" pattern. Перевести на compact-row design (як `ChildRow` у `HubItemCard.tsx`).
 
 **1.3. Міграція legacy HTML content у `articles`.**
 
@@ -71,7 +100,7 @@
 
 ## 2. Static pages з hardcoded `/api/articles/X/file`
 
-**Стан:** SelfGovernance вже не використовує цей URL (Phase 1 PoC, замість нього — `/documents/<id>`). Залишилось 10 native компонентів з ~91 hardcoded ref (`grep` у `src/components/` + `src/lib/`).
+**Стан (2026-05-25):** ✅ практично покрито через §1.2. Усі мігровані компоненти (anti-bullying, attestation, social-scholarships, practical-training, code-of-conduct, scholarship-rating, science, elective-courses, teachers-nav) тепер рендерять `/documents/<id>` замість `/api/articles/X/file` (resolver у `src/lib/link-lists.ts`). Лишкові прямі refs можуть бути лише в `entrance-2025` (стало native) та інших не-hub компонентах — перевірити `grep -rn "/api/articles" src/` перед видаленням роута.
 
 **Шлях покриття:** автоматично через §1.2 (рефакторинг native на CMS-driven). Після того як кожен компонент тягне дані з linkList — він рендерить `/documents/<id>` замість `/api/articles/X/file` (resolver у `src/lib/link-lists.ts` робить це централізовано).
 
