@@ -1,6 +1,4 @@
-"use client";
-
-import { useCallback } from "react";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -13,9 +11,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { resolveFileUrl } from "@/lib/files-url";
-
-const regulationUrl = "/api/articles/3898/file";
+import { getLinkListBySlug } from "@/lib/link-lists";
 
 const keyPoints = [
   {
@@ -40,10 +36,11 @@ const keyPoints = [
   },
 ];
 
-export const CodeOfConductPage = () => {
-  const openInNewTab = useCallback((url: string) => {
-    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
-  }, []);
+export async function CodeOfConductPage() {
+  const list = await getLinkListBySlug("code-of-conduct");
+  if (!list) notFound();
+  const doc = list.items[0];
+  const isExternal = doc?.href?.startsWith("http");
 
   return (
     <div className="space-y-10">
@@ -69,50 +66,53 @@ export const CodeOfConductPage = () => {
       </Card>
 
       {/* Main Document Card */}
-      <button
-        onClick={() => openInNewTab(regulationUrl)}
-        className="group w-full text-left"
-      >
-        <Card
-          className={cn(
-            "overflow-hidden transition-all duration-300",
-            "hover:shadow-lg hover:border-emerald-500/50"
-          )}
+      {doc && (
+        <a
+          href={doc.href ?? "#"}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          className="group block w-full text-left"
         >
-          <div className="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500" />
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="shrink-0 rounded-xl bg-emerald-100 p-4 text-emerald-600 transition-transform duration-300 group-hover:scale-110 dark:bg-emerald-900/30 dark:text-emerald-400">
-                <FileText className="h-10 w-10" />
-              </div>
-              <div className="min-w-0 flex-1 space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-lg font-semibold text-foreground sm:text-xl">
-                    Правила поведінки здобувача освіти в закладі освіти
-                  </h3>
-                  <ExternalLink className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+          <Card
+            className={cn(
+              "overflow-hidden transition-all duration-300",
+              "hover:shadow-lg hover:border-emerald-500/50"
+            )}
+          >
+            <div className="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500" />
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 rounded-xl bg-emerald-100 p-4 text-emerald-600 transition-transform duration-300 group-hover:scale-110 dark:bg-emerald-900/30 dark:text-emerald-400">
+                  <FileText className="h-10 w-10" />
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Повний текст правил поведінки для здобувачів освіти
-                  Криворізького фахового коледжу НАУ. Документ містить вимоги
-                  щодо поведінки під час освітнього процесу, на території
-                  закладу та у гуртожитках.
-                </p>
-                <div className="flex flex-wrap items-center gap-2 pt-2">
-                  <Badge variant="secondary">Офіційний документ</Badge>
-                  <Badge
-                    variant="outline"
-                    className="gap-1 text-emerald-600 dark:text-emerald-400"
-                  >
-                    <ExternalLink className="h-3 w-3" />
-                    Відкрити на сайті
-                  </Badge>
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-lg font-semibold text-foreground sm:text-xl">
+                      {doc.title}
+                    </h3>
+                    <ExternalLink className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                  </div>
+                  {doc.description && (
+                    <p className="text-sm text-muted-foreground">
+                      {doc.description}
+                    </p>
+                  )}
+                  <div className="flex flex-wrap items-center gap-2 pt-2">
+                    <Badge variant="secondary">Офіційний документ</Badge>
+                    <Badge
+                      variant="outline"
+                      className="gap-1 text-emerald-600 dark:text-emerald-400"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      Відкрити
+                    </Badge>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </button>
+            </CardContent>
+          </Card>
+        </a>
+      )}
 
       {/* Key Points */}
       <div className="space-y-4">

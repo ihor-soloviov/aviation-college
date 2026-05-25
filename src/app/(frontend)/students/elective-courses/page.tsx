@@ -3,6 +3,8 @@ import { ElectiveCoursesPage } from "@/components/Students/ElectiveCourses";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Каталог дисциплін за вибором | Криворізький фаховий коледж НАУ",
   description:

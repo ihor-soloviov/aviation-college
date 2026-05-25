@@ -1,8 +1,11 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
-import { ordersLinks } from "@/lib/teachers/attestation.data";
+import { getLinkListBySlug } from "@/lib/link-lists";
 import { ExternalLink } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title:
@@ -11,7 +14,10 @@ export const metadata: Metadata = {
     "Накази щодо атестації педагогічних (науково-педагогічних) працівників.",
 };
 
-export default function OrdersPage() {
+export default async function OrdersPage() {
+  const list = await getLinkListBySlug("attestation-orders");
+  if (!list) notFound();
+
   return (
     <section className="bg-gray-50 py-16 md:py-24 dark:bg-gray-900">
       <div className="container mx-auto max-w-3xl space-y-8">
@@ -21,20 +27,23 @@ export default function OrdersPage() {
           description="Архів наказів коледжу"
         />
         <ul className="space-y-3">
-          {ordersLinks.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-blue-600 hover:underline dark:text-blue-400"
-              >
-                <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-blue-500" />
-                {item.title}
-                <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
-              </a>
-            </li>
-          ))}
+          {list.items.map((item, index) => {
+            const isExternal = item.href?.startsWith("http");
+            return (
+              <li key={index}>
+                <a
+                  href={item.href ?? "#"}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className="flex items-center gap-2 text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-blue-500" />
+                  {item.title}
+                  <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </section>

@@ -1,106 +1,21 @@
-"use client";
-
-import { useCallback } from "react";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Trophy,
   FileText,
   GraduationCap,
-  Plane,
-  Monitor,
-  Truck,
-  BookOpen,
+  type LucideIcon,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
-import { resolveFileUrl } from "@/lib/files-url";
+import { getLinkListBySlug } from "@/lib/link-lists";
 
-const mainPageUrl = "/api/articles/112/file";
-
-const departments = [
-  {
-    id: "transport",
-    title: "Відділення «Транспортні технології»",
-    icon: Truck,
-    color: "blue",
-    semesters: [
-      {
-        year: "2025-2026 н.р.",
-        items: [
-          { title: "І семестр", url: "/api/articles/4789/file" },
-          { title: "ІІ семестр", url: "/api/articles/4790/file" },
-        ],
-      },
-      {
-        year: "2024-2025 н.р.",
-        items: [
-          { title: "І семестр", url: "/api/articles/4311/file" },
-          { title: "ІІ семестр", url: "/api/articles/4550/file" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "aviation",
-    title: "Відділення «Експлуатації та ремонту авіатехніки»",
-    icon: Plane,
-    color: "purple",
-    semesters: [
-      {
-        year: "2025-2026 н.р.",
-        items: [
-          { title: "І семестр", url: "/api/articles/4791/file" },
-          { title: "ІІ семестр", url: "/api/articles/4792/file" },
-        ],
-      },
-      {
-        year: "2024-2025 н.р.",
-        items: [
-          { title: "І семестр", url: "/api/articles/4312/file" },
-          { title: "ІІ семестр", url: "/api/articles/4551/file" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "computer",
-    title: "Відділення «Комп'ютерна і програмна інженерія»",
-    icon: Monitor,
-    color: "green",
-    semesters: [
-      {
-        year: "2025-2026 н.р.",
-        items: [
-          { title: "І семестр", url: "/api/articles/4793/file" },
-          { title: "ІІ семестр", url: "/api/articles/4794/file" },
-        ],
-      },
-      {
-        year: "2024-2025 н.р.",
-        items: [
-          { title: "І семестр", url: "/api/articles/4313/file" },
-          { title: "ІІ семестр", url: "/api/articles/4552/file" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "general",
-    title: "Відділення «Загальноосвітня підготовка»",
-    icon: BookOpen,
-    color: "orange",
-    semesters: [
-      {
-        year: "2025-2026 н.р.",
-        items: [
-          { title: "І курс", url: "/api/articles/4795/file" },
-          { title: "ІІ курс", url: "/api/articles/4796/file" },
-          { title: "ІІ семестр", url: "/api/articles/4797/file" },
-        ],
-      },
-    ],
-  },
-];
+function getLucideIcon(name?: string, fallback: LucideIcon = Trophy): LucideIcon {
+  if (!name) return fallback;
+  const Icon = (LucideIcons as unknown as Record<string, LucideIcon>)[name];
+  return Icon ?? fallback;
+}
 
 const getColorClasses = (color: string) => {
   const colors: Record<
@@ -139,10 +54,10 @@ const getColorClasses = (color: string) => {
   return colors[color] || colors.blue;
 };
 
-export const ScholarshipRatingPage = () => {
-  const openInNewTab = useCallback((url: string) => {
-    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
-  }, []);
+export async function ScholarshipRatingPage() {
+  const list = await getLinkListBySlug("scholarship-rating");
+  if (!list) notFound();
+  const departments = list.items;
 
   return (
     <div className="space-y-10">
@@ -190,10 +105,12 @@ export const ScholarshipRatingPage = () => {
 
         <div className="grid gap-4 md:grid-cols-2">
           {departments.map((dept, index) => {
-            const colors = getColorClasses(dept.color);
+            const colors = getColorClasses(dept.color ?? "blue");
+            const DeptIcon = getLucideIcon(dept.icon);
+            const years = dept.children ?? [];
             return (
               <Card
-                key={dept.id}
+                key={index}
                 className={cn(
                   "overflow-hidden transition-all duration-300",
                   colors.border,
@@ -215,7 +132,7 @@ export const ScholarshipRatingPage = () => {
                           colors.text
                         )}
                       >
-                        <dept.icon className="h-6 w-6" />
+                        <DeptIcon className="h-6 w-6" />
                       </div>
                       <h3 className="font-semibold text-foreground">
                         {dept.title}
@@ -223,25 +140,30 @@ export const ScholarshipRatingPage = () => {
                     </div>
 
                     <div className="space-y-3">
-                      {dept.semesters.map((semester) => (
-                        <div key={semester.year} className="space-y-2">
+                      {years.map((year, yi) => (
+                        <div key={yi} className="space-y-2">
                           <p className="text-sm font-medium text-muted-foreground">
-                            {semester.year}
+                            {year.title}
                           </p>
                           <div className="flex flex-wrap gap-2">
-                            {semester.items.map((item) => (
-                              <button
-                                key={item.title}
-                                onClick={() => openInNewTab(item.url)}
-                                className={cn(
-                                  "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all hover:scale-105",
-                                  colors.badgeBg
-                                )}
-                              >
-                                <FileText className="h-3.5 w-3.5" />
-                                {item.title}
-                              </button>
-                            ))}
+                            {(year.children ?? []).map((item, ii) => {
+                              const isExternal = item.href?.startsWith("http");
+                              return (
+                                <a
+                                  key={ii}
+                                  href={item.href ?? "#"}
+                                  target={isExternal ? "_blank" : undefined}
+                                  rel={isExternal ? "noopener noreferrer" : undefined}
+                                  className={cn(
+                                    "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all hover:scale-105",
+                                    colors.badgeBg
+                                  )}
+                                >
+                                  <FileText className="h-3.5 w-3.5" />
+                                  {item.title}
+                                </a>
+                              );
+                            })}
                           </div>
                         </div>
                       ))}

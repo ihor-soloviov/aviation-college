@@ -1,87 +1,72 @@
-"use client";
-
-import { useCallback } from "react";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Heart,
-  ExternalLink,
   Users,
-  FileText,
   CheckCircle,
   AlertCircle,
-  Phone,
   MapPin,
-  Shield,
-  Baby,
-  Accessibility,
   Home,
-  Scale,
   UserCheck,
+  type LucideIcon,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
-import { resolveFileUrl } from "@/lib/files-url";
+import { getLinkListBySlug } from "@/lib/link-lists";
 
-const mainPageUrl = "/api/articles/4585/file";
+const colorClasses: Record<string, { bg: string; text: string; border: string }> = {
+  blue: {
+    bg: "bg-blue-100 dark:bg-blue-900/30",
+    text: "text-blue-600 dark:text-blue-400",
+    border: "border-l-blue-500",
+  },
+  purple: {
+    bg: "bg-purple-100 dark:bg-purple-900/30",
+    text: "text-purple-600 dark:text-purple-400",
+    border: "border-l-purple-500",
+  },
+  amber: {
+    bg: "bg-amber-100 dark:bg-amber-900/30",
+    text: "text-amber-600 dark:text-amber-400",
+    border: "border-l-amber-500",
+  },
+  green: {
+    bg: "bg-green-100 dark:bg-green-900/30",
+    text: "text-green-600 dark:text-green-400",
+    border: "border-l-green-500",
+  },
+  orange: {
+    bg: "bg-orange-100 dark:bg-orange-900/30",
+    text: "text-orange-600 dark:text-orange-400",
+    border: "border-l-orange-500",
+  },
+  pink: {
+    bg: "bg-pink-100 dark:bg-pink-900/30",
+    text: "text-pink-600 dark:text-pink-400",
+    border: "border-l-pink-500",
+  },
+  red: {
+    bg: "bg-red-100 dark:bg-red-900/30",
+    text: "text-red-600 dark:text-red-400",
+    border: "border-l-red-500",
+  },
+  indigo: {
+    bg: "bg-indigo-100 dark:bg-indigo-900/30",
+    text: "text-indigo-600 dark:text-indigo-400",
+    border: "border-l-indigo-500",
+  },
+};
 
-const categories = [
-  {
-    id: "orphans",
-    title: "Діти-сироти та діти, позбавлені батьківського піклування",
-    description: "Та особи з їх числа у разі продовження навчання до 23 років",
-    icon: Baby,
-    color: "blue",
-  },
-  {
-    id: "lost-parents",
-    title: "Особи, які залишились без батьків",
-    description: "У віці від 18 до 23 років (батьки померли/загинули/зникли безвісти)",
-    icon: Heart,
-    color: "purple",
-  },
-  {
-    id: "chornobyl",
-    title: "Постраждалі внаслідок Чорнобильської катастрофи",
-    description: "Особи, які мають статус постраждалих від аварії на ЧАЕС",
-    icon: AlertCircle,
-    color: "yellow",
-  },
-  {
-    id: "veterans",
-    title: "Учасники бойових дій та їх діти",
-    description: "Визнані учасниками Революції Гідності, учасниками бойових дій",
-    icon: Shield,
-    color: "green",
-  },
-  {
-    id: "disability",
-    title: "Особи з інвалідністю I-III групи",
-    description: "Діти з інвалідністю та особи з інвалідністю внаслідок війни",
-    icon: Accessibility,
-    color: "orange",
-  },
-  {
-    id: "idp",
-    title: "Внутрішньо переміщені особи",
-    description: "Діти, зареєстровані як ВПО (до 23 років)",
-    icon: Home,
-    color: "pink",
-  },
-  {
-    id: "low-income",
-    title: "Малозабезпечені сім'ї",
-    description: "Студенти із сімей, які отримують державну соціальну допомогу",
-    icon: Users,
-    color: "red",
-  },
-  {
-    id: "fallen-heroes",
-    title: "Діти загиблих захисників України",
-    description: "Діти загиблих/померлих учасників бойових дій (до 23 років)",
-    icon: Scale,
-    color: "indigo",
-  },
-];
+function getColorClasses(color?: string) {
+  return (color && colorClasses[color]) || colorClasses.blue;
+}
+
+function getLucideIcon(name?: string, fallback: LucideIcon = Heart): LucideIcon {
+  if (!name) return fallback;
+  const Icon = (LucideIcons as unknown as Record<string, LucideIcon>)[name];
+  return Icon ?? fallback;
+}
 
 const requiredDocuments = [
   "Заява на ім'я начальника коледжу",
@@ -92,56 +77,11 @@ const requiredDocuments = [
   "Документи, що підтверджують право на соціальну стипендію",
 ];
 
-const getColorClasses = (color: string) => {
-  const colors: Record<string, { bg: string; text: string; border: string }> = {
-    blue: {
-      bg: "bg-blue-100 dark:bg-blue-900/30",
-      text: "text-blue-600 dark:text-blue-400",
-      border: "border-l-blue-500",
-    },
-    purple: {
-      bg: "bg-purple-100 dark:bg-purple-900/30",
-      text: "text-purple-600 dark:text-purple-400",
-      border: "border-l-purple-500",
-    },
-    yellow: {
-      bg: "bg-yellow-100 dark:bg-yellow-900/30",
-      text: "text-yellow-600 dark:text-yellow-400",
-      border: "border-l-yellow-500",
-    },
-    green: {
-      bg: "bg-green-100 dark:bg-green-900/30",
-      text: "text-green-600 dark:text-green-400",
-      border: "border-l-green-500",
-    },
-    orange: {
-      bg: "bg-orange-100 dark:bg-orange-900/30",
-      text: "text-orange-600 dark:text-orange-400",
-      border: "border-l-orange-500",
-    },
-    pink: {
-      bg: "bg-pink-100 dark:bg-pink-900/30",
-      text: "text-pink-600 dark:text-pink-400",
-      border: "border-l-pink-500",
-    },
-    red: {
-      bg: "bg-red-100 dark:bg-red-900/30",
-      text: "text-red-600 dark:text-red-400",
-      border: "border-l-red-500",
-    },
-    indigo: {
-      bg: "bg-indigo-100 dark:bg-indigo-900/30",
-      text: "text-indigo-600 dark:text-indigo-400",
-      border: "border-l-indigo-500",
-    },
-  };
-  return colors[color] || colors.blue;
-};
+export async function SocialScholarshipsPage() {
+  const list = await getLinkListBySlug("social-scholarships");
+  if (!list) notFound();
 
-export const SocialScholarshipsPage = () => {
-  const openInNewTab = useCallback((url: string) => {
-    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
-  }, []);
+  const categories = list.items;
 
   return (
     <div className="space-y-10">
@@ -167,7 +107,9 @@ export const SocialScholarshipsPage = () => {
               <div className="flex items-center gap-2 rounded-lg bg-white/80 px-4 py-2 dark:bg-white/10">
                 <Users className="h-5 w-5 text-emerald-600" />
                 <div>
-                  <p className="text-lg font-bold text-foreground">8+</p>
+                  <p className="text-lg font-bold text-foreground">
+                    {categories.length}+
+                  </p>
                   <p className="text-xs text-muted-foreground">Категорій</p>
                 </div>
               </div>
@@ -191,9 +133,10 @@ export const SocialScholarshipsPage = () => {
         <div className="grid gap-3 sm:grid-cols-2">
           {categories.map((category, index) => {
             const colors = getColorClasses(category.color);
+            const Icon = getLucideIcon(category.icon);
             return (
               <Card
-                key={category.id}
+                key={index}
                 className={cn(
                   "overflow-hidden border-l-4 transition-all duration-300 hover:shadow-md",
                   colors.border,
@@ -213,15 +156,17 @@ export const SocialScholarshipsPage = () => {
                         colors.text
                       )}
                     >
-                      <category.icon className="h-5 w-5" />
+                      <Icon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="font-medium text-foreground">
                         {category.title}
                       </h3>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {category.description}
-                      </p>
+                      {category.description && (
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {category.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -313,4 +258,4 @@ export const SocialScholarshipsPage = () => {
       </Card>
     </div>
   );
-};
+}

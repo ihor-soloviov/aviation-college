@@ -1,6 +1,4 @@
-"use client";
-
-import { useCallback } from "react";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,13 +9,13 @@ import {
   FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { resolveFileUrl } from "@/lib/files-url";
-import { catalogUrl } from "./data";
+import { getLinkListBySlug } from "@/lib/link-lists";
 
-export const ElectiveCoursesPage = () => {
-  const openInNewTab = useCallback((url: string) => {
-    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
-  }, []);
+export async function ElectiveCoursesPage() {
+  const list = await getLinkListBySlug("elective-courses");
+  if (!list) notFound();
+  const catalog = list.items[0];
+  const isExternal = catalog?.href?.startsWith("http");
 
   return (
     <div className="space-y-8">
@@ -62,9 +60,11 @@ export const ElectiveCoursesPage = () => {
       </Card>
 
       {/* Main CTA Card */}
-      <button
-        onClick={() => openInNewTab(catalogUrl)}
-        className="group w-full text-left"
+      <a
+        href={catalog?.href ?? "#"}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        className="group block w-full text-left"
       >
         <Card
           className={cn(
@@ -82,14 +82,13 @@ export const ElectiveCoursesPage = () => {
               <div className="min-w-0 flex-1 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="text-xl font-semibold text-foreground">
-                    Повний каталог дисциплін за вибором 2025/2026
+                    {catalog?.title ?? "Каталог дисциплін за вибором"}
                   </h3>
                   <ExternalLink className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <p className="text-muted-foreground">
-                  Перегляньте повний перелік дисциплін за вибором для всіх
-                  спеціальностей на 2025/2026 навчальний рік
-                </p>
+                {catalog?.description && (
+                  <p className="text-muted-foreground">{catalog.description}</p>
+                )}
                 <div className="flex flex-wrap gap-2 pt-1">
                   <Badge
                     variant="default"
@@ -103,7 +102,7 @@ export const ElectiveCoursesPage = () => {
             </div>
           </CardContent>
         </Card>
-      </button>
+      </a>
 
       {/* Info Banner */}
       <Card className="border-violet-200 bg-violet-50/50 dark:border-violet-800/50 dark:bg-violet-950/20">

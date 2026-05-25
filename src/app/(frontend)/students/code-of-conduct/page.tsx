@@ -3,6 +3,8 @@ import { CodeOfConductPage } from "@/components/Students/CodeOfConduct";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Правила поведінки здобувача освіти | Криворізький фаховий коледж НАУ",
   description:

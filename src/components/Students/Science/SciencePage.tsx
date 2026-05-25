@@ -1,136 +1,24 @@
-"use client";
-
-import { useCallback, useState } from "react";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Microscope,
-  FileText,
-  ExternalLink,
-  Users,
   Award,
-  BookOpen,
-  Lightbulb,
-  GraduationCap,
-  Calculator,
-  Monitor,
-  Download,
+  ExternalLink,
   ChevronDown,
-  Plane,
-  History,
-  ScrollText,
+  Lightbulb,
+  FileText,
+  type LucideIcon,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
-import { resolveFileUrl } from "@/lib/files-url";
+import { getLinkListBySlug, type LinkListItem } from "@/lib/link-lists";
 
-const mainPageUrl = "/api/articles/215/file";
-
-// Загальна інформація - посилання на статті сайту
-const generalInfo = [
-  {
-    id: "regulation",
-    title: "Положення про НТК",
-    description: "Нормативний документ, що регламентує діяльність наукового товариства",
-    icon: FileText,
-    url: "/api/articles/3270/file",
-    color: "blue",
-    type: "external",
-  },
-  {
-    id: "circles-regulation",
-    title: "Положення про студентські наукові гуртки та проблемні групи",
-    description: "Правила організації та функціонування наукових гуртків",
-    icon: Users,
-    url: "/api/articles/3271/file",
-    color: "purple",
-    type: "external",
-  },
-  {
-    id: "sections-list",
-    title: "Перелік наукових секцій НТК",
-    description: "Студентські наукові гуртки та проблемні групи коледжу",
-    icon: BookOpen,
-    url: "/api/articles/3272/file",
-    color: "green",
-    type: "external",
-  },
-];
-
-// Конференції - посилання на статті сайту
-const conferences = [
-  {
-    id: "aviation",
-    title: "Авіація і космонавтика",
-    description: "Науково-практична конференція з питань авіації та космонавтики",
-    icon: Plane,
-    url: "/api/articles/3273/file",
-    color: "sky",
-  },
-  {
-    id: "cossacks",
-    title: "Козацтво - традиції через роки!",
-    description: "Конференція присвячена історії та традиціям українського козацтва",
-    icon: History,
-    url: "/api/articles/3274/file",
-    color: "amber",
-  },
-  {
-    id: "pedagogy",
-    title: "Сучасний науково-педагогічний досвід при викладанні фундаментальних дисциплін",
-    description: "Обмін досвідом викладання фундаментальних дисциплін у закладах освіти",
-    icon: BookOpen,
-    url: "/api/articles/3275/file",
-    color: "emerald",
-  },
-  {
-    id: "info-day",
-    title: "Всесвітній день інформації",
-    description: "Науково-практична конференція з питань інформаційних технологій",
-    icon: Monitor,
-    url: "/api/articles/3276/file",
-    color: "cyan",
-  },
-  {
-    id: "integrity",
-    title: "Академічна доброчесність: основи теорії та практики",
-    description: "Конференція з питань академічної доброчесності в освіті",
-    icon: GraduationCap,
-    url: "/api/articles/4089/file",
-    color: "indigo",
-  },
-];
-
-// Олімпіади та досягнення
-const achievements = [
-  {
-    id: "math",
-    title: "Математика",
-    description: "Перемоги та досягнення на олімпіадах з математики",
-    icon: Calculator,
-    url: "/api/articles/3277/file",
-    color: "rose",
-  },
-  {
-    id: "graphics",
-    title: "Комп'ютерна графіка",
-    description: "Досягнення здобувачів у галузі комп'ютерної графіки та дизайну",
-    icon: Monitor,
-    url: "/api/articles/3278/file",
-    color: "violet",
-  },
-];
-
-// Нормативно-правова база
-const regulations = [
-  {
-    id: "olympiad-regulation",
-    title: "Положення про олімпіади",
-    description: "Нормативний документ щодо проведення олімпіад",
-    icon: ScrollText,
-    url: "/api/articles/3279/file",
-    color: "slate",
-  },
-];
+function getLucideIcon(name?: string, fallback: LucideIcon = FileText): LucideIcon {
+  if (!name) return fallback;
+  const Icon = (LucideIcons as unknown as Record<string, LucideIcon>)[name];
+  return Icon ?? fallback;
+}
 
 const getColorClasses = (color: string) => {
   const colors: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
@@ -149,17 +37,23 @@ const getColorClasses = (color: string) => {
   return colors[color] || colors.blue;
 };
 
-export const SciencePage = () => {
-  const openInNewTab = useCallback((url: string) => {
-    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
-  }, []);
+function linkProps(item: LinkListItem) {
+  const isExternal = item.href?.startsWith("http");
+  return {
+    href: item.href ?? "#",
+    target: isExternal ? "_blank" : undefined,
+    rel: isExternal ? "noopener noreferrer" : undefined,
+  };
+}
 
-  const scrollToSection = useCallback((sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, []);
+export async function SciencePage() {
+  const list = await getLinkListBySlug("science");
+  if (!list) notFound();
+
+  const generalInfo = list.items[0]?.children ?? [];
+  const conferences = list.items[1]?.children ?? [];
+  const achievements = list.items[2]?.children ?? [];
+  const regulations = list.items[3]?.children ?? [];
 
   return (
     <div className="space-y-10">
@@ -195,10 +89,7 @@ export const SciencePage = () => {
       </Card>
 
       {/* Main Card - scrolls to content */}
-      <button
-        onClick={() => scrollToSection("general-info")}
-        className="group w-full text-left"
-      >
+      <a href="#general-info" className="group block w-full text-left">
         <Card
           className={cn(
             "overflow-hidden transition-all duration-300",
@@ -219,7 +110,7 @@ export const SciencePage = () => {
                   <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Положення, перелік секцій, матеріали конференцій та досягнення 
+                  Положення, перелік секцій, матеріали конференцій та досягнення
                   здобувачів освіти на олімпіадах і конкурсах.
                 </p>
                 <div className="flex flex-wrap items-center gap-2 pt-2">
@@ -231,7 +122,7 @@ export const SciencePage = () => {
             </div>
           </CardContent>
         </Card>
-      </button>
+      </a>
 
       {/* General Information */}
       <div id="general-info" className="space-y-4 scroll-mt-24">
@@ -246,13 +137,14 @@ export const SciencePage = () => {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {generalInfo.map((item, index) => {
-            const colors = getColorClasses(item.color);
+            const colors = getColorClasses(item.color ?? "blue");
+            const Icon = getLucideIcon(item.icon);
             return (
-              <button
-                key={item.id}
-                onClick={() => openInNewTab(item.url)}
+              <a
+                key={index}
+                {...linkProps(item)}
                 className={cn(
-                  "group text-left",
+                  "group block text-left",
                   "animate-in fade-in slide-in-from-bottom-4"
                 )}
                 style={{
@@ -278,7 +170,7 @@ export const SciencePage = () => {
                             colors.text
                           )}
                         >
-                          <item.icon className="h-6 w-6" />
+                          <Icon className="h-6 w-6" />
                         </div>
                         <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                       </div>
@@ -286,9 +178,11 @@ export const SciencePage = () => {
                         <h3 className="line-clamp-2 font-semibold text-foreground">
                           {item.title}
                         </h3>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
-                          {item.description}
-                        </p>
+                        {item.description && (
+                          <p className="line-clamp-2 text-sm text-muted-foreground">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
                       <Badge variant="secondary" className="gap-1">
                         <ExternalLink className="h-3 w-3" />
@@ -297,7 +191,7 @@ export const SciencePage = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </button>
+              </a>
             );
           })}
         </div>
@@ -316,12 +210,13 @@ export const SciencePage = () => {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {conferences.map((conf, index) => {
-            const colors = getColorClasses(conf.color);
+            const colors = getColorClasses(conf.color ?? "blue");
+            const Icon = getLucideIcon(conf.icon);
             return (
-              <button
-                key={conf.id}
-                onClick={() => openInNewTab(conf.url)}
-                className="group w-full text-left"
+              <a
+                key={index}
+                {...linkProps(conf)}
+                className="group block w-full text-left"
               >
                 <Card
                   className={cn(
@@ -343,7 +238,7 @@ export const SciencePage = () => {
                           colors.text
                         )}
                       >
-                        <conf.icon className="h-5 w-5" />
+                        <Icon className="h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
@@ -352,14 +247,16 @@ export const SciencePage = () => {
                           </h3>
                           <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                         </div>
-                        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                          {conf.description}
-                        </p>
+                        {conf.description && (
+                          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                            {conf.description}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              </button>
+              </a>
             );
           })}
         </div>
@@ -378,13 +275,14 @@ export const SciencePage = () => {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {achievements.map((achievement, index) => {
-            const colors = getColorClasses(achievement.color);
+            const colors = getColorClasses(achievement.color ?? "blue");
+            const Icon = getLucideIcon(achievement.icon);
             return (
-              <button
-                key={achievement.id}
-                onClick={() => openInNewTab(achievement.url)}
+              <a
+                key={index}
+                {...linkProps(achievement)}
                 className={cn(
-                  "group text-left",
+                  "group block text-left",
                   "animate-in fade-in slide-in-from-bottom-4"
                 )}
                 style={{
@@ -409,7 +307,7 @@ export const SciencePage = () => {
                           colors.text
                         )}
                       >
-                        <achievement.icon className="h-6 w-6" />
+                        <Icon className="h-6 w-6" />
                       </div>
                       <div className="min-w-0 flex-1 space-y-2">
                         <div className="flex items-start justify-between gap-2">
@@ -418,9 +316,11 @@ export const SciencePage = () => {
                           </h3>
                           <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {achievement.description}
-                        </p>
+                        {achievement.description && (
+                          <p className="text-sm text-muted-foreground">
+                            {achievement.description}
+                          </p>
+                        )}
                         <Badge variant="secondary" className="gap-1">
                           <Award className="h-3 w-3" />
                           Переглянути
@@ -429,7 +329,7 @@ export const SciencePage = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </button>
+              </a>
             );
           })}
         </div>
@@ -448,12 +348,13 @@ export const SciencePage = () => {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {regulations.map((reg, index) => {
-            const colors = getColorClasses(reg.color);
+            const colors = getColorClasses(reg.color ?? "blue");
+            const Icon = getLucideIcon(reg.icon);
             return (
-              <button
-                key={reg.id}
-                onClick={() => openInNewTab(reg.url)}
-                className="group w-full text-left"
+              <a
+                key={index}
+                {...linkProps(reg)}
+                className="group block w-full text-left"
               >
                 <Card
                   className={cn(
@@ -475,7 +376,7 @@ export const SciencePage = () => {
                           colors.text
                         )}
                       >
-                        <reg.icon className="h-5 w-5" />
+                        <Icon className="h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
@@ -484,14 +385,16 @@ export const SciencePage = () => {
                           </h3>
                           <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                         </div>
-                        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                          {reg.description}
-                        </p>
+                        {reg.description && (
+                          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                            {reg.description}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              </button>
+              </a>
             );
           })}
         </div>
@@ -518,4 +421,4 @@ export const SciencePage = () => {
       </Card>
     </div>
   );
-};
+}

@@ -3,6 +3,8 @@ import { PracticalTrainingPage } from "@/components/Students/PracticalTraining";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Практичне навчання | Криворізький фаховий коледж НАУ",
   description:

@@ -1,8 +1,11 @@
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 import { ExpandableNavigation } from "@/components/common/ExpandableNavigation";
-import { teachersCategories } from "@/lib/teachers";
+import { getTeachersCategories } from "@/lib/teachers";
 
-export default function TeachersPage() {
+export const dynamic = "force-dynamic";
+
+export default async function TeachersPage() {
+  const categories = await getTeachersCategories();
   return (
     <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
       <div className="container space-y-12 mx-auto">
@@ -10,7 +13,7 @@ export default function TeachersPage() {
           title="Викладачам"
           description="Інформація для викладачів коледжу"
         />
-        <ExpandableNavigation categories={teachersCategories} />
+        <ExpandableNavigation categories={categories} />
       </div>
     </section>
   );

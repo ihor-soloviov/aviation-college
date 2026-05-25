@@ -3,6 +3,8 @@ import { SocialScholarshipsPage } from "@/components/Students/SocialScholarships
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Соціальні стипендії | Криворізький фаховий коледж НАУ",
   description:

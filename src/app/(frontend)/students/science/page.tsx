@@ -3,6 +3,8 @@ import { SciencePage } from "@/components/Students/Science";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Наукове товариство коледжу | Криворізький фаховий коледж НАУ",
   description:

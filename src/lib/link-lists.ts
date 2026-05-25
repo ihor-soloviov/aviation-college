@@ -3,7 +3,7 @@ import 'server-only'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-export type LinkListItemKind = 'document' | 'article' | 'external' | 'group'
+export type LinkListItemKind = 'document' | 'article' | 'external' | 'group' | 'info'
 
 export type LinkListItem = {
     title: string

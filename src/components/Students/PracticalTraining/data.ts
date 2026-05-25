@@ -1,38 +1,5 @@
-export const practiceRegulationUrl = "/api/articles/192/file";
-export const practiceBasesUrl = "/api/articles/28/file";
-
-export const practiceBases = [
-  { name: "Товариство з обмеженою відповідальністю \"КОМ ТРАНС СЕРВІС\"", type: "transport" },
-  { name: "ПП \"Одіум-престиж\"", type: "other" },
-  { name: "АТ \"Мотор Січ\"", type: "aviation" },
-  { name: "Товариство з обмеженою відповідальністю \"Електропривод\"", type: "energy" },
-  { name: "ТОВ \"Скорзонеря\" філія \"Міжнародного аеропорту \"Івано-Франківськ\"", type: "aviation" },
-  { name: "ОКП \"Міжнародний аеропорт Рівне\"", type: "aviation" },
-  { name: "КП \"Міжнародний аеропорт \"Запоріжжя\"", type: "aviation" },
-  { name: "КП \"Міжнародний аеропорт Черкаси\"", type: "aviation" },
-  { name: "ТОВ \"КАРРЕРА\"", type: "other" },
-  { name: "ТОВ \"Прогрессор\", м. Кривий Ріг", type: "other" },
-  { name: "ТОВ \"Криворіжелектрострой\", м. Кривий Ріг", type: "energy" },
-  { name: "ТОВ \"Венбест\", м. Кривий Ріг", type: "other" },
-  { name: "ТОВ \"Виробничо-інноваційна компанія \"ДЕВІРО\", м. Дніпро", type: "other" },
-  { name: "ТОВ \"Міжнародний аеропорт \"Дніпропетровськ\"", type: "aviation" },
-  { name: "ТОВ \"Чорноморські авіалінії\"", type: "aviation" },
-  { name: "ТОВ \"Укрейр\"", type: "aviation" },
-  { name: "ТОВ \"Тайпан - Агенство безпеки\"", type: "other" },
-  { name: "ТОВ \"Конкорд Аеротехнік\"", type: "aviation" },
-  { name: "ТОВ \"Ертанз\"", type: "other" },
-  { name: "ТОВ \"Фаєр\" (системи протипожежного захисту)", type: "energy" },
-  { name: "ПрАТ \"Електроград\"", type: "energy" },
-  { name: "КП Херсонської обласної ради \"Херсонські авіалінії\"", type: "aviation" },
-  { name: "КП \"Міжнародний Аеропорт Кривий Ріг\"", type: "aviation" },
-  { name: "КП \"Міжнародний аеропорт \"Чернівці\" ім. Леоніда Каденюка\"", type: "aviation" },
-  { name: "ДП \"Луцький ремонтний завод \"МОТОР\"", type: "aviation" },
-  { name: "ДП \"ЗДАРС\" Мігремонт\"", type: "aviation" },
-  { name: "ТОВ \"ТОРГ О.П.Т.\"", type: "other" },
-  { name: "ТОВ \"ПРАДО ПЛЮС\"", type: "other" },
-  { name: "ТОВ \"Не старі пілоти\"", type: "aviation" },
-  { name: "ПОГ Криворізьке учбово-виробниче підприємство УТОС", type: "other" },
-];
+// practiceRegulationUrl, practiceBasesUrl та practiceBases перенесені в CMS
+// (linkLists slugs "practical-training" і "practice-bases") — редагуються з адмінки.
 
 export const practiceTypes = [
   {

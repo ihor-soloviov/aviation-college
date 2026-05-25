@@ -1,124 +1,69 @@
-"use client";
-
-import { useCallback } from "react";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   ShieldAlert,
   FileText,
   ExternalLink,
-  BookOpen,
-  AlertTriangle,
-  Scale,
-  ClipboardList,
-  Heart,
   Phone,
   ChevronDown,
+  type LucideIcon,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
-import { resolveFileUrl } from "@/lib/files-url";
+import { getLinkListBySlug } from "@/lib/link-lists";
 
-const documents = [
-  {
-    id: "methodology",
-    title: "Методичний посібник",
-    subtitle: "Протидія булінгу в закладі освіти: системний підхід",
-    icon: BookOpen,
-    color: "blue",
-    url: "/api/articles/526/file",
+const colorClasses: Record<
+  string,
+  { bg: string; text: string; border: string }
+> = {
+  blue: {
+    bg: "bg-blue-100 dark:bg-blue-900/30",
+    text: "text-blue-600 dark:text-blue-400",
+    border: "border-l-blue-500",
   },
-  {
-    id: "together",
-    title: "Зупинимо булінг разом",
-    subtitle: "Інформаційні матеріали про протидію булінгу",
-    icon: Heart,
-    color: "pink",
-    url: "/api/articles/527/file",
+  pink: {
+    bg: "bg-pink-100 dark:bg-pink-900/30",
+    text: "text-pink-600 dark:text-pink-400",
+    border: "border-l-pink-500",
   },
-  {
-    id: "tips",
-    title: "Зупинимо булінг разом - поради",
-    subtitle: "Практичні рекомендації для здобувачів освіти",
-    icon: AlertTriangle,
-    color: "yellow",
-    url: "/api/articles/528/file",
+  amber: {
+    bg: "bg-amber-100 dark:bg-amber-900/30",
+    text: "text-amber-600 dark:text-amber-400",
+    border: "border-l-amber-500",
   },
-  {
-    id: "responsibility",
-    title: "Зупинимо булінг разом - відповідальність",
-    subtitle: "Інформація про відповідальність за булінг",
-    icon: Scale,
-    color: "red",
-    url: "/api/articles/529/file",
+  red: {
+    bg: "bg-red-100 dark:bg-red-900/30",
+    text: "text-red-600 dark:text-red-400",
+    border: "border-l-red-500",
   },
-  {
-    id: "plan",
-    title: "План протидії булінгу",
-    subtitle: "Комплексний план заходів з протидії булінгу в коледжі",
-    icon: ClipboardList,
-    color: "green",
-    url: "/api/articles/3899/file",
+  green: {
+    bg: "bg-green-100 dark:bg-green-900/30",
+    text: "text-green-600 dark:text-green-400",
+    border: "border-l-green-500",
   },
-  {
-    id: "regulation",
-    title: "Положення про протидію булінгу",
-    subtitle: "Нормативний документ, що регламентує протидію булінгу",
-    icon: FileText,
-    color: "purple",
-    url: "/api/articles/983/file",
+  purple: {
+    bg: "bg-purple-100 dark:bg-purple-900/30",
+    text: "text-purple-600 dark:text-purple-400",
+    border: "border-l-purple-500",
   },
-];
-
-const getColorClasses = (color: string) => {
-  const colors: Record<
-    string,
-    { bg: string; text: string; border: string }
-  > = {
-    blue: {
-      bg: "bg-blue-100 dark:bg-blue-900/30",
-      text: "text-blue-600 dark:text-blue-400",
-      border: "border-l-blue-500",
-    },
-    pink: {
-      bg: "bg-pink-100 dark:bg-pink-900/30",
-      text: "text-pink-600 dark:text-pink-400",
-      border: "border-l-pink-500",
-    },
-    yellow: {
-      bg: "bg-yellow-100 dark:bg-yellow-900/30",
-      text: "text-yellow-600 dark:text-yellow-400",
-      border: "border-l-yellow-500",
-    },
-    red: {
-      bg: "bg-red-100 dark:bg-red-900/30",
-      text: "text-red-600 dark:text-red-400",
-      border: "border-l-red-500",
-    },
-    green: {
-      bg: "bg-green-100 dark:bg-green-900/30",
-      text: "text-green-600 dark:text-green-400",
-      border: "border-l-green-500",
-    },
-    purple: {
-      bg: "bg-purple-100 dark:bg-purple-900/30",
-      text: "text-purple-600 dark:text-purple-400",
-      border: "border-l-purple-500",
-    },
-  };
-  return colors[color] || colors.blue;
 };
 
-export const AntiBullyingPage = () => {
-  const openInNewTab = useCallback((url: string) => {
-    window.open(resolveFileUrl(url), "_blank", "noopener,noreferrer");
-  }, []);
+function getColorClasses(color?: string) {
+  return (color && colorClasses[color]) || colorClasses.blue;
+}
 
-  const scrollToDocuments = useCallback(() => {
-    const element = document.getElementById("documents-section");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, []);
+function getLucideIcon(name?: string, fallback: LucideIcon = FileText): LucideIcon {
+  if (!name) return fallback;
+  const Icon = (LucideIcons as unknown as Record<string, LucideIcon>)[name];
+  return Icon ?? fallback;
+}
+
+export async function AntiBullyingPage() {
+  const list = await getLinkListBySlug("anti-bullying");
+  if (!list) notFound();
+
+  const documents = list.items;
 
   return (
     <div className="space-y-10">
@@ -130,15 +75,14 @@ export const AntiBullyingPage = () => {
               <div className="flex items-center gap-2">
                 <ShieldAlert className="h-6 w-6 text-rose-600 dark:text-rose-400" />
                 <h2 className="text-xl font-bold text-foreground sm:text-2xl">
-                  Протидія булінгу
+                  {list.title}
                 </h2>
               </div>
-              <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-                Криворізький фаховий коледж НАУ активно працює над створенням
-                безпечного освітнього середовища. Булінг - це цькування,
-                агресивна поведінка щодо іншої особи, яка є неприпустимою у
-                нашому закладі.
-              </p>
+              {list.description && (
+                <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+                  {list.description}
+                </p>
+              )}
             </div>
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <div className="flex items-center gap-2 rounded-lg bg-white/80 px-4 py-2 dark:bg-white/10">
@@ -154,10 +98,7 @@ export const AntiBullyingPage = () => {
       </Card>
 
       {/* Main Card - scrolls to documents */}
-      <button
-        onClick={scrollToDocuments}
-        className="group w-full text-left"
-      >
+      <a href="#documents-section" className="group block text-left">
         <Card
           className={cn(
             "overflow-hidden transition-all duration-300",
@@ -196,7 +137,7 @@ export const AntiBullyingPage = () => {
             </div>
           </CardContent>
         </Card>
-      </button>
+      </a>
 
       {/* Documents List */}
       <div id="documents-section" className="space-y-4 scroll-mt-24">
@@ -212,47 +153,66 @@ export const AntiBullyingPage = () => {
         <div className="grid gap-3 sm:grid-cols-2">
           {documents.map((doc, index) => {
             const colors = getColorClasses(doc.color);
-            return (
-              <button
-                key={doc.id}
-                onClick={() => openInNewTab(doc.url)}
-                className="group w-full text-left"
+            const Icon = getLucideIcon(doc.icon);
+            const isExternal = doc.href?.startsWith("http");
+            const card = (
+              <Card
+                className={cn(
+                  "overflow-hidden border-l-4 transition-all duration-300 hover:shadow-md cursor-pointer",
+                  colors.border,
+                  "animate-in fade-in slide-in-from-bottom-4"
+                )}
+                style={{
+                  animationDelay: `${index * 80}ms`,
+                  animationFillMode: "backwards",
+                }}
               >
-                <Card
-                  className={cn(
-                    "overflow-hidden border-l-4 transition-all duration-300 hover:shadow-md cursor-pointer",
-                    colors.border,
-                    "animate-in fade-in slide-in-from-bottom-4"
-                  )}
-                  style={{
-                    animationDelay: `${index * 80}ms`,
-                    animationFillMode: "backwards",
-                  }}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={cn(
-                          "shrink-0 rounded-lg p-2 transition-transform duration-300 group-hover:scale-110",
-                          colors.bg,
-                          colors.text
-                        )}
-                      >
-                        <doc.icon className="h-5 w-5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-medium text-foreground">{doc.title}</h3>
-                          <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-                        </div>
-                        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                          {doc.subtitle}
-                        </p>
-                      </div>
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={cn(
+                        "shrink-0 rounded-lg p-2 transition-transform duration-300 group-hover:scale-110",
+                        colors.bg,
+                        colors.text
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
                     </div>
-                  </CardContent>
-                </Card>
-              </button>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-medium text-foreground">
+                          {doc.title}
+                        </h3>
+                        <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                      </div>
+                      {doc.description && (
+                        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                          {doc.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+
+            if (!doc.href) {
+              return (
+                <div key={index} className="group w-full text-left">
+                  {card}
+                </div>
+              );
+            }
+            return (
+              <a
+                key={index}
+                href={doc.href}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+                className="group block w-full text-left"
+              >
+                {card}
+              </a>
             );
           })}
         </div>
@@ -265,9 +225,7 @@ export const AntiBullyingPage = () => {
             <Phone className="h-5 w-5 text-rose-600 dark:text-rose-400" />
           </div>
           <div className="space-y-1">
-            <p className="font-medium text-foreground">
-              Куди звернутися?
-            </p>
+            <p className="font-medium text-foreground">Куди звернутися?</p>
             <p className="text-sm text-muted-foreground">
               Якщо ви стали свідком або жертвою булінгу, негайно повідомте про
               це куратора групи, психолога коледжу або адміністрацію. Також
@@ -279,4 +237,4 @@ export const AntiBullyingPage = () => {
       </Card>
     </div>
   );
-};
+}

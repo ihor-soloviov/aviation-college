@@ -3,6 +3,8 @@ import { ScholarshipRatingPage } from "@/components/Students/ScholarshipRating";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Стипендія (рейтинг) | Криворізький фаховий коледж НАУ",
   description:
