@@ -1,6 +1,6 @@
 # Articles + LinkLists — design
 
-Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 задеплоєно** (12 linkLists на проді, commit `b4d91d6`). **Стадія A (page-builder) + Live Preview + Стадія B (Navigation-global + root catch-all, чисті URL `/<slug>`) — зібрано й верифіковано локально, ще НЕ задеплоєно**. Останнє оновлення: 2026-05-27.
+Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 задеплоєно** (12 linkLists на проді, commit `b4d91d6`). **Стадія A (page-builder) + Live Preview + Стадія B (Navigation-global + root catch-all, чисті URL `/<slug>`) — задеплоєно на прод 2026-05-27** (commit `d68ee17`). Останнє оновлення: 2026-05-27.
 
 > **Зміна напряму (2026-05-27).** Початковий план §1.3 — «мігрувати ~500 легасі-статей у `articles`». Після обговоренння переосмислено: справжня ціль — **no-code page-builder**, щоб адміністрація сама збирала *нові* сторінки з курованих блоків (анти-WordPress: палітра блоків = дизайн-система як огорожа). Міграція легасі стає лише одним зі способів наповнення. Стратегія: **two-tier** (bespoke-сторінки лишаються кодом; CMS-`articles` приймає лише сироти) + **demand-driven** (мігрувати тільки те, на що реально посилаються — стартовий набір ≈8 ID, не 500). Деталі — у новому розділі «Лог рішень Стадія A».
 
@@ -24,7 +24,7 @@
 - **Кожен компонент — власний дизайн, спільного рендерера немає.** `LinkListRenderer` НЕ виносили: anti-bullying (border-l картки), scholarship-rating (tree-3 відділення→рік→badge-кнопки), science (4 секції), teachers-nav (ExpandableNavigation) — усі різні. Спільний лише helper `getLinkListBySlug` + `LinkListItem` тип. HubItemCard локальний для SelfGovernance.
 - **teachers-nav — ціле меню в CMS.** Замість лише «педагогічної скарбниці» мігрували всю навігацію «Викладачам» (6 категорій) в один linkList. `lib/teachers.tsx` тепер `getTeachersCategories()` — async-адаптер CMS→`NavigationCategory[]` (мапить group→category, icon-рядок→JSX `<Icon/>`, children→links). `ExpandableNavigation` без змін.
 - **Bug fix: tree-3 seed.** Drizzle/Payload nest L2 під `children`, L3 під `entries`. `buildItemForPayload` писав усе під `children` → L3 губився. Додано `depth`-параметр: nestedKey = `children` (depth 1) або `entries` (depth 2+). Виявлено на scholarship-rating.
-- **Прод-seed через one-off контейнер.** Runner-образ (standalone-style) не містить `src/`/`payload.config.ts`/`tsconfig.json`. Seed на проді: `docker compose run --rm` з bind-mount цих файлів з git-pulled хоста; node_modules+tsx беруться з образу. Порядок деплою: backup → pull → **seed** (до нового коду, бо мігровані сторінки роблять `notFound()` без даних) → build → nginx → health-check.
+- **Прод-seed/scripts через `docker compose exec`.** ~~Runner-образ не містить `src/`/`payload.config.ts`~~ — **застаріло (виправлено 2026-05-27).** Dockerfile (фінальний stage) копіює `src/`, `payload.config.ts`, `tsconfig.json`, `node_modules` у runner, тож seed/скрипти на проді запускаються напряму: `docker compose --env-file .env.production exec -T -w /app next node_modules/.bin/tsx src/scripts/...`. Bind-mount не потрібен. Порядок деплою: backup → pull → build → nginx → health-check → **schema push** (`-e NODE_ENV=development`, бо db-sqlite не пушить за production) → **seed**. (Для linkLists-міграції seed йшов до build, бо сторінки робили `notFound()` без даних; для page-builder сторінок порожня колекція не валить сайт, тож seed — після.)
 - **HTML/missing legacy IDs → `kind:external /article/N` (тимчасово).** 28 (practical-training бази — HTML), 3274 (science Козацтво — відсутній у legacy), 4551/4793 (scholarship-rating — HTML зі сторонніми заголовками). Переключити на `kind:article` у §1.5 після §1.3.
 
 ### Лог рішень Стадія A — page-builder + Live Preview (2026-05-27)
@@ -411,7 +411,7 @@ export default async function ArticlePage({ params }: Props) {
 | A8 | Hardening прев'ю через `draftMode()` | ⏳ | щоб `?preview=true` не віддавав чернетку публічно |
 
 **Завершено й задеплоєно:** Phase 1 MVP (#1-4) + аудит глибини + accordion (#4a-4b) + **Phase 2 §1.1-§1.2 (#5, #6, #6c, #6d) — 2026-05-25**.
-**Зібрано локально, НЕ задеплоєно:** **Стадія A (#A1-A5) + Live Preview** + **Стадія B (#A6, A6.1) — 2026-05-27** (commits `660cbc6`, `5454db6`, + Stage B).
+**Задеплоєно на прод 2026-05-27:** **Стадія A (#A1-A5) + Live Preview** + **Стадія B (#A6, A6.1)** (commits `660cbc6`, `5454db6`, `bf4437c`, `d68ee17`). Схему push'нуто (one-shot, `NODE_ENV=development`), меню-global засіяно 9 пунктами.
 **Залишилось:** #6b, #8-10 (demand-driven), #A7 (`DocumentList`), #A8 (preview hardening).
 
 ---
