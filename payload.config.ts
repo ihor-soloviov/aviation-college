@@ -19,6 +19,18 @@ export default buildConfig({
     secret: process.env.PAYLOAD_SECRET || 'CHANGE_ME_BEFORE_PROD',
     admin: {
         user: Users.slug,
+        livePreview: {
+            // Відносний URL → працює і в dev, і на проді без env. Можна задати
+            // NEXT_PUBLIC_SERVER_URL, щоб зробити абсолютним.
+            url: ({ data }) =>
+                `${process.env.NEXT_PUBLIC_SERVER_URL || ''}/articles/${data?.slug ?? ''}?preview=true`,
+            collections: ['articles'],
+            breakpoints: [
+                { label: 'Телефон', name: 'mobile', width: 390, height: 844 },
+                { label: 'Планшет', name: 'tablet', width: 768, height: 1024 },
+                { label: 'Десктоп', name: 'desktop', width: 1440, height: 900 },
+            ],
+        },
     },
     i18n: {
         supportedLanguages: { uk, en },

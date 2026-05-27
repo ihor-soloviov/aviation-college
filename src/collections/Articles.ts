@@ -1,8 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
+import { CardGrid } from '../blocks/CardGrid'
 import { Gallery } from '../blocks/Gallery'
 import { Heading } from '../blocks/Heading'
+import { Hero } from '../blocks/Hero'
 import { ImageBlock } from '../blocks/ImageBlock'
+import { InfoBanner } from '../blocks/InfoBanner'
 import { LinkList } from '../blocks/LinkList'
 import { LinkListRef } from '../blocks/LinkListRef'
 import { Paragraph } from '../blocks/Paragraph'
@@ -17,11 +20,14 @@ function slugify(input: string): string {
         .replace(/^-+|-+$/g, '')
 }
 
+// Колекція "Сторінки" — no-code page-builder. Slug колекції лишається 'articles'
+// для сумісності з наявною таблицею на проді та звʼязком LinkLists.targetArticle.
+// Публічний роут: /articles/<slug>.
 export const Articles: CollectionConfig = {
     slug: 'articles',
     labels: {
-        singular: 'Стаття',
-        plural: 'Статті',
+        singular: 'Сторінка',
+        plural: 'Сторінки',
     },
     access: {
         read: () => true,
@@ -73,6 +79,17 @@ export const Articles: CollectionConfig = {
             },
         },
         {
+            name: 'parent',
+            type: 'relationship',
+            relationTo: 'articles',
+            hasMany: false,
+            label: 'Батьківська сторінка',
+            admin: {
+                position: 'sidebar',
+                description: 'Необовʼязково. Для breadcrumbs (хлібних крихт). URL лишається пласким /articles/<slug>.',
+            },
+        },
+        {
             name: 'excerpt',
             type: 'textarea',
             label: 'Короткий опис',
@@ -113,7 +130,30 @@ export const Articles: CollectionConfig = {
             name: 'content',
             type: 'blocks',
             label: 'Контент',
-            blocks: [Paragraph, Heading, ImageBlock, Gallery, Youtube, LinkList, LinkListRef],
+            blocks: [Hero, Paragraph, Heading, ImageBlock, Gallery, Youtube, CardGrid, InfoBanner, LinkList, LinkListRef],
+        },
+        {
+            name: 'seo',
+            type: 'group',
+            label: 'SEO',
+            admin: {
+                position: 'sidebar',
+            },
+            fields: [
+                {
+                    name: 'metaTitle',
+                    type: 'text',
+                    label: 'Meta title',
+                    admin: {
+                        description: 'Якщо пусто — використається заголовок сторінки.',
+                    },
+                },
+                {
+                    name: 'metaDescription',
+                    type: 'textarea',
+                    label: 'Meta description',
+                },
+            ],
         },
     ],
 }
