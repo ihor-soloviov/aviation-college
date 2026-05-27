@@ -1,6 +1,8 @@
 # Articles + LinkLists — design
 
-Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 виконано і задеплоєно** (12 linkLists на проді, commit `b4d91d6`). Лишилось §1.2a + §1.3-§1.6. Останнє оновлення: 2026-05-25.
+Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 задеплоєно** (12 linkLists на проді, commit `b4d91d6`). **Стадія A (page-builder) + Live Preview — зібрано й верифіковано локально, ще НЕ задеплоєно** (commits `660cbc6`, `5454db6`). Останнє оновлення: 2026-05-27.
+
+> **Зміна напряму (2026-05-27).** Початковий план §1.3 — «мігрувати ~500 легасі-статей у `articles`». Після обговоренння переосмислено: справжня ціль — **no-code page-builder**, щоб адміністрація сама збирала *нові* сторінки з курованих блоків (анти-WordPress: палітра блоків = дизайн-система як огорожа). Міграція легасі стає лише одним зі способів наповнення. Стратегія: **two-tier** (bespoke-сторінки лишаються кодом; CMS-`articles` приймає лише сироти) + **demand-driven** (мігрувати тільки те, на що реально посилаються — стартовий набір ≈8 ID, не 500). Деталі — у новому розділі «Лог рішень Стадія A».
 
 Базується на: `audit/coverage.md`, `audit/native-hubs.md`, `audit/clusters.json`.
 
@@ -24,6 +26,19 @@
 - **Bug fix: tree-3 seed.** Drizzle/Payload nest L2 під `children`, L3 під `entries`. `buildItemForPayload` писав усе під `children` → L3 губився. Додано `depth`-параметр: nestedKey = `children` (depth 1) або `entries` (depth 2+). Виявлено на scholarship-rating.
 - **Прод-seed через one-off контейнер.** Runner-образ (standalone-style) не містить `src/`/`payload.config.ts`/`tsconfig.json`. Seed на проді: `docker compose run --rm` з bind-mount цих файлів з git-pulled хоста; node_modules+tsx беруться з образу. Порядок деплою: backup → pull → **seed** (до нового коду, бо мігровані сторінки роблять `notFound()` без даних) → build → nginx → health-check.
 - **HTML/missing legacy IDs → `kind:external /article/N` (тимчасово).** 28 (practical-training бази — HTML), 3274 (science Козацтво — відсутній у legacy), 4551/4793 (scholarship-rating — HTML зі сторонніми заголовками). Переключити на `kind:article` у §1.5 після §1.3.
+
+### Лог рішень Стадія A — page-builder + Live Preview (2026-05-27)
+
+- **`articles` стала колекцією-page-builder «Сторінки» (злиття, без перейменування slug).** Slug колекції лишився `'articles'` — задля сумісності з прод-таблицею, звʼязком `LinkLists.targetArticle → articles` та `resolveHref → /articles/<slug>`. Змінено лише labels («Сторінка/Сторінки»), додано `parent` (relationship→articles, для breadcrumbs), SEO-group (`metaTitle`/`metaDescription`).
+- **MVP-палітра «Lean +3».** Свідомо мінімальний набір, щоб не закопатись у 15 блоків: `Hero` (gradient/image/minimal), `CardGrid` (icon+color+href, 2–4 кол.), `InfoBanner` (info/warning/success). Разом із наявними (Paragraph, Heading, ImageBlock, Gallery, Youtube, LinkList, LinkListRef) — 10 блоків. `DocumentList` відкладено (потребує тегування Documents, `coverage.md §6.4`).
+- **Спільні опції винесено.** `src/blocks/shared-options.ts` (`COLOR_OPTIONS`, `ICON_OPTIONS`) — єдине джерело правди для linkLists і блоків (раніше дублювалось у `LinkLists.ts`). `src/lib/cms-colors.ts` — color→**літеральні** Tailwind-класи (динамічні `bg-${c}-600` Tailwind вирізає при purge; патерн узятий з наявних hub-компонентів).
+- **`BlocksRenderer` тепер спільний для News і Сторінок** + дороблено `linkListRef` (раніше падав у `default → null` — прихований баг). Рендер reuse'ить `getLucideIcon`-патерн із `HubItemCard`.
+- **Роут `/articles/[slug]`** (`force-dynamic`) + helper `src/lib/pages.ts` (`getPageBySlug` — резолв, breadcrumbs з ланцюга `parent`, підвантаження резолвлених linkLists для блоків `linkListRef`). SEO через `generateMetadata`. Заголовок-h1 ховається, якщо сторінка починається з Hero.
+- **Live Preview** (`@payloadcms/live-preview-react`). `admin.livePreview` у конфігу для колекції `articles` + breakpoints (Телефон/Планшет/Десктоп). `LivePreviewListener` (client, `RefreshRouteOnSave`) робить `router.refresh()` на зміни. Прев'ю тягне **чернетку** через `?preview=true` → `getPageBySlug(slug, { draft: true })`.
+- **Push-глюк індексу (відома вада drizzle-sqlite `push:true`).** Додавання `parent` у versioned-колекцію спричиняє разовий `CREATE INDEX _articles_v_parent_idx already exists` під час *переходу схеми*. Перший push (seed) чистий; повторний init може раз кинути помилку й відновитись (відтворено: усталений рестарт — 0 помилок). На проді перший init після цього деплою може раз дати 500 → health-check ретраїть. Нуль-ризику = перехід з `push` на міграції (окремо).
+- **No-code звʼязок page→list залежить від дизайну споживача.** Generic-споживачі (`linkListRef`-блок, self-governance grid) рендерять усі items/children → лінк можна додати будь-куди. Bespoke-споживачі (`SciencePage` = 4 фіксовані секції з `items[0..3].children`, scholarship-rating = дерево) приймають лінк **лише в наявну групу**; нова секція/top-level потребує коду. Підтверджено демонстрацією (`src/scripts/seed/demo-link-to-page.ts`). Висновок: щоб **будь-яке** місце (зокрема верхнє меню) стало no-code — потрібен Navigation-global + узагальнений рендер.
+- **Relabel після злиття.** `kind` опція `article`: «Стаття (HTML контент)» → «Сторінка коледжу (page-builder)»; поле `targetArticle`: «Стаття» → «Сторінка».
+- **Не зроблено навмисно (наступні стадії):** root catch-all `/[...slug]` + Navigation-global (no-code меню), `DocumentList`-блок, demand-driven міграція легасі, `?preview=true` hardening через Next `draftMode()`, кеш `getPageBySlug`.
 
 ---
 
@@ -372,13 +387,22 @@ export default async function ArticlePage({ params }: Props) {
 | 6b | Уніфікувати стилі inline links (BlocksRenderer.LinkListBlock) | ⏳ | замінити синій-underlined стиль на compact-row pattern як у ChildRow (§1.2a) |
 | 6c | `icon` text→select; новий `kind: 'info'`; +5 кольорів | ✅ | додано під час §1.2 (запит замовника + контент-картки) |
 | 6d | Fix seed для tree-3 (L3 → `entries`) | ✅ | `buildItemForPayload` отримав `depth`; виявлено на scholarship-rating |
-| 7 | Migration script articles | ⏳ | `migrate-articles-content.ts` — ~500 цінних content rows → articles (фільтр word_count>50) |
-| 8 | Оновити `/article/:id` route | ⏳ | додати articles.legacyId lookup перед MySQL fallback |
+| 7 | ~~Migration script articles (~500 rows)~~ → **переосмислено в demand-driven** | 🔁 | замість масової міграції — мігруємо лише посилані HTML-таргети без native-еквівалента (≈8 ID на старті). Див. «Зміна напряму» вгорі |
+| 8 | Оновити `/article/:id` route | ⏳ | додати articles.legacyId lookup + mapping legacy→native-роут перед MySQL fallback |
 | 9 | Замінити в linkLists `external→/article/X` на `article→targetArticle` | ⏳ | пройти всі linkLists, де kind=external + targetUrl починається з `/article/` — переключити (вкл. 28, 3274, 4551, 4793) |
 | 10 | Прибрати MySQL fallback | ⏳ | видалити `getArticleById`, `src/lib/articles.ts`, `articles_v2` таблицю (depends on §7-8 завершених) |
+| A1 | `articles`→page-builder «Сторінки» | ✅ лок. | `parent`, SEO-group, повна палітра; slug колекції лишився `articles` |
+| A2 | MVP-палітра Lean +3 | ✅ лок. | `Hero`, `CardGrid`, `InfoBanner` + `shared-options.ts` + `cms-colors.ts` |
+| A3 | Рендер + роут | ✅ лок. | `BlocksRenderer` розширено (+ fix `linkListRef`), `lib/pages.ts`, `/articles/[slug]` |
+| A4 | Live Preview | ✅ лок. | `admin.livePreview` + `LivePreviewListener`; прев'ю-чернетка через `?preview=true` |
+| A5 | Relabel kind/target після злиття | ✅ лок. | «Сторінка коледжу (page-builder)» / «Сторінка» |
+| A6 | Navigation-global + root catch-all (no-code меню) | ⏳ | щоб будь-яке місце сайту (вкл. верхнє меню) додавалось без коду |
+| A7 | `DocumentList`-блок | ⏳ | фільтрований листинг documents (`coverage.md §6.4`) |
+| A8 | Hardening прев'ю через `draftMode()` | ⏳ | щоб `?preview=true` не віддавав чернетку публічно |
 
-**Завершено:** Phase 1 MVP (#1-4) + аудит глибини + accordion-subgroup pilot (#4a-4b) + **Phase 2 §1.1-§1.2 (#5, #6, #6c, #6d) — задеплоєно 2026-05-25**.
-**Залишилось:** #6b (§1.2a), #7-10 (§1.3-§1.6).
+**Завершено й задеплоєно:** Phase 1 MVP (#1-4) + аудит глибини + accordion (#4a-4b) + **Phase 2 §1.1-§1.2 (#5, #6, #6c, #6d) — 2026-05-25**.
+**Зібрано локально, НЕ задеплоєно:** **Стадія A (#A1-A5) + Live Preview — 2026-05-27** (commits `660cbc6`, `5454db6`).
+**Залишилось:** #6b, #8-10 (demand-driven), #A6-A8.
 
 ---
 
