@@ -12,6 +12,7 @@ import { LinkLists } from './src/collections/LinkLists'
 import { Media } from './src/collections/Media'
 import { News } from './src/collections/News'
 import { Users } from './src/collections/Users'
+import { Navigation } from './src/globals/Navigation'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -23,7 +24,7 @@ export default buildConfig({
             // Відносний URL → працює і в dev, і на проді без env. Можна задати
             // NEXT_PUBLIC_SERVER_URL, щоб зробити абсолютним.
             url: ({ data }) =>
-                `${process.env.NEXT_PUBLIC_SERVER_URL || ''}/articles/${data?.slug ?? ''}?preview=true`,
+                `${process.env.NEXT_PUBLIC_SERVER_URL || ''}/${data?.slug ?? ''}?preview=true`,
             collections: ['articles'],
             breakpoints: [
                 { label: 'Телефон', name: 'mobile', width: 390, height: 844 },
@@ -37,6 +38,7 @@ export default buildConfig({
         fallbackLanguage: 'uk',
     },
     collections: [Users, Media, News, Documents, Articles, LinkLists],
+    globals: [Navigation],
     editor: lexicalEditor({}),
     db: sqliteAdapter({
         client: {

@@ -5,10 +5,12 @@ import React from "react"
 
 import ThemeToggle from "../common/ThemeToggle/ThemeToggle"
 import NavItem from "../common/Header/NavItem"
-import { links } from "@/lib/navigation"
+import { links as fallbackLinks } from "@/lib/navigation"
 import { useMobileMenu } from "@/hooks/useMobileMenu"
 
-const Header = () => {
+type NavLink = { label: string; href: string }
+
+const Header = ({ links = fallbackLinks }: { links?: NavLink[] }) => {
   const { toggleMenu, isMenuOpen } = useMobileMenu()
 
   return (

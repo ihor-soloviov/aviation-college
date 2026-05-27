@@ -1,6 +1,6 @@
 # Articles + LinkLists — design
 
-Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 задеплоєно** (12 linkLists на проді, commit `b4d91d6`). **Стадія A (page-builder) + Live Preview — зібрано й верифіковано локально, ще НЕ задеплоєно** (commits `660cbc6`, `5454db6`). Останнє оновлення: 2026-05-27.
+Стан: **Phase 1 MVP + Phase 2 §1.1-§1.2 задеплоєно** (12 linkLists на проді, commit `b4d91d6`). **Стадія A (page-builder) + Live Preview + Стадія B (Navigation-global + root catch-all, чисті URL `/<slug>`) — зібрано й верифіковано локально, ще НЕ задеплоєно**. Останнє оновлення: 2026-05-27.
 
 > **Зміна напряму (2026-05-27).** Початковий план §1.3 — «мігрувати ~500 легасі-статей у `articles`». Після обговоренння переосмислено: справжня ціль — **no-code page-builder**, щоб адміністрація сама збирала *нові* сторінки з курованих блоків (анти-WordPress: палітра блоків = дизайн-система як огорожа). Міграція легасі стає лише одним зі способів наповнення. Стратегія: **two-tier** (bespoke-сторінки лишаються кодом; CMS-`articles` приймає лише сироти) + **demand-driven** (мігрувати тільки те, на що реально посилаються — стартовий набір ≈8 ID, не 500). Деталі — у новому розділі «Лог рішень Стадія A».
 
@@ -38,7 +38,16 @@
 - **Push-глюк індексу (відома вада drizzle-sqlite `push:true`).** Додавання `parent` у versioned-колекцію спричиняє разовий `CREATE INDEX _articles_v_parent_idx already exists` під час *переходу схеми*. Перший push (seed) чистий; повторний init може раз кинути помилку й відновитись (відтворено: усталений рестарт — 0 помилок). На проді перший init після цього деплою може раз дати 500 → health-check ретраїть. Нуль-ризику = перехід з `push` на міграції (окремо).
 - **No-code звʼязок page→list залежить від дизайну споживача.** Generic-споживачі (`linkListRef`-блок, self-governance grid) рендерять усі items/children → лінк можна додати будь-куди. Bespoke-споживачі (`SciencePage` = 4 фіксовані секції з `items[0..3].children`, scholarship-rating = дерево) приймають лінк **лише в наявну групу**; нова секція/top-level потребує коду. Підтверджено демонстрацією (`src/scripts/seed/demo-link-to-page.ts`). Висновок: щоб **будь-яке** місце (зокрема верхнє меню) стало no-code — потрібен Navigation-global + узагальнений рендер.
 - **Relabel після злиття.** `kind` опція `article`: «Стаття (HTML контент)» → «Сторінка коледжу (page-builder)»; поле `targetArticle`: «Стаття» → «Сторінка».
-- **Не зроблено навмисно (наступні стадії):** root catch-all `/[...slug]` + Navigation-global (no-code меню), `DocumentList`-блок, demand-driven міграція легасі, `?preview=true` hardening через Next `draftMode()`, кеш `getPageBySlug`.
+- **Не зроблено навмисно (наступні стадії):** `DocumentList`-блок, demand-driven міграція легасі, `?preview=true` hardening через Next `draftMode()`, кеш `getPageBySlug`. *(Root catch-all + Navigation-global — закрито у Стадії B, див. нижче.)*
+
+### Лог рішень Стадія B — Navigation-global + root catch-all (2026-05-27)
+
+- **No-code меню через Payload-global `Navigation`.** Пласка структура `items[]` = `{ label, type(page|url), page→articles, url }` (як поточний хедер, без дропдаунів — підтверджено замовником). `getNavigation()` (`src/lib/get-navigation.ts`, server-only) резолвить href (`page → /<slug>`, `url → as-is`) із fallback на статичний `src/lib/navigation.ts`, щоб хедер ніколи не лишився без меню. `RootLayout` став async → фетчить меню → передає пропсом у `Header`/`MobileMenuDrawer` (обидва client, отримали проп `links` зі статичним default).
+- **Канонічний URL сторінок = `/<slug>`** (рішення замовника). Root catch-all `app/(frontend)/[...slug]/page.tsx` — канонічний рендер (той самий, що був у `/articles/[slug]`). Next пріоритезує статичні роути, тож наявні сторінки не зачіпаються; catch-all ловить лише невідомі шляхи й 404-ить, якщо сторінки нема. Пласка схема: рендер лише для одного сегмента (`slug.length === 1`).
+- **`/articles/[slug]` → `permanentRedirect('/<slug>')`** (308). Старі лінки/закладки не ламаються. `resolveHref` (link-lists) і breadcrumbs (pages) переведено на `/<slug>`. `livePreview.url` → `/<slug>?preview=true`.
+- **Весь frontend → `export const dynamic = 'force-dynamic'`** (у `(frontend)/layout.tsx`). Причина: layout читає меню з CMS — інакше ~29 раніше-статичних сторінок запікали б меню на build-time (зміна меню не видна без редеплою) + prod-build падав би на пререндері без SQLite. Тредофф: втрата статичної оптимізації; для low-traffic коледжу прийнятно й узгоджується з тим, що хаб-сторінки вже force-dynamic. Альтернатива на майбутнє (якщо треба статика): `unstable_cache(nav)` + `revalidateTag('navigation')` на зміну global.
+- **Колізія slug ↔ статичний роут.** Сторінка зі slug, що збігається зі статичним роутом (напр. `students`), затіниться статичним роутом (Next пріоритет). Малоймовірно; не блокуємо, але треба знати.
+- **Seed:** `src/scripts/seed/seed-navigation.ts` — заповнює global із поточних 9 пунктів (усі `type:url`).
 
 ---
 
@@ -396,13 +405,14 @@ export default async function ArticlePage({ params }: Props) {
 | A3 | Рендер + роут | ✅ лок. | `BlocksRenderer` розширено (+ fix `linkListRef`), `lib/pages.ts`, `/articles/[slug]` |
 | A4 | Live Preview | ✅ лок. | `admin.livePreview` + `LivePreviewListener`; прев'ю-чернетка через `?preview=true` |
 | A5 | Relabel kind/target після злиття | ✅ лок. | «Сторінка коледжу (page-builder)» / «Сторінка» |
-| A6 | Navigation-global + root catch-all (no-code меню) | ⏳ | щоб будь-яке місце сайту (вкл. верхнє меню) додавалось без коду |
+| A6 | Navigation-global + root catch-all (no-code меню) | ✅ лок. | global `Navigation` + `getNavigation()` у layout; catch-all `/[...slug]`, `/articles/<slug>`→308; URL = `/<slug>` |
+| A6.1 | `force-dynamic` на всьому frontend | ✅ лок. | щоб CMS-меню було live скрізь; прибирає prod-build пререндер зі SQLite |
 | A7 | `DocumentList`-блок | ⏳ | фільтрований листинг documents (`coverage.md §6.4`) |
 | A8 | Hardening прев'ю через `draftMode()` | ⏳ | щоб `?preview=true` не віддавав чернетку публічно |
 
 **Завершено й задеплоєно:** Phase 1 MVP (#1-4) + аудит глибини + accordion (#4a-4b) + **Phase 2 §1.1-§1.2 (#5, #6, #6c, #6d) — 2026-05-25**.
-**Зібрано локально, НЕ задеплоєно:** **Стадія A (#A1-A5) + Live Preview — 2026-05-27** (commits `660cbc6`, `5454db6`).
-**Залишилось:** #6b, #8-10 (demand-driven), #A6-A8.
+**Зібрано локально, НЕ задеплоєно:** **Стадія A (#A1-A5) + Live Preview** + **Стадія B (#A6, A6.1) — 2026-05-27** (commits `660cbc6`, `5454db6`, + Stage B).
+**Залишилось:** #6b, #8-10 (demand-driven), #A7 (`DocumentList`), #A8 (preview hardening).
 
 ---
 

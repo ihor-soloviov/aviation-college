@@ -10,6 +10,7 @@ import {
   NavigationLoadingProvider,
   LoadingBar,
 } from "@/components/common/LoadingBar";
+import { getNavigation } from "@/lib/get-navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,11 +27,17 @@ export const metadata: Metadata = {
   description: "ВСП КРФК НАУ",
 };
 
-export default function RootLayout({
+// Весь frontend рендериться на вимогу: layout читає меню (Navigation global) з CMS,
+// тож no-code зміни меню видні скрізь миттєво. Також прибирає пререндер зі SQLite
+// на prod-build (bind-mount недоступний на етапі build).
+export const dynamic = "force-dynamic";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navLinks = await getNavigation();
   return (
     <html lang="ua" suppressHydrationWarning>
       <body
@@ -41,8 +48,8 @@ export default function RootLayout({
             {/* <LoadingBar /> */}
             <MobileMenuProvider>
               <div className="flex min-h-screen flex-col">
-                <Header />
-                <MobileMenuDrawer />
+                <Header links={navLinks} />
+                <MobileMenuDrawer links={navLinks} />
                 <main className="flex-1">
                   {children}
                   <Footer />

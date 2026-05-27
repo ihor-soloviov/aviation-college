@@ -7,9 +7,11 @@ import ThemeToggle from "../common/ThemeToggle/ThemeToggle";
 import MobileNavItem from "../common/Header/MobileNavItem";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
-import { links } from "@/lib/navigation";
+import { links as fallbackLinks } from "@/lib/navigation";
 
-const MobileMenuDrawer = () => {
+type NavLink = { label: string; href: string };
+
+const MobileMenuDrawer = ({ links = fallbackLinks }: { links?: NavLink[] }) => {
   const { isMenuOpen, closeMenu } = useMobileMenu();
   const menuRef = useRef<HTMLDivElement>(null);
 

@@ -49,9 +49,10 @@ function resolveHref(item: RawItem): string | null {
     }
     if (item.kind === 'article' && item.targetArticle != null) {
         const a = item.targetArticle
-        if (typeof a === 'object' && a?.slug) return `/articles/${a.slug}`
-        if (typeof a === 'object' && a?.id != null) return `/articles/${a.id}`
-        if (typeof a === 'number' || typeof a === 'string') return `/articles/${a}`
+        // Канонічний URL сторінок page-builder = /<slug> (root catch-all).
+        if (typeof a === 'object' && a?.slug) return `/${a.slug}`
+        if (typeof a === 'object' && a?.id != null) return `/${a.id}`
+        if (typeof a === 'number' || typeof a === 'string') return `/${a}`
         return null
     }
     if (item.kind === 'external' && item.targetUrl) return item.targetUrl

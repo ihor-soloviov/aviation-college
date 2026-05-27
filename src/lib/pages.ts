@@ -41,7 +41,7 @@ function buildBreadcrumbs(parent: RawParent): Breadcrumb[] {
     // Йдемо по populated-ланцюгу батьків (depth обмежує глибину; цього досить для breadcrumbs).
     let guard = 0
     while (cur && typeof cur === 'object' && cur.slug && guard < 6) {
-        chain.unshift({ title: cur.title ?? cur.slug, href: `/articles/${cur.slug}` })
+        chain.unshift({ title: cur.title ?? cur.slug, href: `/${cur.slug}` })
         cur = cur.parent
         guard += 1
     }
