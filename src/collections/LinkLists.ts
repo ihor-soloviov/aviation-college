@@ -13,7 +13,7 @@ function slugify(input: string): string {
 
 const KIND_OPTIONS = [
     { label: 'Документ (PDF)', value: 'document' },
-    { label: 'Стаття (HTML контент)', value: 'article' },
+    { label: 'Сторінка коледжу (page-builder)', value: 'article' },
     { label: 'Зовнішній URL', value: 'external' },
     { label: 'Група (з підпунктами)', value: 'group' },
     { label: 'Інфо-картка (без посилання)', value: 'info' },
@@ -79,7 +79,7 @@ const baseItemFields: Field[] = [
         type: 'relationship',
         relationTo: 'articles',
         hasMany: false,
-        label: 'Стаття',
+        label: 'Сторінка',
         admin: {
             condition: (_data, sibling: SiblingShape) => sibling?.kind === 'article',
         },
