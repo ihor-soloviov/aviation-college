@@ -32,7 +32,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
 !.env.example
 !.env.production.example
 
@@ -49,3 +48,4 @@ yarn-error.log*
 next-env.d.ts
 tmp-samples/
 tmp-out/
+config.bat
