@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import * as LucideIcons from 'lucide-react'
-import { Info, AlertTriangle, CheckCircle2, ArrowUpRight, type LucideIcon } from 'lucide-react'
+import { Info, AlertTriangle, CheckCircle2, ArrowUpRight, FileText, ExternalLink, type LucideIcon } from 'lucide-react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import { getColorClasses } from '@/lib/cms-colors'
@@ -183,21 +183,30 @@ function LinkListBlock({
 }) {
     if (!links || links.length === 0) return null
     return (
-        <nav className="my-8 rounded-lg border border-blue-100 bg-blue-50/60 dark:bg-blue-900/10 dark:border-blue-900/40 p-6">
-            {title && <h3 className="text-lg font-semibold mb-3">{title}</h3>}
-            <ul className="space-y-2">
-                {links.map((link, i) => (
-                    <li key={i}>
-                        <a
-                            href={link.href}
-                            target={link.href.startsWith('http') ? '_blank' : undefined}
-                            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                            className="text-blue-600 hover:text-blue-800 hover:underline"
-                        >
-                            {link.label}
-                        </a>
-                    </li>
-                ))}
+        <nav className="my-8 rounded-xl border bg-muted/30 p-5">
+            {title && <h3 className="mb-3 text-lg font-semibold">{title}</h3>}
+            <ul className="flex flex-col gap-1">
+                {links.map((link, i) => {
+                    const ext = isExternal(link.href)
+                    return (
+                        <li key={i}>
+                            <Link
+                                href={link.href}
+                                target={ext ? '_blank' : undefined}
+                                rel={ext ? 'noopener noreferrer' : undefined}
+                                className="group/row flex items-center gap-3 rounded-md border border-transparent px-3 py-2 transition-all duration-200 hover:border-border hover:bg-muted/60"
+                            >
+                                <span className="shrink-0 rounded-md bg-muted p-2 text-muted-foreground transition-colors group-hover/row:bg-background">
+                                    <FileText className="h-4 w-4" />
+                                </span>
+                                <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+                                    {link.label}
+                                </span>
+                                <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover/row:opacity-100" />
+                            </Link>
+                        </li>
+                    )
+                })}
             </ul>
         </nav>
     )
