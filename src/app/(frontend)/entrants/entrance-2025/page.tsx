@@ -1,40 +1,21 @@
-"use client";
-
+import { notFound } from "next/navigation";
 import "./styles.scss";
-import { useState } from "react";
-import useCardScrollAnimation from "@/hooks/cardScrollAnimation";
 import { BackLink } from "@/components/common/BackLink/BackLink";
-import { DocumentSidebar } from "@/components/Entrants/Documents/DocumentSidebar";
-import { DocumentViewer } from "@/components/Entrants/Documents/DocumentViewer";
-import { documents } from "@/lib/entrants/entrance-2025-documents";
-import { resolveFileUrl } from "@/lib/files-url";
+import { EntranceDocsClient } from "@/components/Entrants/Documents/EntranceDocsClient";
+import { getDocumentTreeBySlug } from "@/lib/document-trees";
 
-export default function DocumentsPage() {
-  useCardScrollAnimation();
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
-  const [selectedTitle, setSelectedTitle] = useState<string>("");
+export const dynamic = "force-dynamic";
 
-  const handleDocumentSelect = (pdfUrl: string, title: string) => {
-    setSelectedDocument(resolveFileUrl(pdfUrl));
-    setSelectedTitle(title);
-  };
+export default async function DocumentsPage() {
+    const tree = await getDocumentTreeBySlug("entrance-2025");
+    if (!tree) notFound();
 
-  return (
-    <section className="bg-gray-50 dark:bg-blue-900/10 min-h-screen">
-      <div className="container mx-auto py-8 px-4">
-        <BackLink href="/entrants" />
-        <div
-          className="grid lg:grid-cols-[380px_1fr] gap-6 animation-card"
-          data-id="2"
-        >
-          <DocumentSidebar
-            documents={documents}
-            selectedDocument={selectedDocument}
-            onDocumentSelect={handleDocumentSelect}
-          />
-          <DocumentViewer pdfUrl={selectedDocument} title={selectedTitle} />
-        </div>
-      </div>
-    </section>
-  );
+    return (
+        <section className="bg-gray-50 dark:bg-blue-900/10 min-h-screen">
+            <div className="container mx-auto py-8 px-4">
+                <BackLink href="/entrants" />
+                <EntranceDocsClient items={tree.items} />
+            </div>
+        </section>
+    );
 }

@@ -8,9 +8,11 @@ import { uk } from '@payloadcms/translations/languages/uk'
 
 import { Articles } from './src/collections/Articles'
 import { Documents } from './src/collections/Documents'
+import { DocumentTrees } from './src/collections/DocumentTrees'
 import { LinkLists } from './src/collections/LinkLists'
 import { Media } from './src/collections/Media'
 import { News } from './src/collections/News'
+import { TreeNodes } from './src/collections/TreeNodes'
 import { Users } from './src/collections/Users'
 import { Navigation } from './src/globals/Navigation'
 
@@ -37,7 +39,7 @@ export default buildConfig({
         supportedLanguages: { uk, en },
         fallbackLanguage: 'uk',
     },
-    collections: [Users, Media, News, Documents, Articles, LinkLists],
+    collections: [Users, Media, News, Documents, Articles, LinkLists, DocumentTrees, TreeNodes],
     globals: [Navigation],
     editor: lexicalEditor({}),
     db: sqliteAdapter({
