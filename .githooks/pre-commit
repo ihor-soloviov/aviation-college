@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Захист від коміту секретів (після інциденту з .env.local, 2026-06).
+# Підключення (один раз після клону): git config core.hooksPath .githooks
+set -euo pipefail
+
+# 1. Блокуємо будь-які .env* у staged, крім *.example.
+blocked=$(git diff --cached --name-only --diff-filter=ACR | grep -E '(^|/)\.env' | grep -vE '\.example$' || true)
+if [ -n "$blocked" ]; then
+    echo "✖ Спроба закомітити env-файл(и) з секретами:" >&2
+    echo "$blocked" >&2
+    echo "  Секрети живуть тільки в .env.local (локально) та .env.production (сервер)." >&2
+    echo "  Обійти свідомо: git commit --no-verify" >&2
+    exit 1
+fi
+
+# 2. gitleaks сканує staged-зміни на паролі/токени (якщо встановлений).
+if command -v gitleaks >/dev/null 2>&1; then
+    gitleaks git --pre-commit --staged --redact --no-banner
+else
+    echo "⚠ gitleaks не встановлений (brew install gitleaks) — скан секретів пропущено." >&2
+fi
