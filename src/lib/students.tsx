@@ -103,7 +103,7 @@ export const studentsCategories: NavigationCategory[] = [
       {
         title: "Соціальні стипендії",
         href: "/students/social-scholarships",
-      },
+      }
     ],
   },
   {

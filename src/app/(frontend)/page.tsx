@@ -2,6 +2,7 @@ import nextDynamic from "next/dynamic";
 import Hero from "@/components/common/Hero/Hero";
 import { NewsCard } from "@/components/common/NewsCard/NewsCard";
 import { getPayloadNewsList } from "@/lib/payload-news";
+import { getPayloadCourses } from "@/lib/payload-courses";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -23,13 +24,16 @@ const Partners = nextDynamic(() => import("@/components/Home/Partners/Partners")
 });
 
 export default async function HomePage() {
-  const { items: news } = await getPayloadNewsList({ limit: 4, offset: 0 });
+  const [{ items: news }, courses] = await Promise.all([
+    getPayloadNewsList({ limit: 4, offset: 0 }),
+    getPayloadCourses(),
+  ]);
 
   return (
     <>
       <Hero imgPath="/hero-contact-us.webp" />
       <Suspense>
-        <Courses />
+        <Courses courses={courses} />
       </Suspense>
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 space-y-8">

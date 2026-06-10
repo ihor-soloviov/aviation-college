@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { GraduationCap, Award } from "lucide-react";
 
 const options = [
-  { value: "Фаховий молодший бакалавр", icon: GraduationCap, short: "ФМБ" },
-  { value: "Бакалавр", icon: Award, short: "Бакалавр" },
+  { value: "fmb", label: "Фаховий молодший бакалавр", icon: GraduationCap, short: "ФМБ" },
+  { value: "bachelor", label: "Бакалавр", icon: Award, short: "Бакалавр" },
 ];
 
 export default function CourseToggle({
@@ -16,7 +16,7 @@ export default function CourseToggle({
 }) {
   return (
     <div className="flex flex-wrap justify-center gap-2 mt-4">
-      {options.map(({ value, icon: Icon, short }) => {
+      {options.map(({ value, label, icon: Icon, short }) => {
         const isActive = value === current;
         return (
           <Button
@@ -32,7 +32,7 @@ export default function CourseToggle({
             onClick={() => onSelect(value)}
           >
             <Icon className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">{value}</span>
+            <span className="hidden sm:inline">{label}</span>
             <span className="sm:hidden">{short}</span>
           </Button>
         );

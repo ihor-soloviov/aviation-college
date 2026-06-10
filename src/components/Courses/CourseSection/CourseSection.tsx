@@ -1,12 +1,12 @@
 import { memo } from "react";
 import Course from "@/components/Courses/Course/Course";
-import { ICourse } from "@/types/courses";
+import { CourseCardData } from "@/types/courses";
 
 interface CourseSectionProps {
   id: string;
   title: string;
   icon: React.ElementType;
-  courses: ICourse[];
+  courses: CourseCardData[];
 }
 
 function CourseSectionComponent({
@@ -31,18 +31,11 @@ function CourseSectionComponent({
         <div className="h-px flex-1 bg-gradient-to-l from-transparent to-border" />
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {courses.map((course) => {
-          const IconComponent = course.icon;
-          return (
-            <div key={course.id} className="h-full">
-              <Course
-                course={course}
-                IconComponent={IconComponent}
-                shouldShowNote={false}
-              />
-            </div>
-          );
-        })}
+        {courses.map((course) => (
+          <div key={course.id} className="h-full">
+            <Course course={course} />
+          </div>
+        ))}
       </div>
     </div>
   );

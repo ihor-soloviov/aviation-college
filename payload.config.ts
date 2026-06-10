@@ -8,6 +8,7 @@ import { en } from '@payloadcms/translations/languages/en'
 import { uk } from '@payloadcms/translations/languages/uk'
 
 import { Articles } from './src/collections/Articles'
+import { Courses } from './src/collections/Courses'
 import { Documents } from './src/collections/Documents'
 import { DocumentTrees } from './src/collections/DocumentTrees'
 import { LinkLists } from './src/collections/LinkLists'
@@ -54,7 +55,7 @@ export default buildConfig({
         supportedLanguages: { uk, en },
         fallbackLanguage: 'uk',
     },
-    collections: [Users, Media, News, Documents, Articles, LinkLists, DocumentTrees, TreeNodes],
+    collections: [Users, Media, News, Documents, Articles, LinkLists, DocumentTrees, TreeNodes, Courses],
     globals: [Navigation],
     editor: lexicalEditor({}),
     db,

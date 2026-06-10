@@ -20,7 +20,7 @@ export default function AboutUsPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 dark:from-blue-900 dark:via-blue-950 dark:to-gray-900 py-20 md:py-32">
+      <section className="relative bg-linear-to-br from-blue-600 via-blue-700 to-blue-900 dark:from-blue-900 dark:via-blue-950 dark:to-gray-900 py-20 md:py-32">
         <div className="absolute inset-0 bg-[url('/aviation-pattern.jpg')] opacity-10"></div>
         <div className="container mx-auto relative z-10 text-center text-white">
           <LazySection animation="fadeIn">
@@ -30,7 +30,7 @@ export default function AboutUsPage() {
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl mb-6">
               Криворізький Фаховий Коледж КАІ
             </h1>
-            <p className="max-w-[800px] mx-auto text-lg text-white/90 md:text-xl">
+            <p className="max-w-200 mx-auto text-lg text-white/90 md:text-xl">
               Понад 70 років досконалості в авіаційній освіті. Готуємо професіоналів для неба.
             </p>
           </LazySection>

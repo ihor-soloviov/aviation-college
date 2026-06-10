@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CATEGORY_LABELS } from "@/lib/courses";
+import { CATEGORY_LABELS } from "@/lib/courseMeta";
 
 type Option = {
   value: string;
