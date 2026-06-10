@@ -108,7 +108,7 @@ cp /home/deploy/aviation/data/payload/cms.sqlite \
 ```nginx
 server_name your-domain.tld www.your-domain.tld;
 ```
-Запушити в `main`, на сервері `git pull && docker compose --env-file .env.production restart nginx`.
+Запушити в `main`, потім `./scripts/deploy.sh` з локальної машини (він синкне код і перезапустить стек; nginx рестартується в межах скрипта).
 
 Перевірити: `curl -sS -I http://your-domain.tld/` має повернути 200.
 
@@ -214,8 +214,12 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.tld
 ssh aviation                                                  # alias
 cd /home/deploy/aviation
 
-# Деплой нової версії з гілки
-git pull
+# Деплой: З ЛОКАЛЬНОЇ машини (бекап БД + reset --hard origin + rebuild + health-check)
+./scripts/deploy.sh            # main
+./scripts/deploy.sh my-branch  # інша гілка
+
+# Вручну на сервері (екстрений випадок; НЕ git pull — історію могли переписати)
+git fetch origin main && git reset --hard origin/main
 docker compose --env-file .env.production up -d --build
 
 # Логи

@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
-# Local deploy: SSH в aviation, бекап Payload SQLite, git pull, перебудова стека,
-# health-check для next.
+# Local deploy: SSH в aviation, бекап Payload-БД (PG + SQLite), синк коду з GitHub,
+# перебудова стека, health-check для next.
+#
+# Деплоїться ТЕ, що лежить в origin (fetch + reset --hard, НЕ pull) — сервер
+# завжди дзеркалить GitHub і переживає переписану історію (force-push).
+# Untracked-файли (.env.production, data/) reset не чіпає; git clean свідомо
+# не викликаємо. Секрети живуть ТІЛЬКИ в .env.production на сервері (chmod 600).
+#
 # Перед запуском: git push гілки в origin.
 
 set -euo pipefail
 
-BRANCH="${1:-}"
+BRANCH="${1:-main}"
 HOST=aviation
 REMOTE_DIR=/home/deploy/aviation
 
@@ -13,19 +19,27 @@ ssh "$HOST" bash -s <<REMOTE
 set -euo pipefail
 cd "$REMOTE_DIR"
 
-# 1. Backup Payload SQLite (якщо існує)
+ts=\$(date +%F-%H%M%S)
+
+# 1a. Backup Payload Postgres (жива CMS-база)
+if docker compose --env-file .env.production ps --status running postgres -q | grep -q .; then
+  docker compose --env-file .env.production exec -T postgres \
+    pg_dump -U aviation payload | gzip > "data/payload/pg-payload-\$ts.sql.gz"
+  echo "=== backup: data/payload/pg-payload-\$ts.sql.gz ==="
+  # Тримаємо останні 10 дампів, старіші видаляємо.
+  ls -1t data/payload/pg-payload-*.sql.gz 2>/dev/null | tail -n +11 | xargs -r rm
+fi
+
+# 1b. Backup Payload SQLite (legacy, поки файл існує)
 if [ -f data/payload/cms.sqlite ]; then
-  ts=\$(date +%F-%H%M%S)
   sudo cp data/payload/cms.sqlite "data/payload/cms.sqlite.bak-\$ts"
   echo "=== backup: data/payload/cms.sqlite.bak-\$ts ==="
 fi
 
-# 2. Pull + rebuild
-if [ -n "${BRANCH}" ]; then
-  git fetch origin
-  git checkout "${BRANCH}"
-fi
-git pull --ff-only
+# 2. Синк коду з GitHub + rebuild (reset --hard: дзеркало origin, без merge-станів)
+git fetch origin "${BRANCH}"
+git checkout "${BRANCH}" 2>/dev/null || git checkout -b "${BRANCH}" "origin/${BRANCH}"
+git reset --hard "origin/${BRANCH}"
 docker compose --env-file .env.production up -d --build
 
 # nginx тримає DNS-резолв upstream'ів у пам'яті — при перебудові next
