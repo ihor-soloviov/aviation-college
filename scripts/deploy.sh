@@ -21,13 +21,16 @@ cd "$REMOTE_DIR"
 
 ts=\$(date +%F-%H%M%S)
 
-# 1a. Backup Payload Postgres (жива CMS-база)
+# 1a. Backup Payload Postgres (жива CMS-база).
+# Пишемо в data/backups/ (належить deploy) — data/payload/ chown-нута під
+# контейнерного юзера next (100:101), туди без sudo не записати.
+mkdir -p data/backups
 if docker compose --env-file .env.production ps --status running postgres -q | grep -q .; then
   docker compose --env-file .env.production exec -T postgres \
-    pg_dump -U aviation payload | gzip > "data/payload/pg-payload-\$ts.sql.gz"
-  echo "=== backup: data/payload/pg-payload-\$ts.sql.gz ==="
+    pg_dump -U aviation payload | gzip > "data/backups/pg-payload-\$ts.sql.gz"
+  echo "=== backup: data/backups/pg-payload-\$ts.sql.gz ==="
   # Тримаємо останні 10 дампів, старіші видаляємо.
-  ls -1t data/payload/pg-payload-*.sql.gz 2>/dev/null | tail -n +11 | xargs -r rm
+  ls -1t data/backups/pg-payload-*.sql.gz 2>/dev/null | tail -n +11 | xargs -r rm
 fi
 
 # 1b. Backup Payload SQLite (legacy, поки файл існує)
