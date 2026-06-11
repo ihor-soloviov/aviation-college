@@ -26,8 +26,10 @@ ts=\$(date +%F-%H%M%S)
 # контейнерного юзера next (100:101), туди без sudo не записати.
 mkdir -p data/backups
 if docker compose --env-file .env.production ps --status running postgres -q | grep -q .; then
+  # </dev/null обов'язково: скрипт приходить у bash -s через stdin, і docker exec
+  # без редіректу з'їдає його решту — деплой тихо обривається після бекапу.
   docker compose --env-file .env.production exec -T postgres \
-    pg_dump -U aviation payload | gzip > "data/backups/pg-payload-\$ts.sql.gz"
+    pg_dump -U aviation payload </dev/null | gzip > "data/backups/pg-payload-\$ts.sql.gz"
   echo "=== backup: data/backups/pg-payload-\$ts.sql.gz ==="
   # Тримаємо останні 10 дампів, старіші видаляємо.
   ls -1t data/backups/pg-payload-*.sql.gz 2>/dev/null | tail -n +11 | xargs -r rm
