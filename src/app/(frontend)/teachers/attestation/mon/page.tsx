@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { linkAttrs } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -28,13 +29,10 @@ export default async function MonPage() {
         />
         <ul className="space-y-3">
           {list.items.map((item, index) => {
-            const isExternal = item.href?.startsWith("http");
             return (
               <li key={index}>
                 <a
-                  href={item.href ?? "#"}
-                  target={isExternal ? "_blank" : undefined}
-                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  {...linkAttrs(item.href)}
                   className="flex items-center gap-2 text-blue-600 hover:underline dark:text-blue-400"
                 >
                   <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-blue-500" />

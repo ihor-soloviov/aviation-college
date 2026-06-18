@@ -1,11 +1,11 @@
 import Link from "next/link";
 
 const resourses = [
-  "Admissions",
-  "Financial Aid",
-  "Career Services",
-  "Student Life",
-  "Alumni Network",
+  { label: "Вступ", href: "/admitions" },
+  { label: "Оплата навчання", href: "/students/tuition-fees" },
+  { label: "Стипендії", href: "/students/social-scholarships" },
+  { label: "Розклад занять", href: "/students/schedule" },
+  { label: "Документи", href: "/documents" },
 ];
 export const Resourses = () => {
   return (
@@ -15,12 +15,12 @@ export const Resourses = () => {
       </h4>
       <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm lg:grid-cols-1">
         {resourses.map((item) => (
-          <li key={item}>
+          <li key={item.href}>
             <Link
-              href="#"
+              href={item.href}
               className="text-sm text-muted-foreground transition-colors duration-300 hover:text-blue-600"
             >
-              {item}
+              {item.label}
             </Link>
           </li>
         ))}

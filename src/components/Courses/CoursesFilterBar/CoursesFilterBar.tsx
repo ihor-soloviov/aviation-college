@@ -8,7 +8,6 @@ import {
   ListFilter,
   GraduationCap,
   Award,
-  Search,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -98,9 +97,91 @@ export function CoursesFilterBar({ totalCount }: { totalCount: number }) {
   const hasAny =
     !!currentForm || !!currentLevel || !!currentCat || !!searchInput;
 
+  // Reveal-on-scroll-up (мобілка), три стани:
+  //  • flow   — бар у потоці (relative); при скролі вниз з верху природно
+  //             йде вгору разом зі сторінкою (лишається на своєму місці);
+  //  • shown  — закріплений згори (fixed) і плавно виїжджає (slide-in);
+  //  • hidden — закріплений, але плавно заїжджає вгору (slide-out) — це коли
+  //             ми вже бачили бар і починаємо гортати вниз.
+  // Placeholder тримає висоту, щоб контент не стрибав. Десктоп — звичайний
+  // sticky, завжди видимий.
+  const barRef = useRef<HTMLDivElement>(null);
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  const [mode, setMode] = useState<"flow" | "shown" | "hidden">("flow");
+  const [barH, setBarH] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      if (barRef.current) setBarH(barRef.current.offsetHeight);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    let lastY = window.scrollY;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      if (!mq.matches) {
+        setMode("flow"); // десктоп — звичайний sticky, без pin-логіки
+        return;
+      }
+      const y = window.scrollY;
+      const delta = y - lastY;
+      if (Math.abs(delta) < 3) return; // ігноруємо дрібний джитер
+      lastY = y;
+      const goingUp = delta < 0;
+      // Верх місця бару у в'юпорті (placeholder завжди в потоці на тому місці).
+      const slotTop = placeholderRef.current
+        ? placeholderRef.current.getBoundingClientRect().top
+        : Infinity;
+      setMode((prev) => {
+        if (slotTop >= 64) return "flow"; // на/над своїм місцем — у потоці
+        if (goingUp) return "shown"; // гортаємо вгору — виїжджає
+        // гортаємо вниз: якщо бар уже був видимий — плавно ховаємо вгору,
+        // якщо ще в потоці — лишаємо його йти вгору разом зі сторінкою.
+        return prev === "flow" ? "flow" : "hidden";
+      });
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    const onResize = () => {
+      if (!mq.matches) setMode("flow");
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  const posClass =
+    mode === "shown"
+      ? "fixed inset-x-0 top-16 animate-in slide-in-from-top duration-300"
+      : mode === "hidden"
+        ? "fixed inset-x-0 top-16 animate-out slide-out-to-top fill-mode-forwards duration-300"
+        : "relative max-md:mx-[calc(50%_-_50vw)]";
+
   return (
-    <div className="sticky top-2 z-20 -mx- py-3 backdrop-blur supports-backdrop-filter:bg-background/7 border-b">
-      <div className="container mx-auto space-y-3">
+    <>
+      <div
+        ref={placeholderRef}
+        aria-hidden
+        style={{ height: mode === "flow" ? 0 : barH }}
+      />
+      <div
+        ref={barRef}
+        className={`z-20 border-b py-3 backdrop-blur bg-background shadow-md md:bg-transparent md:shadow-none md:supports-[backdrop-filter]:bg-background/7 md:sticky md:top-16 md:inset-x-auto md:animate-none ${posClass}`}
+      >
+        <div className="container mx-auto space-y-3 max-md:px-4">
         <ChipGroup
           ariaLabel="Форма навчання"
           options={FORM_OPTIONS}
@@ -134,8 +215,9 @@ export function CoursesFilterBar({ totalCount }: { totalCount: number }) {
             </Button>
           )}
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

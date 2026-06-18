@@ -10,7 +10,7 @@ import {
   Shield,
   CheckCircle2,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
 
 const keyPoints = [
@@ -40,7 +40,6 @@ export async function CodeOfConductPage() {
   const list = await getLinkListBySlug("code-of-conduct");
   if (!list) notFound();
   const doc = list.items[0];
-  const isExternal = doc?.href?.startsWith("http");
 
   return (
     <div className="space-y-10">
@@ -67,12 +66,7 @@ export async function CodeOfConductPage() {
 
       {/* Main Document Card */}
       {doc && (
-        <a
-          href={doc.href ?? "#"}
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noopener noreferrer" : undefined}
-          className="group block w-full text-left"
-        >
+        <a {...linkAttrs(doc.href)} className="group block w-full text-left">
           <Card
             className={cn(
               "overflow-hidden transition-all duration-300",

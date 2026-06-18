@@ -182,7 +182,7 @@ export default function AdmissionCommissionPage() {
             <Card className="animation-card" data-id="6">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                  <Calendar className="h-5 w-5 text-blue-600 shrink-0" />
                   <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-tight">
                     До 30 червня 2025 року
                   </h3>
@@ -250,7 +250,7 @@ export default function AdmissionCommissionPage() {
             <Card className="animation-card" data-id="8">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                  <Calendar className="h-5 w-5 text-blue-600 shrink-0" />
                   <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-tight">
                     З 11 серпня 2025 року
                   </h3>

@@ -13,7 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug, type LinkListItem } from "@/lib/link-lists";
 import { practiceTypes } from "./data";
 
@@ -138,15 +138,8 @@ export async function PracticalTrainingPage() {
         {docs.map((doc, index) => {
           const preset = navPresets[doc.color ?? "blue"] ?? navPresets.blue;
           const Icon = getLucideIcon(doc.icon);
-          const isExternal = doc.href?.startsWith("http");
           return (
-            <a
-              key={index}
-              href={doc.href ?? "#"}
-              target={isExternal ? "_blank" : undefined}
-              rel={isExternal ? "noopener noreferrer" : undefined}
-              className="group text-left"
-            >
+            <a key={index} {...linkAttrs(doc.href)} className="group text-left">
               <Card
                 className={cn(
                   "h-full overflow-hidden transition-all duration-300",

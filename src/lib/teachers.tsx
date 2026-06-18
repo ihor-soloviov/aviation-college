@@ -29,6 +29,8 @@ export async function getTeachersCategories(): Promise<NavigationCategory[]> {
       href: child.href ?? "#",
       description: child.description,
       isExternal: child.href?.startsWith("http") ?? false,
+      // Без href рендеримо як "Потрібно додати посилання", а не мертвий "#".
+      isNeedsLink: !child.href,
     }));
     return {
       title: group.title,

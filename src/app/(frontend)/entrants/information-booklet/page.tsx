@@ -46,7 +46,7 @@ export default function InfoBookletPage() {
     <>
       <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
         <BackLink href="/entrants" />
-        <div className="container space-y-12 mx-auto max-w-[1000px] text-center">
+        <div className="container space-y-12 mx-auto max-w-250 text-center">
           <div className="mb-6 flex justify-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 dark:bg-blue-500">
               <BookOpen className="h-8 w-8 text-white" />
@@ -65,10 +65,10 @@ export default function InfoBookletPage() {
       </section>
 
       <section className="bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
-        <div className="container space-y-12 mx-auto max-w-[1000px]">
+        <div className="container space-y-12 mx-auto max-w-250">
           {/* Booklet Header Card */}
           <Card className="overflow-hidden border-2 border-blue-100 dark:border-blue-900 dark:bg-gray-800">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-blue-950 dark:to-blue-900/50 pb-8">
+            <CardHeader className="bg-linear-to-r from-blue-50 to-blue-100/50 dark:from-blue-950 dark:to-blue-900/50 pb-8">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 flex-wrap">

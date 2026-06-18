@@ -8,7 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
 
 function getLucideIcon(name?: string, fallback: LucideIcon = Trophy): LucideIcon {
@@ -147,13 +147,10 @@ export async function ScholarshipRatingPage() {
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {(year.children ?? []).map((item, ii) => {
-                              const isExternal = item.href?.startsWith("http");
                               return (
                                 <a
                                   key={ii}
-                                  href={item.href ?? "#"}
-                                  target={isExternal ? "_blank" : undefined}
-                                  rel={isExternal ? "noopener noreferrer" : undefined}
+                                  {...linkAttrs(item.href)}
                                   className={cn(
                                     "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all hover:scale-105",
                                     colors.badgeBg

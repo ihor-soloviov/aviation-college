@@ -11,7 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug, type LinkListItem } from "@/lib/link-lists";
 
 function getLucideIcon(name?: string, fallback: LucideIcon = FileText): LucideIcon {
@@ -38,12 +38,7 @@ const getColorClasses = (color: string) => {
 };
 
 function linkProps(item: LinkListItem) {
-  const isExternal = item.href?.startsWith("http");
-  return {
-    href: item.href ?? "#",
-    target: isExternal ? "_blank" : undefined,
-    rel: isExternal ? "noopener noreferrer" : undefined,
-  };
+  return linkAttrs(item.href);
 }
 
 export async function SciencePage() {

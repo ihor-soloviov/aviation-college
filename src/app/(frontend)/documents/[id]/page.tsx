@@ -55,7 +55,7 @@ export default async function DocumentDetailPage({ params }: Props) {
             <section className="py-8">
                 <div className="container max-w-5xl mx-auto">
                     <div className="space-y-6">
-                        <Link href="/admin/collections/documents">
+                        <Link href="/documents">
                             <Button variant="ghost" size="sm" className="-ml-2 text-muted-foreground hover:text-foreground">
                                 <ArrowLeft className="h-4 w-4 mr-2" />
                                 До всіх документів

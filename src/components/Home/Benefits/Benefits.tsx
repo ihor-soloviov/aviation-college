@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Benefits = () => {
   return (
@@ -30,15 +31,18 @@ const Benefits = () => {
                 "Виховання незламного покоління авіаційних спеціалістів",
               ].map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-blue-600" />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
 
             <div className="pt-4">
-              <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
-                Дізнатися більше
+              <Button
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 cursor-pointer"
+              >
+                <Link href="/about-us" className="dark:text-white">Дізнатися більше</Link>
               </Button>
             </div>
           </div>

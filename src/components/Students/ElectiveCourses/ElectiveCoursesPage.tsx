@@ -8,14 +8,13 @@ import {
   Sparkles,
   FileText,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
 
 export async function ElectiveCoursesPage() {
   const list = await getLinkListBySlug("elective-courses");
   if (!list) notFound();
   const catalog = list.items[0];
-  const isExternal = catalog?.href?.startsWith("http");
 
   return (
     <div className="space-y-8">
@@ -60,12 +59,7 @@ export async function ElectiveCoursesPage() {
       </Card>
 
       {/* Main CTA Card */}
-      <a
-        href={catalog?.href ?? "#"}
-        target={isExternal ? "_blank" : undefined}
-        rel={isExternal ? "noopener noreferrer" : undefined}
-        className="group block w-full text-left"
-      >
+      <a {...linkAttrs(catalog?.href)} className="group block w-full text-left">
         <Card
           className={cn(
             "overflow-hidden transition-all duration-300",

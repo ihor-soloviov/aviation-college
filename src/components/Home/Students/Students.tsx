@@ -5,10 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight, Users } from "lucide-react";
-import Link from "next/link";
+import { Users } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 
 const Students = () => {
   return (
@@ -24,7 +22,7 @@ const Students = () => {
           >
             Історії успіху наших випускників
           </h2>
-          <p className="max-w-[700px] text-muted-foreground">
+          <p className="max-w-175 text-muted-foreground">
             Наші випускники знайшли собі роботу в найбільших авіакомпаніях та
             організаціях по всьому світу.
           </p>
@@ -33,23 +31,23 @@ const Students = () => {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {[
             {
-              name: "Іван Іванов",
+              name: "Іван Тараненко",
               role: "Авіаелектронік",
-              image: "https://placehold.co/300x300/grey/white?text=Sarah",
+              image: "https://placehold.co/300x300/grey/white?text=Іван Тараненко",
               quote:
-                "Навчання на практиці та зв'язки з промисловістю в коледжі дозволили мені перейти до мій мрії роботи.",
+                "Навчання на практиці та зв'язки з промисловістю в коледжі дозволили мені перейти до роботи моєї мрії.",
             },
             {
-              name: "Олександр Петров",
+              name: "Олександр Мазур",
               role: "IT-спеціаліст",
-              image: "https://placehold.co/300x300/grey/white?text=Michael",
+              image: "https://placehold.co/300x300/grey/white?text=Олександр Мазур",
               quote:
                 "Технічні знання та практичний досвід, які я отримав, дали мені конкурентне перевагу на ринку праці.",
             },
             {
-              name: "Олена Сидорова",
+              name: "Олена Сидоровчук",
               role: "Менеджер авіаційних операцій",
-              image: "https://placehold.co/300x300/grey/white?text=Aisha",
+              image: "https://placehold.co/300x300/grey/white?text=Олена Сидоровчук",
               quote:
                 "Програма керування авіацією надала мені навички та впевненість для успішного керування авіаційними операціями.",
             },

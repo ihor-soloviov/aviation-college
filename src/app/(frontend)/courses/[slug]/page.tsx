@@ -301,7 +301,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                       className="w-full bg-blue-600 hover:bg-blue-700"
                       size="lg"
                     >
-                      <a href="mailto:vstup.aviacollege@gmail.com">
+                      <a href="mailto:vstup.aviacollege@gmail.com" className="dark:text-white">
                         Подати заявку
                       </a>
                     </Button>

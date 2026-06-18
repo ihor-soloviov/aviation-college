@@ -9,9 +9,10 @@ import {
     payloadDocToCardItem,
 } from "@/lib/payload-news"
 import { BlocksRenderer } from "@/components/news/BlocksRenderer"
-import { ArrowLeft, Calendar, Share2 } from "lucide-react"
+import { ArrowLeft, Calendar } from "lucide-react"
 import { notFound } from "next/navigation"
 import { NewsCard } from "@/components/common/NewsCard/NewsCard"
+import { ShareButton } from "@/components/news/ShareButton"
 
 export const dynamic = "force-dynamic"
 
@@ -73,10 +74,7 @@ export default async function NewsDetailPage({ params }: Props) {
                                     <Calendar className="h-4 w-4" />
                                     <span>{formattedDate}</span>
                                 </div>
-                                <Button variant="outline" size="sm" className="ml-auto bg-transparent">
-                                    <Share2 className="h-4 w-4 mr-2" />
-                                    Поділитися
-                                </Button>
+                                <ShareButton title={title} />
                             </div>
                         </div>
                     </div>
@@ -86,7 +84,7 @@ export default async function NewsDetailPage({ params }: Props) {
             {coverUrl && (
                 <section className="pb-4">
                     <div className="container max-w-4xl mx-auto">
-                        <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-muted">
+                        <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
                             <Image
                                 src={coverUrl}
                                 alt={title}
