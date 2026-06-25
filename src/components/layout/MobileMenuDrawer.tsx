@@ -53,8 +53,6 @@ const MobileMenuDrawer = ({ links = fallbackLinks }: { links?: NavLink[] }) => {
             onClick={closeMenu}
             className="flex items-center gap-2"
           >
-            <Plane className="h-5 w-5 text-blue-600" />
-            <span className="text-base font-bold">Авіаційний коледж</span>
           </Link>
           <button
             type="button"

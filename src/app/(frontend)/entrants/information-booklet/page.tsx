@@ -161,7 +161,7 @@ export default function InfoBookletPage() {
           </Card>
 
           {/* Additional Information */}
-          <Card className="bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-gray-800 border-2 border-blue-100 dark:border-blue-900">
+          <Card className="bg-linear-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-gray-800 border-2 border-blue-100 dark:border-blue-900">
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row gap-6 items-center">
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-600 dark:bg-blue-500">

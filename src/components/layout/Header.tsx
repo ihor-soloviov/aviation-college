@@ -1,12 +1,12 @@
 "use client"
 import Link from "next/link"
 import { Menu, Plane, X } from "lucide-react"
-import React from "react"
 
 import ThemeToggle from "../common/ThemeToggle/ThemeToggle"
 import NavItem from "../common/Header/NavItem"
 import { links as fallbackLinks } from "@/lib/navigation"
 import { useMobileMenu } from "@/hooks/useMobileMenu"
+import Image from "next/image"
 
 type NavLink = { label: string; href: string }
 
@@ -14,10 +14,10 @@ const Header = ({ links = fallbackLinks }: { links?: NavLink[] }) => {
   const { toggleMenu, isMenuOpen } = useMobileMenu()
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 py-4">
         <Link href="/" className="flex items-center gap-2">
-          <Plane className="h-6 w-6 text-blue-600" />
+          <Image alt="logo" src="/krauslogo.png" width={60} height={60} />
           <span className="text-xl font-bold">Авіаційний коледж</span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">

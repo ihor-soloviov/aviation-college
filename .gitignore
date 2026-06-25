@@ -32,7 +32,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files: ігноруємо ВСІ .env* (секрети), явно дозволяємо лише приклади
-.env*
 !.env.example
 !.env.production.example
 
