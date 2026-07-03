@@ -64,6 +64,43 @@ export function extractPayloadCoverUrl(
     return typeof c.url === 'string' && c.url ? c.url : null
 }
 
+function resolveBlockImageUrl(
+    media: unknown,
+    externalUrl: unknown,
+): string | null {
+    if (media && typeof media === 'object') {
+        const url = (media as Record<string, unknown>).url
+        if (typeof url === 'string' && url) return url
+    }
+    if (typeof externalUrl === 'string' && externalUrl) return externalUrl
+    return null
+}
+
+/**
+ * Fallback cover: перша inline-картинка з content (image-блок або перше фото
+ * галереї), у порядку появи. Використовується, коли coverImage не заповнений —
+ * мігровані новини мають зображення лише всередині content.
+ */
+export function extractFirstContentImageUrl(content: unknown): string | null {
+    if (!Array.isArray(content)) return null
+    for (const raw of content) {
+        if (!raw || typeof raw !== 'object') continue
+        const block = raw as Record<string, unknown>
+        if (block.blockType === 'image') {
+            const url = resolveBlockImageUrl(block.media, block.externalUrl)
+            if (url) return url
+        } else if (block.blockType === 'gallery' && Array.isArray(block.images)) {
+            for (const img of block.images) {
+                if (!img || typeof img !== 'object') continue
+                const i = img as Record<string, unknown>
+                const url = resolveBlockImageUrl(i.media, i.externalUrl)
+                if (url) return url
+            }
+        }
+    }
+    return null
+}
+
 function formatUkDate(iso: string): string {
     return new Date(iso).toLocaleDateString('uk-UA', {
         day: 'numeric',
@@ -84,7 +121,9 @@ export function payloadDocToCardItem(doc: Record<string, unknown>): NewsCardItem
         title: String(doc.title ?? ''),
         excerpt: String(doc.excerpt ?? ''),
         content: '',
-        image: extractPayloadCoverUrl(doc.coverImage, 'card'),
+        image:
+            extractPayloadCoverUrl(doc.coverImage, 'card') ??
+            extractFirstContentImageUrl(doc.content),
         date: formatUkDate(publishedAtIso),
         category: tags.join(' · '),
         author: '',

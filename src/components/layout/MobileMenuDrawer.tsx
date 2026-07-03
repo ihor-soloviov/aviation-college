@@ -30,7 +30,7 @@ const MobileMenuDrawer = ({ links = fallbackLinks }: { links?: NavLink[] }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[999] md:hidden transition-[visibility] duration-300 ${
+      className={`fixed inset-0 z-[999] lg:hidden transition-[visibility] duration-300 ${
         isMenuOpen ? "visible" : "invisible"
       }`}
     >
