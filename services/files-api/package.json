@@ -5,7 +5,7 @@
   "description": "File-serving API for aviation-college (compatible with Node 14)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node api.js && node server.js"
   },
   "engines": {
     "node": ">=14"
