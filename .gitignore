@@ -32,6 +32,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files: ігноруємо ВСІ .env* (секрети), явно дозволяємо лише приклади
+.env*
 !.env.example
 !.env.production.example
 
@@ -49,3 +50,6 @@ next-env.d.ts
 tmp-samples/
 tmp-out/
 config.bat
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
