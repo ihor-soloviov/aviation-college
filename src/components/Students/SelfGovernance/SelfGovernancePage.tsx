@@ -2,10 +2,13 @@ import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Scale, Users } from "lucide-react";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 import { HubItemCard } from "./HubItemCard";
 
 export async function SelfGovernancePage() {
   const list = await getLinkListBySlug("self-governance");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
 
   return (

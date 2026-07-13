@@ -1,5 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { DATA_UNAVAILABLE, isUnavailable, type Unavailable } from './data-result'
 import type {
     CourseCardData,
     CourseCategory,
@@ -60,49 +61,71 @@ function toDetail(doc: Course): CourseDetailData {
     }
 }
 
-export async function getPayloadCourses(): Promise<CourseCardData[]> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'courses',
-        sort: 'order',
-        limit: 100,
-        depth: 0,
-    })
-    return (res.docs as unknown as Course[]).map(toCard)
+// Первинне читання: Unavailable = БД недоступна.
+export async function getPayloadCourses(): Promise<CourseCardData[] | Unavailable> {
+    try {
+        const payload = await getPayload({ config })
+        const res = await payload.find({
+            collection: 'courses',
+            sort: 'order',
+            limit: 100,
+            depth: 0,
+        })
+        return (res.docs as unknown as Course[]).map(toCard)
+    } catch (error) {
+        console.error('[getPayloadCourses] data source unavailable:', error)
+        return DATA_UNAVAILABLE
+    }
 }
 
-export async function getPayloadCourseBySlug(slug: string): Promise<CourseDetailData | null> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'courses',
-        where: { slug: { equals: slug } },
-        limit: 1,
-        depth: 0,
-    })
-    const doc = res.docs[0] as unknown as Course | undefined
-    return doc ? toDetail(doc) : null
+// Первинне detail-читання: null = не знайдено, Unavailable = БД недоступна.
+export async function getPayloadCourseBySlug(
+    slug: string,
+): Promise<CourseDetailData | null | Unavailable> {
+    try {
+        const payload = await getPayload({ config })
+        const res = await payload.find({
+            collection: 'courses',
+            where: { slug: { equals: slug } },
+            limit: 1,
+            depth: 0,
+        })
+        const doc = res.docs[0] as unknown as Course | undefined
+        return doc ? toDetail(doc) : null
+    } catch (error) {
+        console.error('[getPayloadCourseBySlug] data source unavailable:', error)
+        return DATA_UNAVAILABLE
+    }
 }
 
 /** Для редіректу зі старих URL /courses/[type]/[id], де id — код спеціальності. */
-export async function getPayloadCourseByCode(code: string): Promise<CourseCardData | null> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'courses',
-        where: { code: { equals: code } },
-        sort: 'order', // ФМБ ідуть першими — як знаходив старий find()
-        limit: 1,
-        depth: 0,
-    })
-    const doc = res.docs[0] as unknown as Course | undefined
-    return doc ? toCard(doc) : null
+export async function getPayloadCourseByCode(
+    code: string,
+): Promise<CourseCardData | null | Unavailable> {
+    try {
+        const payload = await getPayload({ config })
+        const res = await payload.find({
+            collection: 'courses',
+            where: { code: { equals: code } },
+            sort: 'order', // ФМБ ідуть першими — як знаходив старий find()
+            limit: 1,
+            depth: 0,
+        })
+        const doc = res.docs[0] as unknown as Course | undefined
+        return doc ? toCard(doc) : null
+    } catch (error) {
+        console.error('[getPayloadCourseByCode] data source unavailable:', error)
+        return DATA_UNAVAILABLE
+    }
 }
 
-/** Інші програми того ж напрямку (для блоку «Суміжні програми»). */
+/** Інші програми того ж напрямку (для блоку «Суміжні програми»). Вторинне — деградує в []. */
 export async function getPayloadRelatedCourses(
     current: CourseDetailData,
     limit = 3,
 ): Promise<CourseCardData[]> {
     const all = await getPayloadCourses()
+    if (isUnavailable(all)) return []
     const others = all.filter((c) => c.id !== current.id)
     const sameCategory = others.filter((c) => c.category === current.category)
     const rest = others.filter((c) => c.category !== current.category)

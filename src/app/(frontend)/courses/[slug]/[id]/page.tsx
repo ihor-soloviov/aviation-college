@@ -1,5 +1,7 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import { getPayloadCourseByCode } from "@/lib/payload-courses";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +22,7 @@ export default async function LegacyCoursePage({
   }
 
   const course = await getPayloadCourseByCode(id);
+  if (isUnavailable(course)) return <DataUnavailable />;
   if (!course) {
     notFound();
   }

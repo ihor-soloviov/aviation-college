@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { getLinkListById, type LinkList } from './link-lists'
+import { DATA_UNAVAILABLE, type Unavailable } from './data-result'
 
 type MediaObject = { url?: string; alt?: string; width?: number; height?: number }
 
@@ -64,20 +65,27 @@ function collectLinkListIds(content: Array<Record<string, unknown>>): string[] {
     return [...ids]
 }
 
+// Первинне detail-читання: null = не знайдено, Unavailable = БД недоступна.
 export async function getPageBySlug(
     slug: string,
     opts: { draft?: boolean } = {},
-): Promise<PageData | null> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'articles',
-        where: { slug: { equals: slug } },
-        limit: 1,
-        depth: 2,
-        // У режимі прев'ю показуємо найсвіжішу чернетку (для Live Preview).
-        draft: opts.draft ?? false,
-    })
-    const raw = res.docs[0] as unknown as RawPage | undefined
+): Promise<PageData | null | Unavailable> {
+    let raw: RawPage | undefined
+    try {
+        const payload = await getPayload({ config })
+        const res = await payload.find({
+            collection: 'articles',
+            where: { slug: { equals: slug } },
+            limit: 1,
+            depth: 2,
+            // У режимі прев'ю показуємо найсвіжішу чернетку (для Live Preview).
+            draft: opts.draft ?? false,
+        })
+        raw = res.docs[0] as unknown as RawPage | undefined
+    } catch (error) {
+        console.error('[getPageBySlug] data source unavailable:', error)
+        return DATA_UNAVAILABLE
+    }
     if (!raw) return null
 
     const content = raw.content ?? []

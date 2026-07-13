@@ -1,5 +1,7 @@
 import { Suspense } from "react"
 import { getPayloadNewsList, getPayloadNewsArchive } from "@/lib/payload-news"
+import { isUnavailable } from "@/lib/data-result"
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable"
 import { NewsFeed } from "@/components/common/NewsFeed/NewsFeed"
 import { NewsArchive } from "@/components/common/NewsArchive/NewsArchive"
 
@@ -19,10 +21,12 @@ export default async function NewsPage({ searchParams }: Props) {
     const year = yearStr ? Number(yearStr) : undefined
     const month = monthStr ? Number(monthStr) : undefined
 
-    const [list, archive] = await Promise.all([
+    const [listResult, archive] = await Promise.all([
         getPayloadNewsList({ limit: 10, offset: 0, year, month }),
         getPayloadNewsArchive(),
     ])
+
+    const list = isUnavailable(listResult) ? null : listResult
 
     const pageTitle = year && month
         ? `${MONTH_NAMES[month - 1]} ${year}`
@@ -38,13 +42,17 @@ export default async function NewsPage({ searchParams }: Props) {
                     <NewsArchive archive={archive} />
                 </Suspense>
                 <div className="flex-1 min-w-0">
-                    <NewsFeed
-                        key={`${year}-${month}`}
-                        initialNews={list.items}
-                        total={list.total}
-                        year={year}
-                        month={month}
-                    />
+                    {list ? (
+                        <NewsFeed
+                            key={`${year}-${month}`}
+                            initialNews={list.items}
+                            total={list.total}
+                            year={year}
+                            month={month}
+                        />
+                    ) : (
+                        <DataUnavailable variant="inline" title="Новини тимчасово недоступні" />
+                    )}
                 </div>
             </div>
         </div>

@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 const keyPoints = [
   {
@@ -38,6 +40,7 @@ const keyPoints = [
 
 export async function CodeOfConductPage() {
   const list = await getLinkListBySlug("code-of-conduct");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
   const doc = list.items[0];
 

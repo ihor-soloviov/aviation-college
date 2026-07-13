@@ -6,6 +6,7 @@ import {
   NavigationLink,
 } from "@/components/common/ExpandableNavigation";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { DATA_UNAVAILABLE, isUnavailable, type Unavailable } from "@/lib/data-result";
 
 function renderIcon(name?: string): ReactNode {
   const Icon =
@@ -19,8 +20,9 @@ function renderIcon(name?: string): ReactNode {
  * Кожна top-level група = категорія; її children = посилання.
  * Документи резолвляться у /documents/<id>; зовнішні/внутрішні — за targetUrl.
  */
-export async function getTeachersCategories(): Promise<NavigationCategory[]> {
+export async function getTeachersCategories(): Promise<NavigationCategory[] | Unavailable> {
   const list = await getLinkListBySlug("teachers-nav");
+  if (isUnavailable(list)) return DATA_UNAVAILABLE;
   if (!list) return [];
 
   return list.items.map((group) => {

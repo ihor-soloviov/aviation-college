@@ -1,6 +1,8 @@
 import { CourseSection } from "@/components/Courses/CourseSection/CourseSection";
 import { CoursesFilterBar } from "@/components/Courses/CoursesFilterBar/CoursesFilterBar";
 import { getPayloadCourses } from "@/lib/payload-courses";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 import { CourseCardData, CourseCategory } from "@/types/courses";
 import { GraduationCap, Award, SearchX } from "lucide-react";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
@@ -76,7 +78,9 @@ export default async function CoursesPage({
       : undefined;
   const q = pick(sp.q);
 
-  const allCourses = await getPayloadCourses();
+  const allCoursesResult = await getPayloadCourses();
+  const coursesUnavailable = isUnavailable(allCoursesResult);
+  const allCourses = coursesUnavailable ? [] : allCoursesResult;
   const filtered = allCourses.filter((c) => matchCourse(c, form, cat, q));
 
   const fmb = filtered.filter((c) => c.level === "fmb");
@@ -101,7 +105,12 @@ export default async function CoursesPage({
               className="flex flex-col gap-8 mt-8 scroll-mt-[12vh]"
               id="courses"
             >
-              {totalCount === 0 ? (
+              {coursesUnavailable ? (
+                <DataUnavailable
+                  variant="inline"
+                  title="Освітні програми тимчасово недоступні"
+                />
+              ) : totalCount === 0 ? (
                 <EmptyState />
               ) : (
                 <>

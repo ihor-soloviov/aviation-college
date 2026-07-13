@@ -2,6 +2,7 @@ import 'server-only'
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { DATA_UNAVAILABLE, type Unavailable } from './data-result'
 
 export type TreeNode = {
     id: number | string
@@ -70,32 +71,40 @@ function buildTree(rawNodes: RawNode[]): TreeNode[] {
     return pack(null)
 }
 
-export async function getDocumentTreeBySlug(slug: string): Promise<DocumentTree | null> {
-    const payload = await getPayload({ config })
+// Первинне detail-читання: null = не знайдено, Unavailable = БД недоступна.
+export async function getDocumentTreeBySlug(
+    slug: string,
+): Promise<DocumentTree | null | Unavailable> {
+    try {
+        const payload = await getPayload({ config })
 
-    const treesFound = await payload.find({
-        collection: 'documentTrees',
-        where: { slug: { equals: slug } },
-        limit: 1,
-        depth: 0,
-    })
-    const tree = treesFound.docs[0]
-    if (!tree) return null
+        const treesFound = await payload.find({
+            collection: 'documentTrees',
+            where: { slug: { equals: slug } },
+            limit: 1,
+            depth: 0,
+        })
+        const tree = treesFound.docs[0]
+        if (!tree) return null
 
-    const nodesFound = await payload.find({
-        collection: 'treeNodes',
-        where: { tree: { equals: tree.id } },
-        depth: 1,
-        limit: 10000,
-        sort: 'order',
-    })
-    const items = buildTree(nodesFound.docs as unknown as RawNode[])
+        const nodesFound = await payload.find({
+            collection: 'treeNodes',
+            where: { tree: { equals: tree.id } },
+            depth: 1,
+            limit: 10000,
+            sort: 'order',
+        })
+        const items = buildTree(nodesFound.docs as unknown as RawNode[])
 
-    return {
-        id: tree.id,
-        slug: tree.slug as string,
-        title: tree.title as string,
-        description: (tree.description as string | undefined) ?? undefined,
-        items,
+        return {
+            id: tree.id,
+            slug: tree.slug as string,
+            title: tree.title as string,
+            description: (tree.description as string | undefined) ?? undefined,
+            items,
+        }
+    } catch (error) {
+        console.error('[getDocumentTreeBySlug] data source unavailable:', error)
+        return DATA_UNAVAILABLE
     }
 }

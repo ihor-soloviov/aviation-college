@@ -2,6 +2,7 @@ import pool from './db'
 import { RowDataPacket } from 'mysql2'
 import fs from 'fs'
 import path from 'path'
+import { DATA_UNAVAILABLE, type Unavailable } from './data-result'
 
 export interface ArticleDetail {
     id: number
@@ -15,19 +16,31 @@ export interface ArticleDetail {
 
 const UPLOADS_DIR = process.env.UPLOADS_DIR ?? '/var/www/uploads'
 
-export async function getArticleById(id: number): Promise<ArticleDetail | null> {
-    const [rows] = await pool.query<RowDataPacket[]>(
-        'SELECT id, old_id, title, view_mode, file_format, content_path FROM articles_v2 WHERE old_id = ?',
-        [id]
-    )
+// Первинне detail-читання: null = не знайдено, Unavailable = MySQL/файли недоступні.
+export async function getArticleById(id: number): Promise<ArticleDetail | null | Unavailable> {
+    let rows: RowDataPacket[]
+    try {
+        ;[rows] = await pool.query<RowDataPacket[]>(
+            'SELECT id, old_id, title, view_mode, file_format, content_path FROM articles_v2 WHERE old_id = ?',
+            [id]
+        )
+    } catch (error) {
+        console.error('[getArticleById] data source unavailable:', error)
+        return DATA_UNAVAILABLE
+    }
     if (!rows[0]) return null
     const row = rows[0]
 
     let html: string | null = null
     if (row.view_mode !== 'pdf') {
         const filePath = path.join(UPLOADS_DIR, row.content_path)
-        if (fs.existsSync(filePath)) {
-            html = fs.readFileSync(filePath, 'utf-8')
+        // Читання файлу — best-effort: відсутній/битий файл не має ламати сторінку.
+        try {
+            if (fs.existsSync(filePath)) {
+                html = fs.readFileSync(filePath, 'utf-8')
+            }
+        } catch (error) {
+            console.error('[getArticleById] failed to read content file:', error)
         }
     }
 

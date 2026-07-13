@@ -10,9 +10,12 @@ import {
 } from "lucide-react";
 import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 export async function ElectiveCoursesPage() {
   const list = await getLinkListBySlug("elective-courses");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
   const catalog = list.items[0];
 

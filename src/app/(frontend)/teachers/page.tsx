@@ -1,6 +1,8 @@
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 import { ExpandableNavigation } from "@/components/common/ExpandableNavigation";
 import { getTeachersCategories } from "@/lib/teachers";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +15,11 @@ export default async function TeachersPage() {
           title="Викладачам"
           description="Інформація для викладачів коледжу"
         />
-        <ExpandableNavigation categories={categories} />
+        {isUnavailable(categories) ? (
+          <DataUnavailable variant="inline" />
+        ) : (
+          <ExpandableNavigation categories={categories} />
+        )}
       </div>
     </section>
   );

@@ -1,4 +1,6 @@
 import { getPayloadDocuments } from '@/lib/documents'
+import { isUnavailable } from '@/lib/data-result'
+import { DataUnavailable } from '@/components/common/DataUnavailable/DataUnavailable'
 import { DocumentsList } from '@/components/documents/DocumentsList'
 
 export const dynamic = 'force-dynamic'
@@ -9,6 +11,19 @@ export const metadata = {
 
 export default async function DocumentsPage() {
     const documents = await getPayloadDocuments()
+
+    if (isUnavailable(documents)) {
+        return (
+            <div className="container mx-auto py-8 md:py-12 px-4">
+                <div className="max-w-4xl mx-auto">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-2">
+                        Документи
+                    </h1>
+                    <DataUnavailable variant="inline" title="Документи тимчасово недоступні" />
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="container mx-auto py-8 md:py-12 px-4">

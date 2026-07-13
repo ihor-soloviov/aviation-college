@@ -8,6 +8,8 @@ import {
     extractPayloadCoverUrl,
     payloadDocToCardItem,
 } from "@/lib/payload-news"
+import { isUnavailable } from "@/lib/data-result"
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable"
 import { BlocksRenderer } from "@/components/news/BlocksRenderer"
 import { ArrowLeft, Calendar } from "lucide-react"
 import { notFound } from "next/navigation"
@@ -26,6 +28,7 @@ export default async function NewsDetailPage({ params }: Props) {
     if (!Number.isFinite(numericId)) notFound()
 
     const doc = await getPayloadNewsById(numericId)
+    if (isUnavailable(doc)) return <DataUnavailable />
     if (!doc) notFound()
 
     const title = String(doc.title ?? '')

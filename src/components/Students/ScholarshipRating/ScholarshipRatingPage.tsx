@@ -10,6 +10,8 @@ import {
 import * as LucideIcons from "lucide-react";
 import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 function getLucideIcon(name?: string, fallback: LucideIcon = Trophy): LucideIcon {
   if (!name) return fallback;
@@ -56,6 +58,7 @@ const getColorClasses = (color: string) => {
 
 export async function ScholarshipRatingPage() {
   const list = await getLinkListBySlug("scholarship-rating");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
   const departments = list.items;
 

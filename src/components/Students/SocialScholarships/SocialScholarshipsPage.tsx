@@ -14,6 +14,8 @@ import {
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 const colorClasses: Record<string, { bg: string; text: string; border: string }> = {
   blue: {
@@ -79,6 +81,7 @@ const requiredDocuments = [
 
 export async function SocialScholarshipsPage() {
   const list = await getLinkListBySlug("social-scholarships");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
 
   const categories = list.items;

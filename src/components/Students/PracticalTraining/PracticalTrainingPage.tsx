@@ -15,6 +15,8 @@ import {
 import * as LucideIcons from "lucide-react";
 import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug, type LinkListItem } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 import { practiceTypes } from "./data";
 
 function getLucideIcon(name?: string, fallback: LucideIcon = FileText): LucideIcon {
@@ -81,6 +83,7 @@ export async function PracticalTrainingPage() {
     getLinkListBySlug("practical-training"),
     getLinkListBySlug("practice-bases"),
   ]);
+  if (isUnavailable(docsList) || isUnavailable(basesList)) return <DataUnavailable />;
   if (!docsList || !basesList) notFound();
 
   const docs = docsList.items;

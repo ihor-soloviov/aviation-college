@@ -2,6 +2,7 @@ import 'server-only'
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { DATA_UNAVAILABLE, type Unavailable } from './data-result'
 
 export type LinkListItemKind = 'document' | 'article' | 'external' | 'group' | 'info'
 
@@ -96,17 +97,23 @@ function normalize(raw: RawLinkList): LinkList {
     }
 }
 
-export async function getLinkListBySlug(slug: string): Promise<LinkList | null> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'linkLists',
-        where: { slug: { equals: slug } },
-        limit: 1,
-        depth: 2,
-    })
-    const raw = res.docs[0] as unknown as RawLinkList | undefined
-    if (!raw) return null
-    return normalize(raw)
+// Первинне detail-читання: null = не знайдено, Unavailable = БД недоступна.
+export async function getLinkListBySlug(slug: string): Promise<LinkList | null | Unavailable> {
+    try {
+        const payload = await getPayload({ config })
+        const res = await payload.find({
+            collection: 'linkLists',
+            where: { slug: { equals: slug } },
+            limit: 1,
+            depth: 2,
+        })
+        const raw = res.docs[0] as unknown as RawLinkList | undefined
+        if (!raw) return null
+        return normalize(raw)
+    } catch (error) {
+        console.error('[getLinkListBySlug] data source unavailable:', error)
+        return DATA_UNAVAILABLE
+    }
 }
 
 export async function getLinkListById(id: number | string): Promise<LinkList | null> {

@@ -1,5 +1,6 @@
 import { getPayload, type Where } from 'payload'
 import config from '@payload-config'
+import { DATA_UNAVAILABLE, isNotFoundError, type Unavailable } from './data-result'
 
 export interface NewsCardItem {
     id: string
@@ -23,9 +24,12 @@ export async function getPayloadInstance() {
     return getPayload({ config })
 }
 
-export async function getPayloadNewsById(id: number) {
-    const payload = await getPayload({ config })
+// Первинне detail-читання: null = не знайдено/не опубліковано, Unavailable = БД недоступна.
+export async function getPayloadNewsById(
+    id: number,
+): Promise<Record<string, unknown> | null | Unavailable> {
     try {
+        const payload = await getPayload({ config })
         const doc = await payload.findByID({
             collection: 'news',
             id,
@@ -33,21 +37,29 @@ export async function getPayloadNewsById(id: number) {
         })
         if ((doc as Record<string, unknown>)._status !== 'published') return null
         return doc
-    } catch {
-        return null
+    } catch (error) {
+        if (isNotFoundError(error)) return null
+        console.error('[getPayloadNewsById] data source unavailable:', error)
+        return DATA_UNAVAILABLE
     }
 }
 
+// Вторинне читання («інші новини») — тихо деградує в [], щоб не ламати detail-сторінку.
 export async function getPayloadPublishedNews(limit = 20) {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'news',
-        where: { _status: { equals: 'published' } },
-        sort: '-publishedAt',
-        limit,
-        depth: 1,
-    })
-    return res.docs as Array<Record<string, unknown>>
+    try {
+        const payload = await getPayload({ config })
+        const res = await payload.find({
+            collection: 'news',
+            where: { _status: { equals: 'published' } },
+            sort: '-publishedAt',
+            limit,
+            depth: 1,
+        })
+        return res.docs as Array<Record<string, unknown>>
+    } catch (error) {
+        console.error('[getPayloadPublishedNews] data source unavailable:', error)
+        return [] as Array<Record<string, unknown>>
+    }
 }
 
 export function extractPayloadCoverUrl(
@@ -145,42 +157,55 @@ function buildDateRangeFilter(year?: number, month?: number) {
     return null
 }
 
+// Первинне читання стрічки: Unavailable = БД недоступна (API-роут та сторінки це обробляють).
 export async function getPayloadNewsList(opts: {
     limit?: number
     offset?: number
     year?: number
     month?: number
-}): Promise<{ items: NewsCardItem[]; total: number }> {
+}): Promise<{ items: NewsCardItem[]; total: number } | Unavailable> {
     const { limit = 10, offset = 0, year, month } = opts
-    const payload = await getPayload({ config })
-    const where: Where = { _status: { equals: 'published' } }
-    const dateFilter = buildDateRangeFilter(year, month)
-    if (dateFilter) where.publishedAt = dateFilter
+    try {
+        const payload = await getPayload({ config })
+        const where: Where = { _status: { equals: 'published' } }
+        const dateFilter = buildDateRangeFilter(year, month)
+        if (dateFilter) where.publishedAt = dateFilter
 
-    const page = Math.floor(offset / limit) + 1
-    const res = await payload.find({
-        collection: 'news',
-        where,
-        sort: '-publishedAt',
-        limit,
-        page,
-        depth: 1,
-    })
-    return {
-        items: res.docs.map((d) => payloadDocToCardItem(d as Record<string, unknown>)),
-        total: res.totalDocs,
+        const page = Math.floor(offset / limit) + 1
+        const res = await payload.find({
+            collection: 'news',
+            where,
+            sort: '-publishedAt',
+            limit,
+            page,
+            depth: 1,
+        })
+        return {
+            items: res.docs.map((d) => payloadDocToCardItem(d as Record<string, unknown>)),
+            total: res.totalDocs,
+        }
+    } catch (error) {
+        console.error('[getPayloadNewsList] data source unavailable:', error)
+        return DATA_UNAVAILABLE
     }
 }
 
+// Вторинне читання (архів-сайдбар) — тихо деградує в [].
 export async function getPayloadNewsArchive(): Promise<ArchiveMonth[]> {
-    const payload = await getPayload({ config })
-    const res = await payload.find({
-        collection: 'news',
-        where: { _status: { equals: 'published' } },
-        limit: 10000,
-        pagination: false,
-        depth: 0,
-    })
+    let res
+    try {
+        const payload = await getPayload({ config })
+        res = await payload.find({
+            collection: 'news',
+            where: { _status: { equals: 'published' } },
+            limit: 10000,
+            pagination: false,
+            depth: 0,
+        })
+    } catch (error) {
+        console.error('[getPayloadNewsArchive] data source unavailable:', error)
+        return []
+    }
     const counts = new Map<string, ArchiveMonth>()
     for (const doc of res.docs) {
         const iso = (doc as Record<string, unknown>).publishedAt

@@ -6,7 +6,9 @@ import { ChevronRight, Home } from 'lucide-react'
 
 import { BlocksRenderer } from '@/components/news/BlocksRenderer'
 import { LivePreviewListener } from '@/components/common/LivePreviewListener'
+import { DataUnavailable } from '@/components/common/DataUnavailable/DataUnavailable'
 import { getPageBySlug } from '@/lib/pages'
+import { isUnavailable } from '@/lib/data-result'
 
 // Root catch-all для page-builder сторінок. Канонічний URL = /<slug>.
 // Next пріоритезує статичні роути (about-us, students, news…), тож сюди
@@ -26,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const slug = singleSlug((await params).slug)
     if (!slug) return { title: 'Сторінку не знайдено' }
     const page = await getPageBySlug(slug)
+    if (isUnavailable(page)) return { title: 'Ведуться технічні роботи' }
     if (!page) return { title: 'Сторінку не знайдено' }
     return {
         title: page.seo.metaTitle || page.title,
@@ -39,6 +42,7 @@ export default async function CatchAllPage({ params, searchParams }: Props) {
 
     const isPreview = (await searchParams).preview === 'true'
     const page = await getPageBySlug(slug, { draft: isPreview })
+    if (isUnavailable(page)) return <DataUnavailable />
     if (!page) notFound()
 
     const blocks = page.content as Parameters<typeof BlocksRenderer>[0]['blocks']

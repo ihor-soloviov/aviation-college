@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { DOCUMENT_CATEGORIES } from '@/lib/document-categories'
+import { isNotFoundError } from '@/lib/data-result'
+import { DataUnavailable } from '@/components/common/DataUnavailable/DataUnavailable'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,16 +22,19 @@ export default async function DocumentDetailPage({ params }: Props) {
     const numericId = Number(id)
     if (!Number.isFinite(numericId)) notFound()
 
-    const payload = await getPayload({ config })
     let doc: Record<string, unknown> | null = null
     try {
+        const payload = await getPayload({ config })
         doc = (await payload.findByID({
             collection: 'documents',
             id: numericId,
             depth: 0,
         })) as Record<string, unknown>
-    } catch {
-        notFound()
+    } catch (error) {
+        // 404 → документа немає; будь-яка інша помилка → БД недоступна.
+        if (isNotFoundError(error)) notFound()
+        console.error('[DocumentDetailPage] data source unavailable:', error)
+        return <DataUnavailable />
     }
     if (!doc) notFound()
 

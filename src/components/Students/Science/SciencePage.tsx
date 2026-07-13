@@ -13,6 +13,8 @@ import {
 import * as LucideIcons from "lucide-react";
 import { cn, linkAttrs } from "@/lib/utils";
 import { getLinkListBySlug, type LinkListItem } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 function getLucideIcon(name?: string, fallback: LucideIcon = FileText): LucideIcon {
   if (!name) return fallback;
@@ -43,6 +45,7 @@ function linkProps(item: LinkListItem) {
 
 export async function SciencePage() {
   const list = await getLinkListBySlug("science");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
 
   const generalInfo = list.items[0]?.children ?? [];

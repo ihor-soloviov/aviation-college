@@ -19,6 +19,8 @@ import {
   getPayloadCourseBySlug,
   getPayloadRelatedCourses,
 } from "@/lib/payload-courses";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 import {
   CATEGORY_ICONS,
   CATEGORY_LABELS,
@@ -38,6 +40,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const course = await getPayloadCourseBySlug(slug);
+  if (isUnavailable(course)) return { title: "Ведуться технічні роботи" };
   if (!course) return { title: "Програму не знайдено" };
   return {
     title: `${course.title} — ${LEVEL_LABELS[course.level]}`,
@@ -75,6 +78,7 @@ export default async function CoursePage({ params }: { params: Params }) {
   const { slug } = await params;
   const course = await getPayloadCourseBySlug(slug);
 
+  if (isUnavailable(course)) return <DataUnavailable />;
   if (!course) {
     notFound();
   }

@@ -12,6 +12,8 @@ import {
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 
 const colorClasses: Record<
   string,
@@ -61,6 +63,7 @@ function getLucideIcon(name?: string, fallback: LucideIcon = FileText): LucideIc
 
 export async function AntiBullyingPage() {
   const list = await getLinkListBySlug("anti-bullying");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
 
   const documents = list.items;

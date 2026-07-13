@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getPayloadNewsList } from '@/lib/payload-news'
+import { isUnavailable } from '@/lib/data-result'
 
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
@@ -9,10 +10,13 @@ export async function GET(req: Request) {
     const month = searchParams.get('month') ? Number(searchParams.get('month')) : undefined
 
     try {
-        const { items, total } = await getPayloadNewsList({ limit, offset, year, month })
-        return NextResponse.json({ news: items, total })
+        const result = await getPayloadNewsList({ limit, offset, year, month })
+        if (isUnavailable(result)) {
+            return NextResponse.json({ error: 'News temporarily unavailable', news: [], total: 0 }, { status: 503 })
+        }
+        return NextResponse.json({ news: result.items, total: result.total })
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: 'Failed to fetch news' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to fetch news', news: [], total: 0 }, { status: 500 })
     }
 }

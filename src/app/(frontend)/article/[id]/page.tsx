@@ -2,6 +2,8 @@ import { notFound, redirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getArticleById } from '@/lib/articles'
+import { isUnavailable } from '@/lib/data-result'
+import { DataUnavailable } from '@/components/common/DataUnavailable/DataUnavailable'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,18 +16,26 @@ export default async function ArticlePage({ params }: Props) {
     const numericId = Number(id)
     if (!Number.isFinite(numericId)) notFound()
 
-    const payload = await getPayload({ config })
-    const found = await payload.find({
-        collection: 'documents',
-        where: { legacyId: { equals: numericId } },
-        limit: 1,
-        depth: 0,
-    })
-    if (found.docs[0]) {
-        redirect(`/documents/${found.docs[0].id}`)
+    // Спершу перевіряємо, чи цю статтю вже мігровано в documents (Payload).
+    // redirect() кидає спец-помилку Next — тому винесено з try/catch.
+    let migratedId: number | string | null = null
+    try {
+        const payload = await getPayload({ config })
+        const found = await payload.find({
+            collection: 'documents',
+            where: { legacyId: { equals: numericId } },
+            limit: 1,
+            depth: 0,
+        })
+        if (found.docs[0]) migratedId = found.docs[0].id
+    } catch (error) {
+        console.error('[ArticlePage] documents lookup unavailable:', error)
+        return <DataUnavailable />
     }
+    if (migratedId != null) redirect(`/documents/${migratedId}`)
 
     const article = await getArticleById(numericId)
+    if (isUnavailable(article)) return <DataUnavailable />
     if (!article) notFound()
 
     return (

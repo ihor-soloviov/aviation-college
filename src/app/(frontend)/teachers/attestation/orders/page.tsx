@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { BackLink } from "@/components/common/BackLink/BackLink";
 import { PageTitle } from "@/components/common/PageTitle/PageTitle";
 import { getLinkListBySlug } from "@/lib/link-lists";
+import { isUnavailable } from "@/lib/data-result";
+import { DataUnavailable } from "@/components/common/DataUnavailable/DataUnavailable";
 import { linkAttrs } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 
@@ -17,6 +19,7 @@ export const metadata: Metadata = {
 
 export default async function OrdersPage() {
   const list = await getLinkListBySlug("attestation-orders");
+  if (isUnavailable(list)) return <DataUnavailable />;
   if (!list) notFound();
 
   return (
