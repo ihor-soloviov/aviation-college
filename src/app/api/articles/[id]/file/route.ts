@@ -14,7 +14,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         return new Response('Invalid id', { status: 400 })
     }
 
-    const file = await getArticleContent(numericId)
+    let file: Awaited<ReturnType<typeof getArticleContent>>
+    try {
+        file = await getArticleContent(numericId)
+    } catch (error) {
+        console.error('[articles/file] data source unavailable:', error)
+        return new Response('Service temporarily unavailable', { status: 503 })
+    }
     if (!file) {
         return new Response('Not found', { status: 404 })
     }

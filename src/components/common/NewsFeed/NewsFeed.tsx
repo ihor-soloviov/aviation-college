@@ -38,8 +38,15 @@ export function NewsFeed({ initialNews, total, year, month }: NewsFeedProps) {
             if (year) params.set('year', String(year))
             if (month) params.set('month', String(month))
             const res = await fetch(`/api/news?${params}`)
-            const data: { news: NewsItem[] } = await res.json()
-            setNews((prev) => [...prev, ...data.news])
+            // При недоступній БД API повертає 503 — просто не додаємо нічого,
+            // кнопка лишається доступною для повторної спроби.
+            if (!res.ok) return
+            const data: { news?: NewsItem[] } = await res.json().catch(() => ({}))
+            if (Array.isArray(data.news) && data.news.length > 0) {
+                setNews((prev) => [...prev, ...data.news!])
+            }
+        } catch (error) {
+            console.error('[NewsFeed] failed to load more:', error)
         } finally {
             setLoading(false)
         }

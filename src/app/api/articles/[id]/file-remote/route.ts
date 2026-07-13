@@ -12,7 +12,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         return new Response('FILES_API_URL is not configured', { status: 500 })
     }
 
-    const upstream = await fetch(`${FILES_API_URL}/api/articles/${numericId}/file`)
+    let upstream: Response
+    try {
+        upstream = await fetch(`${FILES_API_URL}/api/articles/${numericId}/file`)
+    } catch (error) {
+        console.error('[articles/file-remote] upstream unreachable:', error)
+        return new Response('Service temporarily unavailable', { status: 503 })
+    }
 
     if (!upstream.ok || !upstream.body) {
         return new Response(upstream.statusText || 'Upstream error', { status: upstream.status })
