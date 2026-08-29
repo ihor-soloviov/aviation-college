@@ -1,0 +1,24 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "add-teacher-page-",
+    "feat/data-fallbacks-stage1",
+    "main",
+    "page-not-found",
+    "v0/bart6man-65e7d6f2"
+  ],
+  "parent": {
+    "add-teacher-page-": "main",
+    "feat/data-fallbacks-stage1": "main",
+    "main": null,
+    "page-not-found": "main",
+    "v0/bart6man-65e7d6f2": "main"
+  },
+  "order": [
+    "main",
+    "add-teacher-page-",
+    "feat/data-fallbacks-stage1",
+    "page-not-found",
+    "v0/bart6man-65e7d6f2"
+  ]
+}
